@@ -246,7 +246,7 @@ function HomeContent() {
                     height="200"
                     style={{ backgroundColor: "#fff", objectFit: "contain" }}
                     image={tier.logoUrl}
-                    alt="green iguana"
+                    alt={tier.title}
                     ba
                   />
                 )}

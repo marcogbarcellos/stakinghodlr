@@ -179,3 +179,39 @@ query listExchanges {
 }
 
 ```
+
+### Manual updates
+
+Some API's like, for example, Kucoin and others unfortunately don't provide access to "Earn/Staking" endpoints, so we will initially add them manually to then create an RPA (selenium or similar) to automate this process at least for the "top" coins.
+
+#### Platforms with their Earn links
+
+- [Binance](https://www.binance.com/en/earn) - has API (not need to manually dig in)
+- [Crypto.com](https://crypto.com/br/earn)
+- [Kucoin](https://www.kucoin.com/earn)
+- [Huobi](https://www.huobi.com/en-us/financial/earn)
+- [Kraken](https://www.kraken.com/features/staking-coins)
+- [Coinbase](https://www.coinbase.com/earn)
+- [Gemini](https://www.gemini.com/earn)
+- [Nexo](https://nexo.io/earn-crypto)
+- [Youhodler](https://www.youhodler.com/earn-crypto)
+- [Celsius](https://celsius.network/earn)
+- [TrustWallet](https://trustwallet.com/earn)
+- [Yield App](https://www.yield.app/yld)
+- [Blockfi](https://blockfi.com/crypto-interest-account)
+- [Ledn](https://ledn.io/en/btc-savings)
+- [Guarda](https://guarda.com/staking/)
+
+Crypto.com
+Huobi
+Nexo
+Celsius
+FTX
+Voyager
+Trust wallet
+cex.io
+http://youhodler.com/
+Coinbase
+Kucoin
+Binance
+Kraken
