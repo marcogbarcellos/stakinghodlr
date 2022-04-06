@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "apiName": "stakinghodlr",
+    "serviceName": "AppSync",
+    "gqlSchemaPath": "/Users/barcellos/workspace/personal/stakinghodlr/amplify/backend/api/stakinghodlr/schema.graphql",
+    "defaultAuthType": {
+      "mode": "API_KEY",
+      "expirationTime": 7
+    }
+  }
+}

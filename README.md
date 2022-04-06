@@ -68,3 +68,114 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+### Test api locally
+
+`amplify mock api`
+
+- Most important Queries:
+
+```graphql
+mutation coinCreation {
+  createCoin(input: {
+    name: "Luna"
+    symbol: "LUNA"
+    logoUrl: "https://lh3.googleusercontent.com/d/1YQ4ons4Y6dqWDjYlZasIFoi1evevBHrU"
+  }) {
+    name
+    symbol
+    logoUrl
+  }
+}
+mutation exchangeCreation {
+  createExchange(input: {
+    name: "Huobi"
+    logoUrl: "https://lh3.googleusercontent.com/d/1YbIogw5gR073qCLMTzo-P1BkHNfFSRd5"
+  }) {
+    name
+    logoUrl
+  }
+}
+
+query getCoins {
+  listCoins {
+    items {
+      createdAt
+      logoUrl
+      name
+      symbol
+      updatedAt
+      coinRates {
+        items {
+          coinNameExchangeName
+          interestRate
+        }
+      }
+    }
+  }
+}
+
+query getExchanges {
+  listExchanges {
+    items {
+      createdAt
+      logoUrl
+      name
+      updatedAt
+      coinRates {
+        items {
+          coinNameExchangeName
+          interestRate
+        }
+      }
+    }
+  }
+}
+mutation createCoinRate {
+  createCoinRate(
+    input: {coinNameExchangeName: "COIN#BTC#DATE#2022-04-06T10:58:34.277Z", date: "2022-04-06T10:04:34.277Z", coinSymbol: "BTC", exchangeName: "Binance", interestRate: "0.0365"}
+  ) {
+    interestRate
+    exchangeName
+    updatedAt
+    date
+    createdAt
+    coinSymbol
+    coinNameExchangeName
+  }
+}
+
+query listCoins {
+  listCoins {
+    items {
+      logoUrl
+      name
+      symbol
+      coinRates {
+        items {
+          coinNameExchangeName
+          interestRate
+          exchangeName
+        }
+      }
+    }
+  }
+}
+
+query listExchanges {
+  listExchanges {
+    items {
+      name
+      logoUrl
+      coinRates {
+        items {
+          coinNameExchangeName
+          interestRate
+        }
+      }
+    }
+  }
+}
+
+```

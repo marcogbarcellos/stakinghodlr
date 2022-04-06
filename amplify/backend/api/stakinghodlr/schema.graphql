@@ -1,0 +1,27 @@
+# This "input" configures a global authorization rule to enable public access to
+# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
+input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
+
+type Coin @model {
+  symbol: String! @primaryKey
+  name: String!
+  logoUrl: String
+  coinRates: [CoinRate] @hasMany(indexName: "byCoinSymbol", fields: ["symbol"])
+}
+
+type CoinRate @model {
+  # format example PK: COIN#BTC#EXCHANGE#BINANCE, SK: YYYY-MM-DDThh:mm:ss.sssZ
+  coinNameExchangeName: String! @primaryKey(sortKeyFields: ["date"]) 
+  date: AWSDateTime!
+  coinSymbol: String! @index(name: "byCoinSymbol")
+  exchangeName: String! @index(name: "byExchangeName")
+  coin: Coin! @belongsTo(fields: ["coinSymbol"])
+  exchange: Exchange! @belongsTo(fields: ["exchangeName"])
+  interestRate: String!
+}
+
+type Exchange @model {
+  name: String! @primaryKey
+  logoUrl: String
+  coinRates: [CoinRate] @hasMany(indexName: "byExchangeName", fields: ["name"])
+}
