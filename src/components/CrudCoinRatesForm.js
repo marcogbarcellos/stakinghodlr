@@ -19,7 +19,7 @@ import { deleteCoinRate } from "../graphql/mutations";
 
 const styles = {
   container: {
-    width: 800,
+    width: "100%",
     margin: "0 auto",
     display: "flex",
     flexDirection: "column",
@@ -55,6 +55,7 @@ function CrudCoinRatesForm({ user }) {
     { field: "coinSymbol", headerName: "Coin", width: 150 },
     { field: "exchangeName", headerName: "Exchange", width: 150 },
     { field: "interestRate", headerName: "Interest Rate", width: 150 },
+    { field: "lockDays", headerName: "Lock Days", width: 150 },
     {
       field: "action",
       headerName: "Action",
@@ -106,6 +107,7 @@ function CrudCoinRatesForm({ user }) {
     const lockDays = parseInt(event.target.value);
     if (!lockDays || lockDays <= 0) {
       setLockDays(undefined);
+      return;
     }
     setLockDays(lockDays);
   };
@@ -116,10 +118,9 @@ function CrudCoinRatesForm({ user }) {
       date: new Date().toISOString(),
       coinSymbol: coin,
       exchangeName: exchange,
-      interestRate: (Number(rate) / 100).toString(),
+      interestRate: (Number(rate) / 100).toFixed(6),
       lockDays,
     };
-    
     try {
       await API.graphql(graphqlOperation(createCoinRate, { input: coinRate }));
       setCoinRates([...coinRates, coinRate]);
@@ -252,7 +253,7 @@ function CrudCoinRatesForm({ user }) {
                     maxLength: 5,
                     step: "1",
                   }}
-                  value={rate}
+                  value={lockDays}
                   onChange={handleChangeLockDays}
                 />
               </FormControl>
@@ -265,16 +266,22 @@ function CrudCoinRatesForm({ user }) {
           </Grid>
           <Grid container spacing={3} alignItems="flex-end" mt={5}>
             <Grid item key="coins-grid-list" xs={12}>
-              <div style={{ height: 500, width: "100%" }}>
+              <div style={{ height: 1500, width: "100%" }}>
                 <DataGrid
                   rows={coinRates.map((rate, index) => ({
                     ...rate,
-                    interestRate: `${rate.interestRate * 100}%`,
+                    interestRate: `${(rate.interestRate * 100).toFixed(2)}%`,
                     id: index,
                   }))}
+                  // sortModel={[
+                  //   {field: "date", sort: "desc"},
+                  //   {field: "date", sort: "asc"},
+                  //   {field: "exchangeName", sort: "desc"},
+                  //   {field: "exchangeName", sort: "asc"},
+                  // ]}
                   columns={columns}
-                  pageSize={5}
-                  rowsPerPageOptions={[5]}
+                  pageSize={20}
+                  rowsPerPageOptions={[50]}
                 />
               </div>
             </Grid>

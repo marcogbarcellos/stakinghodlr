@@ -254,7 +254,7 @@ function HomeContent() {
                       up to
                     </Typography>
                     <Typography component="h3" variant="h4" color="text.primary" style={{fontWeight: 800}}>
-                      {coinRate.interestRate*100}% 
+                      {(coinRate.interestRate*100).toFixed(2)}% 
                     </Typography>
                   </Box>
                   <ul>
