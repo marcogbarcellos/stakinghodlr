@@ -14,6 +14,7 @@ export const onCreateCoin = /* GraphQL */ `
           coinSymbol
           exchangeName
           interestRate
+          lockDays
           createdAt
           updatedAt
         }
@@ -37,6 +38,7 @@ export const onUpdateCoin = /* GraphQL */ `
           coinSymbol
           exchangeName
           interestRate
+          lockDays
           createdAt
           updatedAt
         }
@@ -60,6 +62,7 @@ export const onDeleteCoin = /* GraphQL */ `
           coinSymbol
           exchangeName
           interestRate
+          lockDays
           createdAt
           updatedAt
         }
@@ -97,6 +100,7 @@ export const onCreateCoinRate = /* GraphQL */ `
         updatedAt
       }
       interestRate
+      lockDays
       createdAt
       updatedAt
     }
@@ -129,6 +133,7 @@ export const onUpdateCoinRate = /* GraphQL */ `
         updatedAt
       }
       interestRate
+      lockDays
       createdAt
       updatedAt
     }
@@ -161,6 +166,7 @@ export const onDeleteCoinRate = /* GraphQL */ `
         updatedAt
       }
       interestRate
+      lockDays
       createdAt
       updatedAt
     }
@@ -178,6 +184,7 @@ export const onCreateExchange = /* GraphQL */ `
           coinSymbol
           exchangeName
           interestRate
+          lockDays
           createdAt
           updatedAt
         }
@@ -200,6 +207,7 @@ export const onUpdateExchange = /* GraphQL */ `
           coinSymbol
           exchangeName
           interestRate
+          lockDays
           createdAt
           updatedAt
         }
@@ -222,6 +230,7 @@ export const onDeleteExchange = /* GraphQL */ `
           coinSymbol
           exchangeName
           interestRate
+          lockDays
           createdAt
           updatedAt
         }

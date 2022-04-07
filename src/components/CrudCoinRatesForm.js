@@ -82,6 +82,7 @@ function CrudCoinRatesForm({ user }) {
   const [coinRates, setCoinRates] = useState([]);
   const [coin, setCoin] = useState("");
   const [rate, setRate] = useState(null);
+  const [lockDays, setLockDays] = useState(undefined);
   const [exchange, setExchange] = useState("");
 
   useEffect(() => {
@@ -101,6 +102,14 @@ function CrudCoinRatesForm({ user }) {
     setRate(event.target.value);
   };
 
+  const handleChangeLockDays = (event) => {
+    const lockDays = parseInt(event.target.value);
+    if (!lockDays || lockDays <= 0) {
+      setLockDays(undefined);
+    }
+    setLockDays(lockDays);
+  };
+
   const handleSubmit = async () => {
     const coinRate = {
       coinNameExchangeName: `COIN#${coin}#EXCHANGE#${exchange}`,
@@ -108,6 +117,7 @@ function CrudCoinRatesForm({ user }) {
       coinSymbol: coin,
       exchangeName: exchange,
       interestRate: (Number(rate) / 100).toString(),
+      lockDays,
     };
     
     try {
@@ -117,6 +127,7 @@ function CrudCoinRatesForm({ user }) {
       setCoin("");
       setExchange("");
       setRate(null);
+      setLockDays(undefined);
     } catch (error) {
       console.error("error creating coin rate:", error);
     }
@@ -159,7 +170,7 @@ function CrudCoinRatesForm({ user }) {
     item => async () => {
       try {
         const deletingCoinRate = item.row;
-        const x =await API.graphql(
+        await API.graphql(
           graphqlOperation(deleteCoinRate, { input: { coinNameExchangeName: deletingCoinRate.coinNameExchangeName, date: deletingCoinRate.date } })
         );
         await fetchCoinRates();
@@ -212,9 +223,8 @@ function CrudCoinRatesForm({ user }) {
             </Grid>
             <Grid item key="coins-grid-form-rate" xs={12}>
               <FormControl fullWidth>
-                {/* <InputLabel id="coins-select-label">Exchange</InputLabel> */}
                 <TextField
-                  id="outlined-number"
+                  id="outlined-rates"
                   label="Interest Rate (in %)"
                   type="number"
                   InputLabelProps={{
@@ -226,6 +236,24 @@ function CrudCoinRatesForm({ user }) {
                   }}
                   value={rate}
                   onChange={handleChangeRate}
+                />
+              </FormControl>
+            </Grid>
+            <Grid item key="coins-grid-form-rate" xs={12}>
+              <FormControl fullWidth>
+                <TextField
+                  id="outlined-lock-days"
+                  label="Lock days"
+                  type="number"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  inputProps={{
+                    maxLength: 5,
+                    step: "1",
+                  }}
+                  value={rate}
+                  onChange={handleChangeLockDays}
                 />
               </FormControl>
             </Grid>

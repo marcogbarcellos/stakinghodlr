@@ -18,6 +18,7 @@ type CoinRate @model {
   coin: Coin! @belongsTo(fields: ["coinSymbol"])
   exchange: Exchange! @belongsTo(fields: ["exchangeName"])
   interestRate: String!
+  lockDays: Int
 }
 
 type Exchange @model {

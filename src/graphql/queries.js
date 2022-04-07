@@ -14,6 +14,7 @@ export const getCoin = /* GraphQL */ `
           coinSymbol
           exchangeName
           interestRate
+          lockDays
           createdAt
           updatedAt
         }
@@ -80,6 +81,7 @@ export const getCoinRate = /* GraphQL */ `
         updatedAt
       }
       interestRate
+      lockDays
       createdAt
       updatedAt
     }
@@ -121,6 +123,7 @@ export const listCoinRates = /* GraphQL */ `
           updatedAt
         }
         interestRate
+        lockDays
         createdAt
         updatedAt
       }
@@ -140,6 +143,7 @@ export const getExchange = /* GraphQL */ `
           coinSymbol
           exchangeName
           interestRate
+          lockDays
           createdAt
           updatedAt
         }
