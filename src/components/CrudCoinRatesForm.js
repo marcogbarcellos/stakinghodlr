@@ -148,8 +148,8 @@ function CrudCoinRatesForm({ user }) {
       setCoinRates(rates);
     } catch (error) {
       console.error("error fetching coin rates", error);
-      if (err.data.listCoinRates.items) {
-        const rates = err.data.listCoinRates.items.filter(i => i !== null);
+      if (error.data.listCoinRates.items) {
+        const rates = error.data.listCoinRates.items.filter(i => i !== null);
         setCoinRates(rates);
       }
     }

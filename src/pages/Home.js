@@ -11,207 +11,65 @@ import Container from '@mui/material/Container';
 import { CardMedia } from '@mui/material';
 import ExchangesTinyList from '../components/ExchangesTinyList';
 import { listCoinRates } from "../graphql/queries";
-import Amplify, { API, graphqlOperation } from 'aws-amplify';
+import { API, graphqlOperation } from 'aws-amplify';
 
 
-// Stop receiving data updates from the subscription
-// subscription.unsubscribe();
-// const interestRates = [
-//   {
-//     title: 'Bitcoin',
-//     interestRate: '0.05',
-//     logoUrl: 'https://lh3.googleusercontent.com/d/1jIwfWBWmUVifMgUrAhpmPP25gHQWTIxc',
-//     exchanges: [
-//       {
-//         name: 'Binance',
-//         logoUrl: 'https://lh3.googleusercontent.com/d/1boyq5ggqGRMRooCVW9dxnJOuyBxOjxbY',
-//         interestRate: 0.075,
-//       },
-//       {
-//         name: 'Kucoin',
-//         logoUrl: 'https://lh3.googleusercontent.com/d/1wGiCfaq1znluUOfR7FORDgNbpKEHm42e',
-//         interestRate: 0.065,
-//       },
-//       {
-//         name: 'Huobi',
-//         logoUrl: 'https://lh3.googleusercontent.com/d/1YbIogw5gR073qCLMTzo-P1BkHNfFSRd5',
-//         interestRate: 0.065,
-//       },
-//     ],
-//     buttonText: 'See all rates',
-//     buttonVariant: 'outlined',
-//   },
-//   {
-//     title: 'Ethereum',
-//     // subheader: 'Most popular',
-//     logoUrl: 'https://lh3.googleusercontent.com/d/1aZPBydbafN_xsdJ5rmBJDtMgxygfv_M0',
-//     interestRate: '0.075',
-//     exchanges: [
-//       {
-//         name: 'Binance',
-//         logoUrl: 'https://lh3.googleusercontent.com/d/1boyq5ggqGRMRooCVW9dxnJOuyBxOjxbY',
-//         interestRate: 0.075,
-//       },
-//       {
-//         name: 'Kucoin',
-//         logoUrl: 'https://lh3.googleusercontent.com/d/1wGiCfaq1znluUOfR7FORDgNbpKEHm42e',
-//         interestRate: 0.065,
-//       },
-//       {
-//         name: 'Huobi',
-//         logoUrl: 'https://lh3.googleusercontent.com/d/1YbIogw5gR073qCLMTzo-P1BkHNfFSRd5',
-//         interestRate: 0.065,
-//       },
-//     ],
-//     buttonText: 'See all rates',
-//     buttonVariant: 'outlined',
-//   },
-//   {
-//     title: 'USDT Tether',
-//     logoUrl: 'https://lh3.googleusercontent.com/d/1m7uqUxkrbFlhlMKuc48qKMRgulToGSqu',
-//     interestRate: '0.135',
-//     exchanges: [
-//       {
-//         name: 'Binance',
-//         logoUrl: 'https://lh3.googleusercontent.com/d/1boyq5ggqGRMRooCVW9dxnJOuyBxOjxbY',
-//         interestRate: 0.075,
-//       },
-//       {
-//         name: 'Kucoin',
-//         logoUrl: 'https://lh3.googleusercontent.com/d/1wGiCfaq1znluUOfR7FORDgNbpKEHm42e',
-//         interestRate: 0.065,
-//       },
-//       {
-//         name: 'Huobi',
-//         logoUrl: 'https://lh3.googleusercontent.com/d/1YbIogw5gR073qCLMTzo-P1BkHNfFSRd5',
-//         interestRate: 0.065,
-//       },
-//     ],
-//     buttonText: 'See all rates',
-//     buttonVariant: 'outlined',
-//   },
-//   {
-//     title: 'Solana',
-//     logoUrl: 'https://lh3.googleusercontent.com/d/1nXse0ZxVNl5GKI7PUwaEJcdVpS4Mud6S',
-//     interestRate: '0.115',
-//     exchanges: [
-//       {
-//         name: 'Binance',
-//         logoUrl: 'https://lh3.googleusercontent.com/d/1boyq5ggqGRMRooCVW9dxnJOuyBxOjxbY',
-//         interestRate: 0.075,
-//       },
-//       {
-//         name: 'Kucoin',
-//         logoUrl: 'https://lh3.googleusercontent.com/d/1wGiCfaq1znluUOfR7FORDgNbpKEHm42e',
-//         interestRate: 0.065,
-//       },
-//       {
-//         name: 'Huobi',
-//         logoUrl: 'https://lh3.googleusercontent.com/d/1YbIogw5gR073qCLMTzo-P1BkHNfFSRd5',
-//         interestRate: 0.065,
-//       },
-//     ],
-//     buttonText: 'See all rates',
-//     buttonVariant: 'outlined',
-//   },
-//   {
-//     title: 'Polkadot',
-//     logoUrl: 'https://lh3.googleusercontent.com/d/1KXd0AR3PcoRZNl_-_zCo2mlYJYV4K71b',
-//     interestRate: '0.175',
-//     exchanges: [
-//       {
-//         name: 'Binance',
-//         logoUrl: 'https://lh3.googleusercontent.com/d/1boyq5ggqGRMRooCVW9dxnJOuyBxOjxbY',
-//         interestRate: 0.075,
-//       },
-//       {
-//         name: 'Kucoin',
-//         logoUrl: 'https://lh3.googleusercontent.com/d/1wGiCfaq1znluUOfR7FORDgNbpKEHm42e',
-//         interestRate: 0.065,
-//       },
-//       {
-//         name: 'Huobi',
-//         logoUrl: 'https://lh3.googleusercontent.com/d/1YbIogw5gR073qCLMTzo-P1BkHNfFSRd5',
-//         interestRate: 0.065,
-//       },
-//     ],
-//     buttonText: 'See all rates',
-//     buttonVariant: 'outlined',
-//   },
-//   {
-//     title: 'Cardano',
-//     logoUrl: 'https://lh3.googleusercontent.com/d/1K18_Dvsdc1DzZPPsX8WCTkHkyNisRGWE',
-//     interestRate: '0.045',
-//     exchanges: [
-//       {
-//         name: 'Binance',
-//         logoUrl: 'https://lh3.googleusercontent.com/d/1boyq5ggqGRMRooCVW9dxnJOuyBxOjxbY',
-//         interestRate: 0.075,
-//       },
-//       {
-//         name: 'Kucoin',
-//         logoUrl: 'https://lh3.googleusercontent.com/d/1wGiCfaq1znluUOfR7FORDgNbpKEHm42e',
-//         interestRate: 0.065,
-//       },
-//       {
-//         name: 'Huobi',
-//         logoUrl: 'https://lh3.googleusercontent.com/d/1YbIogw5gR073qCLMTzo-P1BkHNfFSRd5',
-//         interestRate: 0.065,
-//       },
-//     ],
-//     buttonText: 'See all rates',
-//     buttonVariant: 'outlined',
-//   },
-//   {
-//     title: 'BNB',
-//     logoUrl: 'https://lh3.googleusercontent.com/d/10wkm3mrPFnd3UhvoGVeBlhLYszvEHsb3',
-//     interestRate: '0.065',
-//     exchanges: [
-//       {
-//         name: 'Binance',
-//         logoUrl: 'https://lh3.googleusercontent.com/d/1boyq5ggqGRMRooCVW9dxnJOuyBxOjxbY',
-//         interestRate: 0.075,
-//       },
-//       {
-//         name: 'Kucoin',
-//         logoUrl: 'https://lh3.googleusercontent.com/d/1wGiCfaq1znluUOfR7FORDgNbpKEHm42e',
-//         interestRate: 0.065,
-//       },
-//       {
-//         name: 'Huobi',
-//         logoUrl: 'https://lh3.googleusercontent.com/d/1YbIogw5gR073qCLMTzo-P1BkHNfFSRd5',
-//         interestRate: 0.065,
-//       },
-//     ],
-//     buttonText: 'See all rates',
-//     buttonVariant: 'outlined',
-//   },
-//   {
-//     title: 'Luna',
-//     logoUrl: 'https://lh3.googleusercontent.com/d/1YQ4ons4Y6dqWDjYlZasIFoi1evevBHrU',
-//     interestRate: '0.245',
-//     exchanges: [
-//       {
-//         name: 'Binance',
-//         logoUrl: 'https://lh3.googleusercontent.com/d/1boyq5ggqGRMRooCVW9dxnJOuyBxOjxbY',
-//         interestRate: 0.075,
-//       },
-//       {
-//         name: 'Kucoin',
-//         logoUrl: 'https://lh3.googleusercontent.com/d/1wGiCfaq1znluUOfR7FORDgNbpKEHm42e',
-//         interestRate: 0.065,
-//       },
-//       {
-//         name: 'Huobi',
-//         logoUrl: 'https://lh3.googleusercontent.com/d/1YbIogw5gR073qCLMTzo-P1BkHNfFSRd5',
-//         interestRate: 0.065,
-//       },
-//     ],
-//     buttonText: 'See all rates',
-//     buttonVariant: 'outlined',
-//   },
-// ];
-
+/* const exchanges = [
+  {
+      name: 'Binance',
+      logoUrl: 'https://stakinghodlr.s3.amazonaws.com/exchange_tiny_logos/binance.png',
+    },
+    {
+      name: 'Kucoin',
+      logoUrl: 'https://stakinghodlr.s3.amazonaws.com/exchange_tiny_logos/kucoin.png',
+    },
+    {
+      name: 'Huobi',
+      logoUrl: 'https://stakinghodlr.s3.amazonaws.com/exchange_tiny_logos/huobi.png',
+    },
+];
+const coins = [
+  {
+    title: 'Bitcoin',
+    symbol: 'BTC',
+    logoUrl: 'https://stakinghodlr.s3.amazonaws.com/currencies_logos/btc.png',
+  },
+  {
+    title: 'Ethereum',
+    symbol: 'ETH',
+    logoUrl: 'https://stakinghodlr.s3.amazonaws.com/currencies_logos/eth.png',
+  },
+  {
+    title: 'Tether',
+    symbol: 'USDT',
+    logoUrl: 'https://stakinghodlr.s3.amazonaws.com/currencies_logos/usdt.png',
+  },
+  {
+    title: 'Solana',
+    symbol: 'SOL',
+    logoUrl: 'https://stakinghodlr.s3.amazonaws.com/currencies_logos/sol.png',
+  },
+  {
+    title: 'Polkadot',
+    symbol: 'DOT',
+    logoUrl: 'https://stakinghodlr.s3.amazonaws.com/currencies_logos/dot.png',
+  },
+  {
+    title: 'Cardano',
+    symbol: 'ADA',
+    logoUrl: 'https://stakinghodlr.s3.amazonaws.com/currencies_logos/ada.jpg',
+  },
+  {
+    title: 'Binance Coin',
+    symbol: 'BNB',
+    logoUrl: 'https://stakinghodlr.s3.amazonaws.com/currencies_logos/bnb.png',
+  },
+  {
+    title: 'Luna',
+    symbol: 'LUNA',
+    logoUrl: 'https://stakinghodlr.s3.amazonaws.com/currencies_logos/luna.png',
+  },
+]; */
 function HomeContent() {
 
   const [sortedCoins, setCoinRates] = useState([]);
