@@ -1,116 +1,82 @@
-import React, { useEffect, useState } from "react";
-import { API, graphqlOperation } from "aws-amplify";
+import React from "react";
+import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
+import Button from "@mui/material/Button";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
 import { Authenticator } from "@aws-amplify/ui-react";
-import { createCoin } from "../graphql/mutations";
-import { listCoins } from "../graphql/queries";
-
-const initialState = { name: "", symbol: "", logoUrl: "" };
-
-const styles = {
-  container: {
-    width: 400,
-    margin: "0 auto",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    padding: 20,
-  },
-  coin: { marginBottom: 15 },
-  input: {
-    border: "none",
-    backgroundColor: "#ddd",
-    marginBottom: 10,
-    padding: 8,
-    fontSize: 18,
-  },
-  coinName: { fontSize: 20, fontWeight: "bold" },
-  coinDescription: { marginBottom: 0 },
-  button: {
-    backgroundColor: "black",
-    color: "white",
-    outline: "none",
-    fontSize: 18,
-    padding: "12px 0px",
-  },
-};
+import CrudCoinForm from "../components/CrudCoinForm";
+import CrudExchangeForm from "../components/CrudExchangeForm";
+import CrudCoinRatesForm from "../components/CrudCoinRatesForm";
 
 function SigninContent() {
-  const [formState, setFormState] = useState(initialState);
-  const [coins, setCoins] = useState([]);
-
-  useEffect(() => {
-    fetchCoins();
-  }, []);
-
-  function setInput(key, value) {
-    setFormState({ ...formState, [key]: value });
-  }
-  console.log(formState);
-  async function fetchCoins() {
-    try {
-      const coinData = await API.graphql(graphqlOperation(listCoins));
-      console.log(coinData);
-      const coins = coinData.data.listCoins.items;
-      setCoins(coins);
-    } catch (err) {
-      console.log("error fetching coins");
-    }
-  }
-
-  async function addCoin() {
-    console.log("add coin");
-    try {
-      if (!formState.name || !formState.symbol || !formState.logoUrl) return;
-      const coin = { ...formState };
-      setCoins([...coins, coin]);
-      setFormState(initialState);
-      console.log({ input: coin });
-      await API.graphql(graphqlOperation(createCoin, { input: coin }));
-    } catch (err) {
-      console.log("error creating coin:", err);
-    }
-  }
-
+  const [value, setValue] = React.useState('coins');
+  
+  const handleRadioChange = event => {
+    setValue(event.target.value);
+  };
   return (
     <>
       <Container maxWidth="xl" component="main">
         <Authenticator>
-          {({ signOut /* , user */ }) => (
-            <div style={styles.container}>
-              <button style={styles.button} onClick={signOut}>
-                Sign out
-              </button>
-              <h2>Cryptocurrencies</h2>
-              <input
-                onChange={(event) => setInput("name", event.target.value)}
-                style={styles.input}
-                value={formState.name}
-                placeholder="Name"
-              />
-              <input
-                onChange={(event) => setInput("symbol", event.target.value)}
-                style={styles.input}
-                value={formState.symbol}
-                placeholder="Symbol"
-              />
-              <input
-                onChange={(event) => setInput("logoUrl", event.target.value)}
-                style={styles.input}
-                value={formState.logoUrl}
-                placeholder="Logo URL"
-              />
-              <button style={styles.button} onClick={addCoin}>
-                Create Coin
-              </button>
-              {coins.map((coin, index) => (
-                <div key={coin.id ? coin.id : index} style={styles.coin}>
-                  <p style={styles.coinName}>{coin.name}</p>
-                  <p style={styles.coinDescription}>{coin.symbol}</p>
-                  <p style={styles.coinDescription}>{coin.logoUrl}</p>
-                </div>
-              ))}
-            </div>
+          {({ signOut, user }) => (
+            <>
+              <Grid container spacing={3} alignItems="flex-end" mt={5}>
+                <Grid item key="signout-button" xs={6}>
+                  <Button variant="contained" onClick={signOut}>
+                    Sign out
+                  </Button>
+                </Grid>
+                <Grid item key="radio-button" xs={6}>
+                  <FormControl>
+                    <FormLabel id="demo-row-radio-buttons-group-label">
+                      Management
+                    </FormLabel>
+                    <RadioGroup
+                      row
+                      aria-labelledby="demo-row-radio-buttons-group-label"
+                      name="row-radio-buttons-group"
+                      onChange={handleRadioChange}
+                      defaultValue="coins"
+                    >
+                      <FormControlLabel
+                        value="coins"
+                        control={<Radio />}
+                        label="Coins"
+                      />
+                      <FormControlLabel
+                        value="exchanges"
+                        control={<Radio />}
+                        label="Exchanges"
+                      />
+                      <FormControlLabel
+                        value="coinRates"
+                        control={<Radio />}
+                        label="Coin Rates"
+                      />
+                    </RadioGroup>
+                  </FormControl>
+                </Grid>
+                {value === 'coins' && (
+                  <Grid item key="coin-form" xs={12}>
+                    <CrudCoinForm user={user} />
+                  </Grid>
+                )}
+                {value === 'exchanges' && (
+                  <Grid item key="coin-form" xs={12}>
+                    <CrudExchangeForm user={user} />
+                  </Grid>
+                )}
+                {value === 'coinRates' && (
+                  <Grid item key="coin-form" xs={12}>
+                    <CrudCoinRatesForm user={user} />
+                  </Grid>
+                )}
+              </Grid>
+            </>
           )}
         </Authenticator>
       </Container>
