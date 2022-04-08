@@ -135,6 +135,8 @@ function Coin() {
         flexRates.push(insertingRate);
       }
     }
+    flexRates.sort((a,b) => b.interestRate - a.interestRate);
+    fixedRates.sort((a,b) => b.interestRate - a.interestRate);
     setFlexRates(flexRates);
     setFixedRates(fixedRates);
     setCoin(coin);
