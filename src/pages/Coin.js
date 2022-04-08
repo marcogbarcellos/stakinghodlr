@@ -232,8 +232,6 @@ function Coin() {
                 </MenuItem>
                 )
               }
-              <MenuItem value={20}>{coins.toString()}</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
             </Select>
           </Grid>
           <Grid item container key={`grids`} spacing={3} xs={12}>
