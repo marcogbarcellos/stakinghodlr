@@ -8,11 +8,11 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import { Divider } from '@mui/material';
 
-export default function ExchangesTinyList({exchanges}) {
+export default function ExchangesTinyList({exchanges, fixedStaking}) {
   const cutExchanges = exchanges.sort((a,b) => b.interestRate - a.interestRate).slice(0,3);
   return (
     <List dense sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-      {cutExchanges.map(({logoUrl, name, interestRate}, index) => {
+      {cutExchanges.map(({logoUrl, name, interestRate, lockDays}, index) => {
         const labelId = `exchange-list-secondary-label-${index}`;
         return (
         <>
@@ -35,7 +35,7 @@ export default function ExchangesTinyList({exchanges}) {
                   src={logoUrl}
                 />
               </ListItemAvatar>
-              <ListItemText id={`exchange-${labelId}`} primary={`up to ${(interestRate*100).toFixed(2)}% on ${name}`} />
+              <ListItemText id={`exchange-${labelId}`} primary={`${(interestRate*100).toFixed(2)}% on ${name}${fixedStaking ? ` for ${lockDays} days` : ''}`} />
             </ListItemButton>
           </ListItem>
           <Divider style={{color: "#000"}} />

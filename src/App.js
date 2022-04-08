@@ -8,6 +8,7 @@ import Link from '@mui/material/Link';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import Container from '@mui/material/Container';
 import Home from "./pages/Home";
+import Coin from "./pages/Coin";
 import Signin from "./pages/Signin";
 
 function Copyright(props) {
@@ -50,7 +51,9 @@ const BasePage = ({ children }) => {
     >
       <Toolbar sx={{ flexWrap: "wrap", backgroundColor: "#fff" }}>
         <Typography variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
-          StakingHodlr
+          <Link color="inherit" href="https://stakinghodlr.com/">
+            StakingHodlr
+          </Link>
         </Typography>
         {/* <nav>
           <Link
@@ -123,6 +126,7 @@ const App = () => {
       <Routes>
         <Route index element={<BasePage><Home /></BasePage> } />
         <Route path="home" element={<BasePage><Home /></BasePage> } />
+        <Route path="coins/:symbol" forceRefresh={true} element={<BasePage><Coin /></BasePage> } />
         <Route path="signin" element={<BasePage><Signin /></BasePage> } />
         <Route path="*" element={<p>There's nothing here: 404!</p>} />
       </Routes>

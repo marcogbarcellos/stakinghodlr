@@ -50,7 +50,7 @@ function CrudCoinRatesForm({ user }) {
   if (!user) {
     navigate("/signin", { replace: true });
   }
-  const columns = [
+  const datagridColumns = [
     { field: "date", headerName: "Date", width: 250 },
     { field: "coinSymbol", headerName: "Coin", width: 150 },
     { field: "exchangeName", headerName: "Exchange", width: 150 },
@@ -279,7 +279,7 @@ function CrudCoinRatesForm({ user }) {
                   //   {field: "exchangeName", sort: "desc"},
                   //   {field: "exchangeName", sort: "asc"},
                   // ]}
-                  columns={columns}
+                  columns={datagridColumns}
                   pageSize={20}
                   rowsPerPageOptions={[50]}
                 />

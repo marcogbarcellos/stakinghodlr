@@ -40,7 +40,7 @@ const styles = {
   },
 };
 
-const initialState = { name: "", logoUrl: "" };
+const initialState = { name: "", logoUrl: "", earnUrl: "" };
 
 function CrudExchangeForm({ user }) {
   const navigate = useNavigate();
@@ -70,7 +70,7 @@ function CrudExchangeForm({ user }) {
 
   async function addExchange() {
     try {
-      if (!formState.name || !formState.logoUrl) return;
+      if (!formState.name || !formState.logoUrl || !formState.earnUrl) return;
       const exchange = { ...formState };
       setExchanges([...exchanges, exchange]);
       setFormState(initialState);
@@ -115,6 +115,12 @@ function CrudExchangeForm({ user }) {
             value={formState.logoUrl}
             placeholder="Logo URL"
           />
+          <input
+            onChange={(event) => setInput("earnUrl", event.target.value)}
+            style={styles.input}
+            value={formState.earnUrl}
+            placeholder="Earn URL"
+          />
           <button style={styles.button} onClick={addExchange}>
             Create Exchange
           </button>
@@ -122,6 +128,7 @@ function CrudExchangeForm({ user }) {
             <div key={exchange.id ? exchange.id : index} style={styles.exchange}>
               <p style={styles.exchangeName}>{exchange.name}</p>
               <p style={styles.exchangeDescription}>{exchange.logoUrl}</p>
+              <p style={styles.exchangeDescription}>{exchange.earnUrl}</p>
               <button style={styles.buttonDlt} onClick={removeExchange(exchange.name)}>
                 delete
               </button>

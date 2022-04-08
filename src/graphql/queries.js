@@ -74,6 +74,7 @@ export const getCoinRate = /* GraphQL */ `
       exchange {
         name
         logoUrl
+        earnUrl
         coinRates {
           nextToken
         }
@@ -119,6 +120,7 @@ export const listCoinRates = /* GraphQL */ `
         exchange {
           name
           logoUrl
+          earnUrl
           createdAt
           updatedAt
         }
@@ -136,6 +138,7 @@ export const getExchange = /* GraphQL */ `
     getExchange(name: $name) {
       name
       logoUrl
+      earnUrl
       coinRates {
         items {
           coinNameExchangeName
@@ -172,6 +175,7 @@ export const listExchanges = /* GraphQL */ `
       items {
         name
         logoUrl
+        earnUrl
         coinRates {
           nextToken
         }

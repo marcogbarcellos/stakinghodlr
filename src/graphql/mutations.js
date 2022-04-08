@@ -105,6 +105,7 @@ export const createCoinRate = /* GraphQL */ `
       exchange {
         name
         logoUrl
+        earnUrl
         coinRates {
           nextToken
         }
@@ -141,6 +142,7 @@ export const updateCoinRate = /* GraphQL */ `
       exchange {
         name
         logoUrl
+        earnUrl
         coinRates {
           nextToken
         }
@@ -177,6 +179,7 @@ export const deleteCoinRate = /* GraphQL */ `
       exchange {
         name
         logoUrl
+        earnUrl
         coinRates {
           nextToken
         }
@@ -198,6 +201,7 @@ export const createExchange = /* GraphQL */ `
     createExchange(input: $input, condition: $condition) {
       name
       logoUrl
+      earnUrl
       coinRates {
         items {
           coinNameExchangeName
@@ -224,6 +228,7 @@ export const updateExchange = /* GraphQL */ `
     updateExchange(input: $input, condition: $condition) {
       name
       logoUrl
+      earnUrl
       coinRates {
         items {
           coinNameExchangeName
@@ -250,6 +255,7 @@ export const deleteExchange = /* GraphQL */ `
     deleteExchange(input: $input, condition: $condition) {
       name
       logoUrl
+      earnUrl
       coinRates {
         items {
           coinNameExchangeName

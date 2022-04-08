@@ -24,5 +24,6 @@ type CoinRate @model {
 type Exchange @model {
   name: String! @primaryKey
   logoUrl: String
+  earnUrl: String
   coinRates: [CoinRate] @hasMany(indexName: "byExchangeName", fields: ["name"])
 }
