@@ -127,7 +127,7 @@ function CrudCoinRatesForm({ user }) {
     try {
       if (oldCoinRate) {
         await API.graphql(graphqlOperation(updateCoinRate, { input: coinRate }));
-        await API.graphql(graphqlOperation(createHistoryCoinRate, { input: coinRate }));
+        await API.graphql(graphqlOperation(createHistoryCoinRate, { input: oldCoinRate }));
       } else {
         await API.graphql(graphqlOperation(createCoinRate, { input: coinRate }));
       }

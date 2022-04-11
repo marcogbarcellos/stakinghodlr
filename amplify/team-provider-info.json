@@ -14,6 +14,12 @@
     "categories": {
       "auth": {
         "stakinghodlr609cfa54": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d2bzk6bu02yo9f",
+          "type": "cicd"
+        }
       }
     }
   }
