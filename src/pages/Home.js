@@ -160,7 +160,7 @@ function Home() {
         disableGutters
         maxWidth="xl"
         component="main"
-        sx={{ pt: 8, pb: 6 }}
+        sx={{ p: 10 }}
       >
         <Typography
           component="h1"

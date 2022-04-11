@@ -48,5 +48,13 @@
       "type": "cicd",
       "lastPushTimeStamp": "2022-04-06T15:08:13.568Z"
     }
+  },
+  "function": {
+    "tweetRates": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": []
+    }
   }
 }

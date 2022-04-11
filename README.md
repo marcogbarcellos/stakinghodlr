@@ -190,6 +190,8 @@ Some API's like, for example, Kucoin and others unfortunately don't provide acce
 - [Crypto.com](https://crypto.com/br/earn)
 - [Kucoin](https://www.kucoin.com/earn)
 - [Huobi](https://www.huobi.com/en-us/financial/earn)
+- [Bybit](https://www.bybit.com/en-US/earn/home)
+- [Bitfinex](https://staking.bitfinex.com/)
 - [Kraken](https://www.kraken.com/features/staking-coins)
 - [Coinbase](https://www.coinbase.com/earn)
 - [Gemini](https://www.gemini.com/earn)
@@ -201,17 +203,3 @@ Some API's like, for example, Kucoin and others unfortunately don't provide acce
 - [Blockfi](https://blockfi.com/crypto-interest-account)
 - [Ledn](https://ledn.io/en/btc-savings)
 - [Guarda](https://guarda.com/staking/)
-
-Crypto.com
-Huobi
-Nexo
-Celsius
-FTX
-Voyager
-Trust wallet
-cex.io
-http://youhodler.com/
-Coinbase
-Kucoin
-Binance
-Kraken

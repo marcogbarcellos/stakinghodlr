@@ -20,6 +20,13 @@
           "appId": "d380coxsjx67bc",
           "type": "cicd"
         }
+      },
+      "function": {
+        "tweetRates": {
+          "twitterApiKey": "fsdfsdfsdfsdfd",
+          "twitterApiSecret": "dsfsdfsdfdsfsdfsd",
+          "secretsPathAmplifyAppId": "d380coxsjx67bc"
+        }
       }
     }
   }

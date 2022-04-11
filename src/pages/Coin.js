@@ -177,11 +177,11 @@ function Coin() {
           component="main"
           sx={{ pt: 8, pb: 6 }}
         >
-          <Grid item key={`${coin.name}-notfound`} xs={12} md={6} lg={4}>
+          {/* <Grid item key={`${coin.name}-notfound`} xs={12} md={6} lg={4}>
             <Typography variant="h2" color="text.secondary" align="center">
               No Coin was found. =(
             </Typography>
-          </Grid>
+          </Grid> */}
         </Container>
       </>
     );
