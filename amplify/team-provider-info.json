@@ -12,14 +12,14 @@
       "AmplifyAppId": "d3fihn4bs5jrqf"
     },
     "categories": {
-      "auth": {
-        "stakinghodlr3be5a271": {}
-      },
       "hosting": {
         "amplifyhosting": {
           "appId": "d3fihn4bs5jrqf",
           "type": "cicd"
         }
+      },
+      "auth": {
+        "stakinghodlr5e3dfa3e": {}
       }
     }
   }
