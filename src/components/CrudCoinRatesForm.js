@@ -126,6 +126,7 @@ function CrudCoinRatesForm({ user }) {
     try {
       const exchangeData = await API.graphql(graphqlOperation(listExchanges));
       const exchanges = exchangeData.data.listExchanges.items;
+      exchanges.sort((a, b) => a.name.localeCompare(b.name));
       setExchanges(exchanges);
     } catch (error) {
       console.error("error fetching exchanges", error);
@@ -136,6 +137,7 @@ function CrudCoinRatesForm({ user }) {
     try {
       const coinData = await API.graphql(graphqlOperation(listCoins));
       const coins = coinData.data.listCoins.items;
+      coins.sort((a, b) => a.symbol.localeCompare(b.symbol));
       setCoins(coins);
     } catch (error) {
       console.error("error fetching coins", error);
