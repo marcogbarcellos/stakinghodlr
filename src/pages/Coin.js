@@ -4,6 +4,7 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 import Container from "@mui/material/Container";
+import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { DataGrid } from "@mui/x-data-grid";
@@ -135,13 +136,13 @@ function Coin() {
         flexRates.push(insertingRate);
       }
     }
-    flexRates.sort((a,b) => b.interestRate - a.interestRate);
-    fixedRates.sort((a,b) => b.interestRate - a.interestRate);
+    flexRates.sort((a, b) => b.interestRate - a.interestRate);
+    fixedRates.sort((a, b) => b.interestRate - a.interestRate);
     setFlexRates(flexRates);
     setFixedRates(fixedRates);
     setCoin(coin);
   };
-  console.log(flexRates)
+  console.log(flexRates);
   async function fetchCoin() {
     try {
       const sevenDaysAgo = new Date();
@@ -149,8 +150,8 @@ function Coin() {
       console.log(`finding coin with Symbol: ${symbol}`);
       const coinData = await API.graphql(
         graphqlOperation(getCoinGraphqlQuery, { symbol })
-        );
-        
+      );
+
       console.log(`finding coin data:`, coinData);
       setCoinAttributes(coinData.data.getCoin);
     } catch (error) {
@@ -168,6 +169,41 @@ function Coin() {
     }
   }
 
+  const coinSelector = () => {
+    return (
+      <>
+        <InputLabel id="select-coin-label">Select a coin</InputLabel>
+        <Select
+          value={coin.symbol}
+          style={{ width: "90%" }}
+          onChange={(event) => {
+            navigate(`/coins/${event.target.value}`);
+            navigate(0);
+          }}
+        >
+          {coins.map((coin) => (
+            <MenuItem value={coin.symbol}>
+              <Grid container spacing={5}>
+                <Grid item key={`${coin.name}-flex`}>
+                  <Avatar
+                    style={{
+                      cursor: "pointer",
+                    }}
+                    alt={coin.symbol}
+                    src={coin.logoUrl}
+                  />
+                </Grid>
+                <Grid item key={`${coin.name}-symb-flex`}>
+                  <Typography variant="h5">{coin.symbol}</Typography>
+                </Grid>
+              </Grid>
+            </MenuItem>
+          ))}
+        </Select>
+      </>
+    );
+  };
+
   if (!coin || !coin.name) {
     return (
       <>
@@ -177,6 +213,11 @@ function Coin() {
           component="main"
           sx={{ pt: 8, pb: 6 }}
         >
+          <Grid container spacing={5}>
+            <Grid item key={`${coin.name}-main-flex`} xs={12} lg={3}>
+              {coinSelector()}
+            </Grid>
+          </Grid>
           {/* <Grid item key={`${coin.name}-notfound`} xs={12} md={6} lg={4}>
             <Typography variant="h2" color="text.secondary" align="center">
               No Coin was found. =(
@@ -194,49 +235,13 @@ function Coin() {
         component="main"
         sx={{ pt: 8, pb: 6, pl: 5 }}
       >
-        <Grid
-          container
-          spacing={5}
-        >
+        <Grid container spacing={5}>
           <Grid item key={`${coin.name}-main-flex`} xs={12} lg={3}>
-            <Select
-              value={coin.symbol}
-              style={{width: "90%"}}
-              onChange={event => {
-                navigate(`/coins/${event.target.value}`);
-                navigate(0);
-              }}
-            >
-              {
-                coins.map(coin => 
-                  <MenuItem value={coin.symbol}>
-                    <Grid
-                      container
-                      spacing={5}
-                    >
-                      <Grid item key={`${coin.name}-flex`}>
-                        <Avatar
-                          style={{
-                            cursor: "pointer",
-                          }}
-                          alt={coin.symbol}
-                          src={coin.logoUrl}
-                        />
-                      </Grid>
-                      <Grid item key={`${coin.name}-symb-flex`}>
-                        <Typography
-                          variant="h5"
-                        >{coin.symbol}</Typography>
-                      </Grid>
-                    </Grid>
-                </MenuItem>
-                )
-              }
-            </Select>
+            {coinSelector()}
           </Grid>
           <Grid item container key={`grids`} spacing={3} xs={12}>
             <Grid item key={`grid-fixed`}>
-              {fixedRates.length > 0 && (
+              {flexRates.length > 0 && (
                 <>
                   <Typography variant="h5">Flexible Term</Typography>
                   <div style={{ height: 500, width: 350 }}>

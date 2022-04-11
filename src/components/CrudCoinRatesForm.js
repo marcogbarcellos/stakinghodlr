@@ -280,7 +280,7 @@ function CrudCoinRatesForm({ user }) {
                   //   {field: "exchangeName", sort: "asc"},
                   // ]}
                   columns={datagridColumns}
-                  pageSize={20}
+                  pageSize={50}
                   rowsPerPageOptions={[50]}
                 />
               </div>
