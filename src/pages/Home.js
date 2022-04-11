@@ -54,7 +54,6 @@ function Home() {
         },
       ];
     }
-    console.log(sortedCoins);
     return Object.values(sortedCoins);
   };
 

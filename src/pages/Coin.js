@@ -48,7 +48,6 @@ function Coin() {
   const [flexRates, setFlexRates] = useState([]);
   const [fixedRates, setFixedRates] = useState([]);
   const [coins, setCoins] = useState([]);
-  console.log(coin);
   const flexDatagridColumns = [
     {
       field: "exchangeInfo",
@@ -142,17 +141,13 @@ function Coin() {
     setFixedRates(fixedRates);
     setCoin(coin);
   };
-  console.log(flexRates);
   async function fetchCoin() {
     try {
       const sevenDaysAgo = new Date();
       sevenDaysAgo.setHours(sevenDaysAgo.getHours() - 24 * 7);
-      console.log(`finding coin with Symbol: ${symbol}`);
       const coinData = await API.graphql(
         graphqlOperation(getCoinGraphqlQuery, { symbol })
       );
-
-      console.log(`finding coin data:`, coinData);
       setCoinAttributes(coinData.data.getCoin);
     } catch (error) {
       console.error("error fetching coins", error);

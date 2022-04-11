@@ -98,7 +98,6 @@ function CrudCoinRatesForm({ user }) {
     };
     try {
       if (oldCoinRate) {
-        console.log("updating coin Rate",coinRate);
         await API.graphql(graphqlOperation(updateCoinRate, { input: coinRate }));
         const historyRate = {
           coinNameExchangeName: oldCoinRate.coinNameExchangeName,
@@ -108,12 +107,11 @@ function CrudCoinRatesForm({ user }) {
           interestRate: oldCoinRate.interestRate,
           lockDays: oldCoinRate.lockDays,
         };
-        console.log("updating HISTORY coin Rate", historyRate);
         await API.graphql(graphqlOperation(createHistoryCoinRate, { input: historyRate }));
       } else {
         await API.graphql(graphqlOperation(createCoinRate, { input: coinRate }));
       }
-      setCoinRates([...coinRates, coinRate]);
+      await fetchCoinRates();
       // cleanup form
       setCoin("");
       setExchange("");
