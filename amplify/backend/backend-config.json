@@ -17,7 +17,7 @@
     }
   },
   "auth": {
-    "stakinghodlr609cfa54": {
+    "stakinghodlr3be5a271": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
@@ -46,7 +46,7 @@
     "amplifyhosting": {
       "service": "amplifyhosting",
       "type": "cicd",
-      "lastPushTimeStamp": "2022-04-11T18:23:20.881Z"
+      "lastPushTimeStamp": "2022-04-11T19:44:58.513Z"
     }
   }
 }

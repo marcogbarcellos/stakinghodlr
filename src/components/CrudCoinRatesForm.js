@@ -18,34 +18,6 @@ import { createCoinRate, updateCoinRate } from "../graphql/mutations";
 import { createHistoryCoinRate } from "../graphql/mutations";
 import { deleteCoinRate } from "../graphql/mutations";
 
-const styles = {
-  container: {
-    width: "100%",
-    margin: "0 auto",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    padding: 20,
-  },
-  exchange: { marginBottom: 15 },
-  input: {
-    border: "none",
-    backgroundColor: "#ddd",
-    marginBottom: 10,
-    padding: 8,
-    fontSize: 18,
-  },
-  exchangeName: { fontSize: 20, fontWeight: "bold" },
-  exchangeDescription: { marginBottom: 0 },
-  button: {
-    backgroundColor: "black",
-    color: "white",
-    outline: "none",
-    fontSize: 18,
-    padding: "12px 0px",
-  },
-};
-
 function CrudCoinRatesForm({ user }) {
   const navigate = useNavigate();
   if (!user) {
@@ -126,8 +98,18 @@ function CrudCoinRatesForm({ user }) {
     };
     try {
       if (oldCoinRate) {
+        console.log("updating coin Rate",coinRate);
         await API.graphql(graphqlOperation(updateCoinRate, { input: coinRate }));
-        await API.graphql(graphqlOperation(createHistoryCoinRate, { input: oldCoinRate }));
+        const historyRate = {
+          coinNameExchangeName: oldCoinRate.coinNameExchangeName,
+          date: oldCoinRate.date,
+          coinSymbol: oldCoinRate.coinSymbol,
+          exchangeName: oldCoinRate.exchangeName,
+          interestRate: oldCoinRate.interestRate,
+          lockDays: oldCoinRate.lockDays,
+        };
+        console.log("updating HISTORY coin Rate", historyRate);
+        await API.graphql(graphqlOperation(createHistoryCoinRate, { input: historyRate }));
       } else {
         await API.graphql(graphqlOperation(createCoinRate, { input: coinRate }));
       }
@@ -193,7 +175,6 @@ function CrudCoinRatesForm({ user }) {
   return (
     <>
       <Container maxWidth="xl" component="main">
-        <div style={styles.container}>
           <Grid container spacing={3} alignItems="flex-end" mt={5}>
             <Grid item key="coins-grid-title" xs={12}>
               <Typography variant="h5">Add new coin rates</Typography>
@@ -248,7 +229,7 @@ function CrudCoinRatesForm({ user }) {
                 />
               </FormControl>
             </Grid>
-            <Grid item key="coins-grid-form-rate" xs={12}>
+            <Grid item key="coins-grid-form-lock-days" xs={12}>
               <FormControl fullWidth>
                 <TextField
                   id="outlined-lock-days"
@@ -294,7 +275,6 @@ function CrudCoinRatesForm({ user }) {
               </div>
             </Grid>
           </Grid>
-        </div>
       </Container>
     </>
   );
