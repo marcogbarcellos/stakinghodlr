@@ -16,9 +16,9 @@ import { useNavigate } from "react-router-dom";
 
 function Home() {
   const navigate = useNavigate();
-  
-  const [sortedCoins, setCoinRates] = useState([]);
-  const [lockedCoins, setLockedRates] = useState([]);
+
+  const [flexRates, setFlexRates] = useState([]);
+  const [lockedRates, setLockedRates] = useState([]);
 
   useEffect(() => {
     fetchCoinRates();
@@ -60,19 +60,28 @@ function Home() {
   async function fetchCoinRates() {
     try {
       const sevenDaysAgo = new Date();
-      sevenDaysAgo.setHours(sevenDaysAgo.getHours() - (24 * 7));
-      const rateData = await API.graphql(graphqlOperation(listCoinRates, {filter: {and: {date: {ge: sevenDaysAgo.toISOString()}, lockDays: {attributeExists: false}}}}));
+      sevenDaysAgo.setHours(sevenDaysAgo.getHours() - 24 * 7);
+      const rateData = await API.graphql(
+        graphqlOperation(listCoinRates, {
+          filter: {
+            and: {
+              date: { ge: sevenDaysAgo.toISOString() },
+              lockDays: { attributeExists: false },
+            },
+          },
+        })
+      );
       const rates = extractFormattedCoinRates(
         rateData.data.listCoinRates.items
       );
-      setCoinRates(rates);
+      setFlexRates(rates);
     } catch (error) {
       console.error("error fetching coins", error);
       if (error.data.listCoinRates.items) {
         const rates = extractFormattedCoinRates(
           error.data.listCoinRates.items.filter((i) => i !== null)
         );
-        setCoinRates(rates);
+        setFlexRates(rates);
       }
     }
   }
@@ -80,8 +89,17 @@ function Home() {
   async function fetchLockedRates() {
     try {
       const sevenDaysAgo = new Date();
-      sevenDaysAgo.setHours(sevenDaysAgo.getHours() - (24 * 7));
-      const rateData = await API.graphql(graphqlOperation(listCoinRates, {filter: {and: {date: {ge: sevenDaysAgo.toISOString()}, lockDays: {attributeExists: true}}}}));
+      sevenDaysAgo.setHours(sevenDaysAgo.getHours() - 24 * 7);
+      const rateData = await API.graphql(
+        graphqlOperation(listCoinRates, {
+          filter: {
+            and: {
+              date: { ge: sevenDaysAgo.toISOString() },
+              lockDays: { attributeExists: true },
+            },
+          },
+        })
+      );
       const rates = extractFormattedCoinRates(
         rateData.data.listCoinRates.items
       );
@@ -97,14 +115,9 @@ function Home() {
     }
   }
 
-  const coinCard = coinRate => {
+  const flexRateCard = (coinRate) => {
     return (
-      <Grid
-        item
-        key={`${coinRate.title}-flex`}
-        xs={12}
-        md={3}
-      >
+      <Grid item key={`${coinRate.title}-flex`} xs={12} md={3}>
         <Card>
           {coinRate.logoUrl && (
             <CardMedia
@@ -175,7 +188,13 @@ function Home() {
             </ul>
           </CardContent>
           <CardActions>
-            <Button fullWidth variant={coinRate.buttonVariant} onClick={() => navigate(`/coins/${coinRate.title}`, { replace: true })}>
+            <Button
+              fullWidth
+              variant={coinRate.buttonVariant}
+              onClick={() =>
+                navigate(`/coins/${coinRate.title}`, { replace: true })
+              }
+            >
               {coinRate.buttonText}
             </Button>
           </CardActions>
@@ -184,14 +203,104 @@ function Home() {
     );
   };
 
+  const lockedRateCard = (coinRate) => {
+    return (
+      <Grid item key={`${coinRate.title}-fixex`} xs={12} md={3}>
+        <Card>
+          {coinRate.logoUrl && (
+            <CardMedia
+              component="img"
+              height="200"
+              style={{ backgroundColor: "#fff", objectFit: "contain" }}
+              image={coinRate.logoUrl}
+              alt={`${coinRate.title}-fixed`}
+              ba
+            />
+          )}
+          <CardHeader
+            title={coinRate.title}
+            // subheader={tier.subheader}
+            titleTypographyProps={{ align: "center" }}
+            // action={tier.title === 'Pro' ? <StarIcon /> : null}
+            i
+            // subheaderTypographyProps={{
+            //   align: 'center',
+            // }}
+            sx={{
+              backgroundColor: (theme) =>
+                theme.palette.mode === "light"
+                  ? theme.palette.grey[200]
+                  : theme.palette.grey[700],
+            }}
+          />
+          <CardContent>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "baseline",
+                mb: 2,
+              }}
+            >
+              <Typography
+                component="h5"
+                variant="h6"
+                color="text.primary"
+                style={{ paddingRight: 10 }}
+              >
+                up to
+              </Typography>
+              <Typography
+                component="h3"
+                variant="h4"
+                color="text.primary"
+                style={{ fontWeight: 800 }}
+              >
+                {(coinRate.interestRate * 100).toFixed(2)}%
+              </Typography>
+            </Box>
+            <ul>
+              {coinRate.exchanges && (
+                <ExchangesTinyList
+                  exchanges={coinRate.exchanges}
+                  fixedStaking={true}
+                />
+              )}
+            </ul>
+          </CardContent>
+          <CardActions>
+            <Button
+              fullWidth
+              variant={coinRate.buttonVariant}
+              onClick={() =>
+                navigate(`/coins/${coinRate.title}`, { replace: true })
+              }
+            >
+              {coinRate.buttonText}
+            </Button>
+          </CardActions>
+        </Card>
+      </Grid>
+    );
+  };
+  console.log(flexRates);
+  const btcCoinFlexRate = flexRates.find((c) => c.title === "BTC");
+  const ethCoinFlexRate = flexRates.find((c) => c.title === "ETH");
+  const usdtCoinFlexRate = flexRates.find((c) => c.title === "USDT");
+  const usdcCoinFlexRate = flexRates.find((c) => c.title === "USDC");
+  const filteredFlexRates = flexRates.filter(
+    (c) => !["BTC", "ETH", "USDC", "USDT"].includes(c.title)
+  );
+  const btcCoinLockedRate = lockedRates.find((c) => c.title === "BTC");
+  const ethCoinLockedRate = lockedRates.find((c) => c.title === "ETH");
+  const usdtCoinLockedRate = lockedRates.find((c) => c.title === "USDT");
+  const usdcCoinLockedRate = lockedRates.find((c) => c.title === "USDC");
+  const filteredLockedRates = lockedRates.filter(
+    (c) => !["BTC", "ETH", "USDC", "USDT"].includes(c.title)
+  );
   return (
     <>
-      <Container
-        disableGutters
-        maxWidth="xl"
-        component="main"
-        sx={{ p: 10 }}
-      >
+      <Container disableGutters maxWidth="xl" component="main" sx={{ p: 10 }}>
         <Typography
           component="h1"
           variant="h2"
@@ -222,98 +331,25 @@ function Home() {
       </Container>
       <Container maxWidth="xl" component="main">
         <Grid container spacing={3} alignItems="flex-end">
-          <Grid
-            item
-            key="flexible-staking-title"
-            xs={12}
-          >
+          <Grid item key="flexible-staking-title" xs={12}>
             <Typography variant="h5">Flexible Staking</Typography>
           </Grid>
-          {sortedCoins.map((coinRate) => coinCard(coinRate))}
+          {btcCoinFlexRate && flexRateCard(btcCoinFlexRate)}
+          {ethCoinFlexRate && flexRateCard(ethCoinFlexRate)}
+          {usdtCoinFlexRate && flexRateCard(usdtCoinFlexRate)}
+          {usdcCoinFlexRate && flexRateCard(usdcCoinFlexRate)}
+          {filteredFlexRates.map((coinRate) => flexRateCard(coinRate))}
         </Grid>
-        {lockedCoins.length > 0 && (
+        {lockedRates.length > 0 && (
           <Grid container spacing={3} alignItems="flex-end" mt={10}>
-            <Grid
-              item
-              key="flexible-staking-title"
-              xs={12}
-            >
+            <Grid item key="flexible-staking-title" xs={12}>
               <Typography variant="h5">Fixed Staking</Typography>
             </Grid>
-            {lockedCoins.map((coinRate) => (
-              <Grid
-                item
-                key={`${coinRate.title}-fixex`}
-                xs={12}
-                md={3}
-              >
-                <Card>
-                  {coinRate.logoUrl && (
-                    <CardMedia
-                      component="img"
-                      height="200"
-                      style={{ backgroundColor: "#fff", objectFit: "contain" }}
-                      image={coinRate.logoUrl}
-                      alt={`${coinRate.title}-fixed`}
-                      ba
-                    />
-                  )}
-                  <CardHeader
-                    title={coinRate.title}
-                    // subheader={tier.subheader}
-                    titleTypographyProps={{ align: "center" }}
-                    // action={tier.title === 'Pro' ? <StarIcon /> : null}
-                    i
-                    // subheaderTypographyProps={{
-                    //   align: 'center',
-                    // }}
-                    sx={{
-                      backgroundColor: (theme) =>
-                        theme.palette.mode === "light"
-                          ? theme.palette.grey[200]
-                          : theme.palette.grey[700],
-                    }}
-                  />
-                  <CardContent>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "baseline",
-                        mb: 2,
-                      }}
-                    >
-                      <Typography
-                        component="h5"
-                        variant="h6"
-                        color="text.primary"
-                        style={{ paddingRight: 10 }}
-                      >
-                        up to
-                      </Typography>
-                      <Typography
-                        component="h3"
-                        variant="h4"
-                        color="text.primary"
-                        style={{ fontWeight: 800 }}
-                      >
-                        {(coinRate.interestRate * 100).toFixed(2)}%
-                      </Typography>
-                    </Box>
-                    <ul>
-                      {coinRate.exchanges && (
-                        <ExchangesTinyList exchanges={coinRate.exchanges} fixedStaking={true}/>
-                      )}
-                    </ul>
-                  </CardContent>
-                  <CardActions>
-                    <Button fullWidth variant={coinRate.buttonVariant} onClick={() => navigate(`/coins/${coinRate.title}`, { replace: true })}>
-                      {coinRate.buttonText}
-                    </Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))}
+            {btcCoinLockedRate && flexRateCard(btcCoinLockedRate)}
+            {ethCoinLockedRate && flexRateCard(ethCoinLockedRate)}
+            {usdtCoinLockedRate && flexRateCard(usdtCoinLockedRate)}
+            {usdcCoinLockedRate && flexRateCard(usdcCoinLockedRate)}
+            {filteredLockedRates.map((coinRate) => lockedRateCard(coinRate))}
           </Grid>
         )}
       </Container>

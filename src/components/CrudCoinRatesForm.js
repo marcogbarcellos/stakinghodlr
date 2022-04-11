@@ -113,10 +113,10 @@ function CrudCoinRatesForm({ user }) {
       }
       await fetchCoinRates();
       // cleanup form
-      setCoin("");
-      setExchange("");
-      setRate(null);
-      setLockDays(undefined);
+      // setCoin("");
+      // setExchange("");
+      // setRate(null);
+      // setLockDays(undefined);
     } catch (error) {
       console.error("error creating coin rate:", error);
     }
