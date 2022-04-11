@@ -78,21 +78,20 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 ```graphql
 mutation coinCreation {
-  createCoin(input: {
-    name: "Luna"
-    symbol: "LUNA"
-    logoUrl: "https://lh3.googleusercontent.com/d/1YQ4ons4Y6dqWDjYlZasIFoi1evevBHrU"
-  }) {
+  createCoin(
+    input: {name: "Luna", symbol: "LUNA", logoUrl: "https://lh3.googleusercontent.com/d/1YQ4ons4Y6dqWDjYlZasIFoi1evevBHrU"}
+    condition: {}
+  ) {
     name
     symbol
     logoUrl
   }
 }
+
 mutation exchangeCreation {
-  createExchange(input: {
-    name: "Huobi"
-    logoUrl: "https://lh3.googleusercontent.com/d/1YbIogw5gR073qCLMTzo-P1BkHNfFSRd5"
-  }) {
+  createExchange(
+    input: {name: "Huobi", logoUrl: "https://lh3.googleusercontent.com/d/1YbIogw5gR073qCLMTzo-P1BkHNfFSRd5"}
+  ) {
     name
     logoUrl
   }
@@ -132,8 +131,25 @@ query getExchanges {
     }
   }
 }
+
+mutation updateRate {
+  updateCoinRate(input: {
+    coinNameExchangeName: "COIN#BTC#DATE#2022-04-06T10:58:34.277Z", date: "2022-04-06T10:04:34.277Z", coinSymbol: "BTC", exchangeName: "Binance", interestRate: "0.0265"
+  }) {
+    coinNameExchangeName
+    interestRate
+  }
+}
+
+mutation deleteRate {
+  deleteCoinRate(input:{coinNameExchangeName: "COIN#BTC#DATE#2022-04-06T10:58:34.277Z"}) {
+    coinNameExchangeName
+  }
+}
+
 mutation createCoinRate {
   createCoinRate(
+    
     input: {coinNameExchangeName: "COIN#BTC#DATE#2022-04-06T10:58:34.277Z", date: "2022-04-06T10:04:34.277Z", coinSymbol: "BTC", exchangeName: "Binance", interestRate: "0.0365"}
   ) {
     interestRate
@@ -178,6 +194,14 @@ query listExchanges {
   }
 }
 
+query listrates {
+  listCoinRates {
+    items {
+      coinNameExchangeName
+    }
+  }
+}
+
 ```
 
 ### Manual updates
@@ -187,19 +211,21 @@ Some API's like, for example, Kucoin and others unfortunately don't provide acce
 #### Platforms with their Earn links
 
 - [Binance](https://www.binance.com/en/earn) - has API (not need to manually dig in)
-- [Crypto.com](https://crypto.com/br/earn)
 - [Kucoin](https://www.kucoin.com/earn)
 - [Huobi](https://www.huobi.com/en-us/financial/earn)
-- [Bybit](https://www.bybit.com/en-US/earn/home)
-- [Bitfinex](https://staking.bitfinex.com/)
+- [Crypto.com](https://crypto.com/br/earn)
 - [Kraken](https://www.kraken.com/features/staking-coins)
-- [Coinbase](https://www.coinbase.com/earn)
-- [Gemini](https://www.gemini.com/earn)
 - [Nexo](https://nexo.io/earn-crypto)
 - [Youhodler](https://www.youhodler.com/earn-crypto)
 - [Celsius](https://celsius.network/earn)
-- [TrustWallet](https://trustwallet.com/earn)
 - [Yield App](https://www.yield.app/yld)
 - [Blockfi](https://blockfi.com/crypto-interest-account)
 - [Ledn](https://ledn.io/en/btc-savings)
 - [Guarda](https://guarda.com/staking/)
+
+Skippping for now (few coins, bad rates):
+- [Bitfinex](https://staking.bitfinex.com/)
+- [Coinbase](https://www.coinbase.com/earn)
+- [Gemini](https://www.gemini.com/earn)
+- [TrustWallet](https://trustwallet.com/earn)
+- [Bybit](https://www.bybit.com/en-US/earn/home)

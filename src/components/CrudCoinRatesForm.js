@@ -14,7 +14,8 @@ import { DataGrid } from "@mui/x-data-grid";
 import { listExchanges } from "../graphql/queries";
 import { listCoins } from "../graphql/queries";
 import { listCoinRates } from "../graphql/queries";
-import { createCoinRate } from "../graphql/mutations";
+import { createCoinRate, updateCoinRate } from "../graphql/mutations";
+import { createHistoryCoinRate } from "../graphql/mutations";
 import { deleteCoinRate } from "../graphql/mutations";
 
 const styles = {
@@ -113,8 +114,10 @@ function CrudCoinRatesForm({ user }) {
   };
 
   const handleSubmit = async () => {
+    const coinNameExchangeName = `COIN#${coin}#EXCHANGE#${exchange}#LOCK_DAYS#${lockDays > 0 ? lockDays : 0}`;
+    const oldCoinRate = coinRates.find(coinRate => coinRate.coinNameExchangeName === coinNameExchangeName);
     const coinRate = {
-      coinNameExchangeName: `COIN#${coin}#EXCHANGE#${exchange}`,
+      coinNameExchangeName,
       date: new Date().toISOString(),
       coinSymbol: coin,
       exchangeName: exchange,
@@ -122,7 +125,12 @@ function CrudCoinRatesForm({ user }) {
       lockDays,
     };
     try {
-      await API.graphql(graphqlOperation(createCoinRate, { input: coinRate }));
+      if (oldCoinRate) {
+        await API.graphql(graphqlOperation(updateCoinRate, { input: coinRate }));
+        await API.graphql(graphqlOperation(createHistoryCoinRate, { input: coinRate }));
+      } else {
+        await API.graphql(graphqlOperation(createCoinRate, { input: coinRate }));
+      }
       setCoinRates([...coinRates, coinRate]);
       // cleanup form
       setCoin("");

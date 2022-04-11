@@ -7,11 +7,24 @@ type Coin @model {
   name: String!
   logoUrl: String
   coinRates: [CoinRate] @hasMany(indexName: "byCoinSymbol", fields: ["symbol"])
+  historicCoinRates: [HistoryCoinRate] @hasMany(indexName: "byCoinSymbol", fields: ["symbol"])
 }
 
 type CoinRate @model {
-  # format example PK: COIN#BTC#EXCHANGE#BINANCE, SK: YYYY-MM-DDThh:mm:ss.sssZ
-  coinNameExchangeName: String! @primaryKey(sortKeyFields: ["date"]) 
+  # format example PK: COIN#BTC#EXCHANGE#BINANCE#LOCK_DAYS#14
+  coinNameExchangeName: String! @primaryKey
+  date: AWSDateTime!
+  coinSymbol: String! @index(name: "byCoinSymbol")
+  exchangeName: String! @index(name: "byExchangeName")
+  coin: Coin! @belongsTo(fields: ["coinSymbol"])
+  exchange: Exchange! @belongsTo(fields: ["exchangeName"])
+  interestRate: String!
+  lockDays: Int
+}
+
+type HistoryCoinRate @model {
+  # format example PK: COIN#BTC#EXCHANGE#BINANCE#LOCK_DAYS#14, SK: YYYY-MM-DDThh:mm:ss.sssZ
+  coinNameExchangeName: String! @primaryKey(sortKeyFields: ["date"])
   date: AWSDateTime!
   coinSymbol: String! @index(name: "byCoinSymbol")
   exchangeName: String! @index(name: "byExchangeName")
@@ -26,4 +39,5 @@ type Exchange @model {
   logoUrl: String
   earnUrl: String
   coinRates: [CoinRate] @hasMany(indexName: "byExchangeName", fields: ["name"])
+  historicCoinRates: [HistoryCoinRate] @hasMany(indexName: "byExchangeName", fields: ["name"])
 }

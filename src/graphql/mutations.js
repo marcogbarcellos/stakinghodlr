@@ -20,11 +20,35 @@ export const createCoin = /* GraphQL */ `
           lockDays
           createdAt
           updatedAt
+          _version
+          _deleted
+          _lastChangedAt
         }
         nextToken
+        startedAt
+      }
+      historicCoinRates {
+        items {
+          coinNameExchangeName
+          date
+          coinSymbol
+          exchangeName
+          interestRate
+          lockDays
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -47,11 +71,35 @@ export const updateCoin = /* GraphQL */ `
           lockDays
           createdAt
           updatedAt
+          _version
+          _deleted
+          _lastChangedAt
         }
         nextToken
+        startedAt
+      }
+      historicCoinRates {
+        items {
+          coinNameExchangeName
+          date
+          coinSymbol
+          exchangeName
+          interestRate
+          lockDays
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -74,11 +122,35 @@ export const deleteCoin = /* GraphQL */ `
           lockDays
           createdAt
           updatedAt
+          _version
+          _deleted
+          _lastChangedAt
         }
         nextToken
+        startedAt
+      }
+      historicCoinRates {
+        items {
+          coinNameExchangeName
+          date
+          coinSymbol
+          exchangeName
+          interestRate
+          lockDays
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -98,9 +170,17 @@ export const createCoinRate = /* GraphQL */ `
         logoUrl
         coinRates {
           nextToken
+          startedAt
+        }
+        historicCoinRates {
+          nextToken
+          startedAt
         }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       exchange {
         name
@@ -108,14 +188,25 @@ export const createCoinRate = /* GraphQL */ `
         earnUrl
         coinRates {
           nextToken
+          startedAt
+        }
+        historicCoinRates {
+          nextToken
+          startedAt
         }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       interestRate
       lockDays
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -135,9 +226,17 @@ export const updateCoinRate = /* GraphQL */ `
         logoUrl
         coinRates {
           nextToken
+          startedAt
+        }
+        historicCoinRates {
+          nextToken
+          startedAt
         }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       exchange {
         name
@@ -145,14 +244,25 @@ export const updateCoinRate = /* GraphQL */ `
         earnUrl
         coinRates {
           nextToken
+          startedAt
+        }
+        historicCoinRates {
+          nextToken
+          startedAt
         }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       interestRate
       lockDays
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -172,9 +282,17 @@ export const deleteCoinRate = /* GraphQL */ `
         logoUrl
         coinRates {
           nextToken
+          startedAt
+        }
+        historicCoinRates {
+          nextToken
+          startedAt
         }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       exchange {
         name
@@ -182,14 +300,193 @@ export const deleteCoinRate = /* GraphQL */ `
         earnUrl
         coinRates {
           nextToken
+          startedAt
+        }
+        historicCoinRates {
+          nextToken
+          startedAt
         }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       interestRate
       lockDays
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const createHistoryCoinRate = /* GraphQL */ `
+  mutation CreateHistoryCoinRate(
+    $input: CreateHistoryCoinRateInput!
+    $condition: ModelHistoryCoinRateConditionInput
+  ) {
+    createHistoryCoinRate(input: $input, condition: $condition) {
+      coinNameExchangeName
+      date
+      coinSymbol
+      exchangeName
+      coin {
+        symbol
+        name
+        logoUrl
+        coinRates {
+          nextToken
+          startedAt
+        }
+        historicCoinRates {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      exchange {
+        name
+        logoUrl
+        earnUrl
+        coinRates {
+          nextToken
+          startedAt
+        }
+        historicCoinRates {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      interestRate
+      lockDays
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const updateHistoryCoinRate = /* GraphQL */ `
+  mutation UpdateHistoryCoinRate(
+    $input: UpdateHistoryCoinRateInput!
+    $condition: ModelHistoryCoinRateConditionInput
+  ) {
+    updateHistoryCoinRate(input: $input, condition: $condition) {
+      coinNameExchangeName
+      date
+      coinSymbol
+      exchangeName
+      coin {
+        symbol
+        name
+        logoUrl
+        coinRates {
+          nextToken
+          startedAt
+        }
+        historicCoinRates {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      exchange {
+        name
+        logoUrl
+        earnUrl
+        coinRates {
+          nextToken
+          startedAt
+        }
+        historicCoinRates {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      interestRate
+      lockDays
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const deleteHistoryCoinRate = /* GraphQL */ `
+  mutation DeleteHistoryCoinRate(
+    $input: DeleteHistoryCoinRateInput!
+    $condition: ModelHistoryCoinRateConditionInput
+  ) {
+    deleteHistoryCoinRate(input: $input, condition: $condition) {
+      coinNameExchangeName
+      date
+      coinSymbol
+      exchangeName
+      coin {
+        symbol
+        name
+        logoUrl
+        coinRates {
+          nextToken
+          startedAt
+        }
+        historicCoinRates {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      exchange {
+        name
+        logoUrl
+        earnUrl
+        coinRates {
+          nextToken
+          startedAt
+        }
+        historicCoinRates {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      interestRate
+      lockDays
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -212,11 +509,35 @@ export const createExchange = /* GraphQL */ `
           lockDays
           createdAt
           updatedAt
+          _version
+          _deleted
+          _lastChangedAt
         }
         nextToken
+        startedAt
+      }
+      historicCoinRates {
+        items {
+          coinNameExchangeName
+          date
+          coinSymbol
+          exchangeName
+          interestRate
+          lockDays
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -239,11 +560,35 @@ export const updateExchange = /* GraphQL */ `
           lockDays
           createdAt
           updatedAt
+          _version
+          _deleted
+          _lastChangedAt
         }
         nextToken
+        startedAt
+      }
+      historicCoinRates {
+        items {
+          coinNameExchangeName
+          date
+          coinSymbol
+          exchangeName
+          interestRate
+          lockDays
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -266,11 +611,35 @@ export const deleteExchange = /* GraphQL */ `
           lockDays
           createdAt
           updatedAt
+          _version
+          _deleted
+          _lastChangedAt
         }
         nextToken
+        startedAt
+      }
+      historicCoinRates {
+        items {
+          coinNameExchangeName
+          date
+          coinSymbol
+          exchangeName
+          interestRate
+          lockDays
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;

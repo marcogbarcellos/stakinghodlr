@@ -17,7 +17,7 @@
     }
   },
   "auth": {
-    "stakinghodlrd7f59881": {
+    "stakinghodlr609cfa54": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
@@ -40,21 +40,6 @@
           "EMAIL"
         ]
       }
-    }
-  },
-  "hosting": {
-    "amplifyhosting": {
-      "service": "amplifyhosting",
-      "type": "cicd",
-      "lastPushTimeStamp": "2022-04-06T15:08:13.568Z"
-    }
-  },
-  "function": {
-    "tweetRates": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": []
     }
   }
 }

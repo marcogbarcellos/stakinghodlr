@@ -14,62 +14,6 @@ import { listCoinRates } from "../graphql/queries";
 import { API, graphqlOperation } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
 
-/* const exchanges = [
-  {
-      name: 'Binance',
-      logoUrl: 'https://stakinghodlr.s3.amazonaws.com/exchange_tiny_logos/binance.png',
-    },
-    {
-      name: 'Kucoin',
-      logoUrl: 'https://stakinghodlr.s3.amazonaws.com/exchange_tiny_logos/kucoin.png',
-    },
-    {
-      name: 'Huobi',
-      logoUrl: 'https://stakinghodlr.s3.amazonaws.com/exchange_tiny_logos/huobi.png',
-    },
-];
-const coins = [
-  {
-    title: 'Bitcoin',
-    symbol: 'BTC',
-    logoUrl: 'https://stakinghodlr.s3.amazonaws.com/currencies_logos/btc.png',
-  },
-  {
-    title: 'Ethereum',
-    symbol: 'ETH',
-    logoUrl: 'https://stakinghodlr.s3.amazonaws.com/currencies_logos/eth.png',
-  },
-  {
-    title: 'Tether',
-    symbol: 'USDT',
-    logoUrl: 'https://stakinghodlr.s3.amazonaws.com/currencies_logos/usdt.png',
-  },
-  {
-    title: 'Solana',
-    symbol: 'SOL',
-    logoUrl: 'https://stakinghodlr.s3.amazonaws.com/currencies_logos/sol.png',
-  },
-  {
-    title: 'Polkadot',
-    symbol: 'DOT',
-    logoUrl: 'https://stakinghodlr.s3.amazonaws.com/currencies_logos/dot.png',
-  },
-  {
-    title: 'Cardano',
-    symbol: 'ADA',
-    logoUrl: 'https://stakinghodlr.s3.amazonaws.com/currencies_logos/ada.jpg',
-  },
-  {
-    title: 'Binance Coin',
-    symbol: 'BNB',
-    logoUrl: 'https://stakinghodlr.s3.amazonaws.com/currencies_logos/bnb.png',
-  },
-  {
-    title: 'Luna',
-    symbol: 'LUNA',
-    logoUrl: 'https://stakinghodlr.s3.amazonaws.com/currencies_logos/luna.png',
-  },
-]; */
 function Home() {
   const navigate = useNavigate();
   
@@ -154,6 +98,93 @@ function Home() {
     }
   }
 
+  const coinCard = coinRate => {
+    return (
+      <Grid
+        item
+        key={`${coinRate.title}-flex`}
+        xs={12}
+        md={3}
+      >
+        <Card>
+          {coinRate.logoUrl && (
+            <CardMedia
+              component="img"
+              height="200"
+              style={{ backgroundColor: "#fff", objectFit: "contain" }}
+              image={coinRate.logoUrl}
+              alt={`${coinRate.title}-flex`}
+              ba
+            />
+          )}
+          <CardHeader
+            title={coinRate.title}
+            // subheader={tier.subheader}
+            titleTypographyProps={{ align: "center" }}
+            // action={tier.title === 'Pro' ? <StarIcon /> : null}
+            i
+            // subheaderTypographyProps={{
+            //   align: 'center',
+            // }}
+            sx={{
+              backgroundColor: (theme) =>
+                theme.palette.mode === "light"
+                  ? theme.palette.grey[200]
+                  : theme.palette.grey[700],
+            }}
+          />
+          <CardContent>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "baseline",
+                mb: 2,
+              }}
+            >
+              <Typography
+                component="h5"
+                variant="h6"
+                color="text.primary"
+                style={{ paddingRight: 10 }}
+              >
+                up to
+              </Typography>
+              <Typography
+                component="h3"
+                variant="h4"
+                color="text.primary"
+                style={{ fontWeight: 800 }}
+              >
+                {(coinRate.interestRate * 100).toFixed(2)}%
+              </Typography>
+            </Box>
+            <ul>
+              {/* {tier.description.map((line) => (
+                <Typography
+                  component="li"
+                  variant="subtitle1"
+                  align="center"
+                  key={line}
+                >
+                  {line}
+                </Typography>
+              ))} */}
+              {coinRate.exchanges && (
+                <ExchangesTinyList exchanges={coinRate.exchanges} />
+              )}
+            </ul>
+          </CardContent>
+          <CardActions>
+            <Button fullWidth variant={coinRate.buttonVariant} onClick={() => navigate(`/coins/${coinRate.title}`, { replace: true })}>
+              {coinRate.buttonText}
+            </Button>
+          </CardActions>
+        </Card>
+      </Grid>
+    );
+  };
+
   return (
     <>
       <Container
@@ -199,90 +230,7 @@ function Home() {
           >
             <Typography variant="h5">Flexible Staking</Typography>
           </Grid>
-          {sortedCoins.map((coinRate) => (
-            <Grid
-              item
-              key={`${coinRate.title}-flex`}
-              xs={12}
-              md={3}
-            >
-              <Card>
-                {coinRate.logoUrl && (
-                  <CardMedia
-                    component="img"
-                    height="200"
-                    style={{ backgroundColor: "#fff", objectFit: "contain" }}
-                    image={coinRate.logoUrl}
-                    alt={`${coinRate.title}-flex`}
-                    ba
-                  />
-                )}
-                <CardHeader
-                  title={coinRate.title}
-                  // subheader={tier.subheader}
-                  titleTypographyProps={{ align: "center" }}
-                  // action={tier.title === 'Pro' ? <StarIcon /> : null}
-                  i
-                  // subheaderTypographyProps={{
-                  //   align: 'center',
-                  // }}
-                  sx={{
-                    backgroundColor: (theme) =>
-                      theme.palette.mode === "light"
-                        ? theme.palette.grey[200]
-                        : theme.palette.grey[700],
-                  }}
-                />
-                <CardContent>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "baseline",
-                      mb: 2,
-                    }}
-                  >
-                    <Typography
-                      component="h5"
-                      variant="h6"
-                      color="text.primary"
-                      style={{ paddingRight: 10 }}
-                    >
-                      up to
-                    </Typography>
-                    <Typography
-                      component="h3"
-                      variant="h4"
-                      color="text.primary"
-                      style={{ fontWeight: 800 }}
-                    >
-                      {(coinRate.interestRate * 100).toFixed(2)}%
-                    </Typography>
-                  </Box>
-                  <ul>
-                    {/* {tier.description.map((line) => (
-                      <Typography
-                        component="li"
-                        variant="subtitle1"
-                        align="center"
-                        key={line}
-                      >
-                        {line}
-                      </Typography>
-                    ))} */}
-                    {coinRate.exchanges && (
-                      <ExchangesTinyList exchanges={coinRate.exchanges} />
-                    )}
-                  </ul>
-                </CardContent>
-                <CardActions>
-                  <Button fullWidth variant={coinRate.buttonVariant} onClick={() => navigate(`/coins/${coinRate.title}`, { replace: true })}>
-                    {coinRate.buttonText}
-                  </Button>
-                </CardActions>
-              </Card>
-            </Grid>
-          ))}
+          {sortedCoins.map((coinRate) => coinCard(coinRate))}
         </Grid>
         {lockedCoins.length > 0 && (
           <Grid container spacing={3} alignItems="flex-end" mt={10}>

@@ -5,6 +5,7 @@ import Container from "@mui/material/Container";
 import { createCoin, deleteCoin } from "../graphql/mutations";
 import { listCoins } from "../graphql/queries";
 
+
 const styles = {
   container: {
     width: 400,

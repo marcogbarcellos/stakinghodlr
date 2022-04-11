@@ -17,11 +17,35 @@ export const getCoin = /* GraphQL */ `
           lockDays
           createdAt
           updatedAt
+          _version
+          _deleted
+          _lastChangedAt
         }
         nextToken
+        startedAt
+      }
+      historicCoinRates {
+        items {
+          coinNameExchangeName
+          date
+          coinSymbol
+          exchangeName
+          interestRate
+          lockDays
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -46,17 +70,62 @@ export const listCoins = /* GraphQL */ `
         logoUrl
         coinRates {
           nextToken
+          startedAt
+        }
+        historicCoinRates {
+          nextToken
+          startedAt
         }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncCoins = /* GraphQL */ `
+  query SyncCoins(
+    $filter: ModelCoinFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncCoins(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        symbol
+        name
+        logoUrl
+        coinRates {
+          nextToken
+          startedAt
+        }
+        historicCoinRates {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;
 export const getCoinRate = /* GraphQL */ `
-  query GetCoinRate($coinNameExchangeName: String!, $date: AWSDateTime!) {
-    getCoinRate(coinNameExchangeName: $coinNameExchangeName, date: $date) {
+  query GetCoinRate($coinNameExchangeName: String!) {
+    getCoinRate(coinNameExchangeName: $coinNameExchangeName) {
       coinNameExchangeName
       date
       coinSymbol
@@ -67,9 +136,17 @@ export const getCoinRate = /* GraphQL */ `
         logoUrl
         coinRates {
           nextToken
+          startedAt
+        }
+        historicCoinRates {
+          nextToken
+          startedAt
         }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       exchange {
         name
@@ -77,27 +154,201 @@ export const getCoinRate = /* GraphQL */ `
         earnUrl
         coinRates {
           nextToken
+          startedAt
+        }
+        historicCoinRates {
+          nextToken
+          startedAt
         }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       interestRate
       lockDays
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
 export const listCoinRates = /* GraphQL */ `
   query ListCoinRates(
     $coinNameExchangeName: String
-    $date: ModelStringKeyConditionInput
     $filter: ModelCoinRateFilterInput
     $limit: Int
     $nextToken: String
     $sortDirection: ModelSortDirection
   ) {
     listCoinRates(
+      coinNameExchangeName: $coinNameExchangeName
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        coinNameExchangeName
+        date
+        coinSymbol
+        exchangeName
+        coin {
+          symbol
+          name
+          logoUrl
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        exchange {
+          name
+          logoUrl
+          earnUrl
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        interestRate
+        lockDays
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncCoinRates = /* GraphQL */ `
+  query SyncCoinRates(
+    $filter: ModelCoinRateFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncCoinRates(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        coinNameExchangeName
+        date
+        coinSymbol
+        exchangeName
+        coin {
+          symbol
+          name
+          logoUrl
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        exchange {
+          name
+          logoUrl
+          earnUrl
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        interestRate
+        lockDays
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const getHistoryCoinRate = /* GraphQL */ `
+  query GetHistoryCoinRate(
+    $coinNameExchangeName: String!
+    $date: AWSDateTime!
+  ) {
+    getHistoryCoinRate(
+      coinNameExchangeName: $coinNameExchangeName
+      date: $date
+    ) {
+      coinNameExchangeName
+      date
+      coinSymbol
+      exchangeName
+      coin {
+        symbol
+        name
+        logoUrl
+        coinRates {
+          nextToken
+          startedAt
+        }
+        historicCoinRates {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      exchange {
+        name
+        logoUrl
+        earnUrl
+        coinRates {
+          nextToken
+          startedAt
+        }
+        historicCoinRates {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      interestRate
+      lockDays
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const listHistoryCoinRates = /* GraphQL */ `
+  query ListHistoryCoinRates(
+    $coinNameExchangeName: String
+    $date: ModelStringKeyConditionInput
+    $filter: ModelHistoryCoinRateFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listHistoryCoinRates(
       coinNameExchangeName: $coinNameExchangeName
       date: $date
       filter: $filter
@@ -116,6 +367,9 @@ export const listCoinRates = /* GraphQL */ `
           logoUrl
           createdAt
           updatedAt
+          _version
+          _deleted
+          _lastChangedAt
         }
         exchange {
           name
@@ -123,13 +377,71 @@ export const listCoinRates = /* GraphQL */ `
           earnUrl
           createdAt
           updatedAt
+          _version
+          _deleted
+          _lastChangedAt
         }
         interestRate
         lockDays
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncHistoryCoinRates = /* GraphQL */ `
+  query SyncHistoryCoinRates(
+    $filter: ModelHistoryCoinRateFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncHistoryCoinRates(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        coinNameExchangeName
+        date
+        coinSymbol
+        exchangeName
+        coin {
+          symbol
+          name
+          logoUrl
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        exchange {
+          name
+          logoUrl
+          earnUrl
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        interestRate
+        lockDays
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;
@@ -149,11 +461,35 @@ export const getExchange = /* GraphQL */ `
           lockDays
           createdAt
           updatedAt
+          _version
+          _deleted
+          _lastChangedAt
         }
         nextToken
+        startedAt
+      }
+      historicCoinRates {
+        items {
+          coinNameExchangeName
+          date
+          coinSymbol
+          exchangeName
+          interestRate
+          lockDays
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -178,11 +514,56 @@ export const listExchanges = /* GraphQL */ `
         earnUrl
         coinRates {
           nextToken
+          startedAt
+        }
+        historicCoinRates {
+          nextToken
+          startedAt
         }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
+      startedAt
+    }
+  }
+`;
+export const syncExchanges = /* GraphQL */ `
+  query SyncExchanges(
+    $filter: ModelExchangeFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncExchanges(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        name
+        logoUrl
+        earnUrl
+        coinRates {
+          nextToken
+          startedAt
+        }
+        historicCoinRates {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
     }
   }
 `;
