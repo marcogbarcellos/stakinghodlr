@@ -13,6 +13,13 @@ import ExchangesTinyList from "../components/ExchangesTinyList";
 import { listCoinRates } from "../graphql/queries";
 import { API, graphqlOperation } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
+import List from "@mui/material/List";
+import Stack from "@mui/material/Stack";
+import ListItem from "@mui/material/ListItem";
+import Divider from "@mui/material/Divider";
+import ListItemText from "@mui/material/ListItemText";
+import ListItemAvatar from "@mui/material/ListItemAvatar";
+import Avatar from "@mui/material/Avatar";
 
 function Home() {
   const navigate = useNavigate();
@@ -131,13 +138,15 @@ function Home() {
           )}
           <CardHeader
             title={coinRate.title}
-            // subheader={tier.subheader}
-            titleTypographyProps={{ align: "center" }}
+            subheader={`Best rate: ${(coinRate.interestRate * 100).toFixed(
+              2
+            )}%`}
+            titleTypographyProps={{ align: "center", variant: "h4" }}
             // action={tier.title === 'Pro' ? <StarIcon /> : null}
-            i
-            // subheaderTypographyProps={{
-            //   align: 'center',
-            // }}
+            subheaderTypographyProps={{
+              align: "center",
+              variant: "h6",
+            }}
             sx={{
               backgroundColor: (theme) =>
                 theme.palette.mode === "light"
@@ -146,42 +155,7 @@ function Home() {
             }}
           />
           <CardContent>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "baseline",
-                mb: 2,
-              }}
-            >
-              <Typography
-                component="h5"
-                variant="h6"
-                color="text.primary"
-                style={{ paddingRight: 10 }}
-              >
-                up to
-              </Typography>
-              <Typography
-                component="h3"
-                variant="h4"
-                color="text.primary"
-                style={{ fontWeight: 800 }}
-              >
-                {(coinRate.interestRate * 100).toFixed(2)}%
-              </Typography>
-            </Box>
             <ul>
-              {/* {tier.description.map((line) => (
-                <Typography
-                  component="li"
-                  variant="subtitle1"
-                  align="center"
-                  key={line}
-                >
-                  {line}
-                </Typography>
-              ))} */}
               {coinRate.exchanges && (
                 <ExchangesTinyList exchanges={coinRate.exchanges} />
               )}
@@ -219,13 +193,15 @@ function Home() {
           )}
           <CardHeader
             title={coinRate.title}
-            // subheader={tier.subheader}
-            titleTypographyProps={{ align: "center" }}
+            subheader={`Best rate: ${(coinRate.interestRate * 100).toFixed(
+              2
+            )}%`}
+            titleTypographyProps={{ align: "center", variant: "h4" }}
             // action={tier.title === 'Pro' ? <StarIcon /> : null}
-            i
-            // subheaderTypographyProps={{
-            //   align: 'center',
-            // }}
+            subheaderTypographyProps={{
+              align: "center",
+              variant: "h6",
+            }}
             sx={{
               backgroundColor: (theme) =>
                 theme.palette.mode === "light"
@@ -234,31 +210,6 @@ function Home() {
             }}
           />
           <CardContent>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "baseline",
-                mb: 2,
-              }}
-            >
-              <Typography
-                component="h5"
-                variant="h6"
-                color="text.primary"
-                style={{ paddingRight: 10 }}
-              >
-                up to
-              </Typography>
-              <Typography
-                component="h3"
-                variant="h4"
-                color="text.primary"
-                style={{ fontWeight: 800 }}
-              >
-                {(coinRate.interestRate * 100).toFixed(2)}%
-              </Typography>
-            </Box>
             <ul>
               {coinRate.exchanges && (
                 <ExchangesTinyList
