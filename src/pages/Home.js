@@ -311,13 +311,12 @@ function Home() {
           Top Staking rates
         </Typography>
         <Typography
-          variant="h6"
+          variant="subtitle1"
           align="center"
           color="text.secondary"
           component="p"
         >
-          Get top dollar returns by finding the best staking APYs from the best
-          platforms.
+          Browse the best staking APYs available from one single place.
         </Typography>
         {/* <Typography
           variant="body1"
