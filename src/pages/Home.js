@@ -300,10 +300,10 @@ function Home() {
   );
   return (
     <>
-      <Container disableGutters maxWidth="xl" component="main" sx={{ p: 10 }}>
+      <Container disableGutters maxWidth="xl" component="main" sx={{ p: 2 }}>
         <Typography
-          component="h1"
-          variant="h2"
+          component="h2"
+          variant="h3"
           align="center"
           color="text.primary"
           gutterBottom
@@ -311,7 +311,7 @@ function Home() {
           Top Staking rates
         </Typography>
         <Typography
-          variant="h5"
+          variant="h6"
           align="center"
           color="text.secondary"
           component="p"
@@ -319,15 +319,15 @@ function Home() {
           Get top dollar returns by finding the best staking APYs from the best
           platforms.
         </Typography>
-        <Typography
-          variant="subtitle1"
+        {/* <Typography
+          variant="body1"
           align="center"
           color="text.secondary"
           component="p"
         >
           APYs are updated every day 9am EST time so make sure to follow up on
           the platforms to see if the rates are still valid.
-        </Typography>
+        </Typography> */}
       </Container>
       <Container maxWidth="xl" component="main">
         <Grid container spacing={3} alignItems="flex-end">
