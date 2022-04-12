@@ -222,10 +222,10 @@ Some API's like, for example, Kucoin and others unfortunately don't provide acce
 - [Blockfi](https://blockfi.com/crypto-interest-account)
 - [Ledn](https://ledn.io/en/btc-savings)
 - [Guarda](https://guarda.com/staking/)
+- [Gate.io](https://www.gate.io/hodl)
 
 Skippping for now (few coins, bad rates):
 - [Bitfinex](https://staking.bitfinex.com/)
 - [Coinbase](https://www.coinbase.com/earn)
 - [Gemini](https://www.gemini.com/earn)
-- [TrustWallet](https://trustwallet.com/earn)
 - [Bybit](https://www.bybit.com/en-US/earn/home)

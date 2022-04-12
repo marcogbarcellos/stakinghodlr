@@ -18,10 +18,11 @@ function SigninContent() {
   const handleRadioChange = event => {
     setValue(event.target.value);
   };
+  
   return (
     <>
       <Container maxWidth="xl" component="main">
-        <Authenticator>
+        <Authenticator hideSignUp>
           {({ signOut, user }) => (
             <>
               <Grid container spacing={3} alignItems="flex-end" mt={5}>

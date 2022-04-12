@@ -345,10 +345,10 @@ function Home() {
             <Grid item key="flexible-staking-title" xs={12}>
               <Typography variant="h5">Fixed Staking</Typography>
             </Grid>
-            {btcCoinLockedRate && flexRateCard(btcCoinLockedRate)}
-            {ethCoinLockedRate && flexRateCard(ethCoinLockedRate)}
-            {usdtCoinLockedRate && flexRateCard(usdtCoinLockedRate)}
-            {usdcCoinLockedRate && flexRateCard(usdcCoinLockedRate)}
+            {btcCoinLockedRate && lockedRateCard(btcCoinLockedRate)}
+            {ethCoinLockedRate && lockedRateCard(ethCoinLockedRate)}
+            {usdtCoinLockedRate && lockedRateCard(usdtCoinLockedRate)}
+            {usdcCoinLockedRate && lockedRateCard(usdcCoinLockedRate)}
             {filteredLockedRates.map((coinRate) => lockedRateCard(coinRate))}
           </Grid>
         )}
