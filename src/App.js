@@ -1,15 +1,16 @@
 import { Routes, Route, useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import CssBaseline from "@mui/material/CssBaseline";
-import Grid from "@mui/material/Grid";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import GlobalStyles from "@mui/material/GlobalStyles";
+import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import Home from "./pages/Home";
 import Coin from "./pages/Coin";
 import Signin from "./pages/Signin";
+import TermsOfUse from "./pages/TermsOfUse";
 
 function Copyright(props) {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ function Copyright(props) {
 const footers = [
   {
     title: "Legal",
-    description: ["Disclaimer", "Terms of use"],
+    description: [{label: "Terms of use", page: "/terms"}],
   },
 ];
 
@@ -86,8 +87,8 @@ const BasePage = ({ children }) => {
               <ul>
                 {footer.description.map((item) => (
                   <li key={item}>
-                    <Link href="#" variant="subtitle1" color="text.secondary">
-                      {item}
+                    <Link onClick={() => navigate(item.page)} variant="subtitle1" color="text.secondary" style={{ cursor: "pointer" }}>
+                      {item.label}
                     </Link>
                   </li>
                 ))}
@@ -135,6 +136,14 @@ const App = () => {
           element={
             <BasePage>
               <Signin />
+            </BasePage>
+          }
+        />
+        <Route
+          path="terms"
+          element={
+            <BasePage>
+              <TermsOfUse />
             </BasePage>
           }
         />
