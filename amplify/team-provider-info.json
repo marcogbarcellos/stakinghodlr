@@ -20,6 +20,13 @@
       },
       "auth": {
         "stakinghodlr5e3dfa3e": {}
+      },
+      "function": {
+        "fetchRates": {
+          "secretsPathAmplifyAppId": "d3fihn4bs5jrqf",
+          "deploymentBucketName": "amplify-stakinghodlr-dev-164054-deployment",
+          "s3Key": "amplify-builds/fetchRates-30712b6f6c6931666447-build.zip"
+        }
       }
     }
   }

@@ -48,5 +48,24 @@
       "type": "cicd",
       "lastPushTimeStamp": "2022-04-11T19:44:58.513Z"
     }
-  }
+  },
+  "function": {
+    "fetchRates": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "api",
+          "resourceName": "stakinghodlr",
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ]
+        }
+      ]
+    }
+  },
+  "storage": {}
 }

@@ -95,6 +95,7 @@ function CrudCoinRatesForm({ user }) {
       exchangeName: exchange,
       interestRate: (Number(rate) / 100).toFixed(6),
       lockDays,
+      origin: "manual_insertion",
     };
     try {
       if (oldCoinRate) {
@@ -106,6 +107,7 @@ function CrudCoinRatesForm({ user }) {
           exchangeName: oldCoinRate.exchangeName,
           interestRate: oldCoinRate.interestRate,
           lockDays: oldCoinRate.lockDays,
+          origin: oldCoinRate.origin,
         };
         await API.graphql(graphqlOperation(createHistoryCoinRate, { input: historyRate }));
       } else {

@@ -72,7 +72,7 @@ function CrudCoinForm({ user }) {
   async function addCoin() {
     try {
       if (!formState.name || !formState.symbol || !formState.logoUrl) return;
-      const coin = { ...formState };
+      const coin = { ...formState, type: "TOP" };
       setCoins([...coins, coin]);
       setFormState(initialState);
       await API.graphql(graphqlOperation(createCoin, { input: coin }));

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -8,37 +7,37 @@ import CardHeader from "@mui/material/CardHeader";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { CardMedia } from "@mui/material";
 import ExchangesTinyList from "../components/ExchangesTinyList";
 import { listCoinRates } from "../graphql/queries";
 import { API, graphqlOperation } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
-import List from "@mui/material/List";
-import Stack from "@mui/material/Stack";
-import ListItem from "@mui/material/ListItem";
-import Divider from "@mui/material/Divider";
-import ListItemText from "@mui/material/ListItemText";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import Avatar from "@mui/material/Avatar";
 
 function Home() {
   const navigate = useNavigate();
-
-  const [flexRates, setFlexRates] = useState([]);
-  const [lockedRates, setLockedRates] = useState([]);
+  const [rateType, setRateType] = React.useState("all");
+  const [coinType, setCoinType] = React.useState("top");
+  const [topCoinsRates, setTopCoinsRates] = useState([]);
+  const [otherCoinsRates, setOtherCoinsRates] = useState([]);
+  const [topCoinsFlexRates, setTopCoinsFlexRates] = useState([]);
+  const [otherCoinsFlexRates, setOtherCoinsFlexRates] = useState([]);
+  const [topCoinsFixedRates, setTopCoinsFixedRates] = useState([]);
+  const [otherCoinsFixedRates, setOtherCoinsFixedRates] = useState([]);
 
   useEffect(() => {
     fetchCoinRates();
-    fetchLockedRates();
   }, []);
 
-  const extractFormattedCoinRates = (rates) => {
+  const getFormattedCoinsMap = (rates) => {
     const sortedCoins = {};
     for (const rate of rates) {
       if (!sortedCoins[rate.coinSymbol]) {
         sortedCoins[rate.coinSymbol] = {};
       }
       sortedCoins[rate.coinSymbol].title = rate.coinSymbol;
+      sortedCoins[rate.coinSymbol].type = rate.coin.type;
       sortedCoins[rate.coinSymbol].logoUrl = rate.coin.logoUrl;
       sortedCoins[rate.coinSymbol].buttonText = "See all rates";
       sortedCoins[rate.coinSymbol].buttonVariant = "outlined";
@@ -61,70 +60,95 @@ function Home() {
         },
       ];
     }
-    return Object.values(sortedCoins);
+    return sortedCoins;
+  };
+  const getTopAndOtherCoinsFromMap = (ratesMap) => {
+    let topCoinsRates = [];
+    const otherCoinsRates = [];
+    for (const sortedCoin of Object.values(ratesMap)) {
+      if (sortedCoin.type === "TOP") {
+        topCoinsRates.push(sortedCoin);
+        continue;
+      }
+      otherCoinsRates.push(sortedCoin);
+    }
+    // ordering top coins
+    topCoinsRates = [
+      ...topCoinsRates.filter((c) => c.title === "BTC"),
+      ...topCoinsRates.filter((c) => c.title === "ETH"),
+      ...topCoinsRates.filter((c) => c.title === "USDT"),
+      ...topCoinsRates.filter((c) => c.title === "USDC"),
+      ...topCoinsRates.filter(
+        (c) => !["BTC", "ETH", "USDT", "USDC"].includes(c.title)
+      ),
+    ];
+    return { topCoinsRates, otherCoinsRates };
+  };
+
+  const extractFormattedCoinRates = (rates) => {
+    const allRates = getFormattedCoinsMap(rates);
+    const fixedTermRates = getFormattedCoinsMap(
+      rates.filter((r) => r.lockDays > 0)
+    );
+    const flexTermRates = getFormattedCoinsMap(
+      rates.filter((r) => !r.lockDays)
+    );
+    const {
+      topCoinsRates: topCoinsFixedRates,
+      otherCoinsRates: otherCoinsFixedRates,
+    } = getTopAndOtherCoinsFromMap(fixedTermRates);
+    const {
+      topCoinsRates: topCoinsFlexRates,
+      otherCoinsRates: otherCoinsFlexRates,
+    } = getTopAndOtherCoinsFromMap(flexTermRates);
+    const { topCoinsRates, otherCoinsRates } =
+      getTopAndOtherCoinsFromMap(allRates);
+    return {
+      topCoinsRates,
+      otherCoinsRates,
+      topCoinsFlexRates,
+      otherCoinsFlexRates,
+      topCoinsFixedRates,
+      otherCoinsFixedRates,
+    };
   };
 
   async function fetchCoinRates() {
     try {
-      const sevenDaysAgo = new Date();
-      sevenDaysAgo.setHours(sevenDaysAgo.getHours() - 24 * 7);
-      const rateData = await API.graphql(
-        graphqlOperation(listCoinRates, {
-          filter: {
-            and: {
-              date: { ge: sevenDaysAgo.toISOString() },
-              lockDays: { attributeExists: false },
-            },
-          },
-        })
-      );
-      const rates = extractFormattedCoinRates(
-        rateData.data.listCoinRates.items
-      );
-      setFlexRates(rates);
+      let nextToken;
+      let items = [];
+      do {
+        const rateData = await API.graphql(
+          graphqlOperation(listCoinRates, { nextToken })
+        );
+        items = [...items, ...(rateData.data.listCoinRates.items || [])];
+        nextToken = rateData.data.listCoinRates.nextToken;
+      } while (nextToken);
+      const {
+        topCoinsRates,
+        otherCoinsRates,
+        topCoinsFlexRates,
+        otherCoinsFlexRates,
+        topCoinsFixedRates,
+        otherCoinsFixedRates,
+      } = extractFormattedCoinRates(items);
+      console.log("items", items);
+      console.log("topCoinsFlexRates", topCoinsFlexRates);
+      console.log("topCoinsFixedRates", topCoinsFixedRates);
+      setTopCoinsRates(topCoinsRates);
+      setOtherCoinsRates(otherCoinsRates);
+      setTopCoinsFlexRates(topCoinsFlexRates);
+      setTopCoinsFixedRates(topCoinsFixedRates);
+      setOtherCoinsFlexRates(otherCoinsFlexRates);
+      setOtherCoinsFixedRates(otherCoinsFixedRates);
     } catch (error) {
       console.error("error fetching coins", error);
-      if (error.data.listCoinRates.items) {
-        const rates = extractFormattedCoinRates(
-          error.data.listCoinRates.items.filter((i) => i !== null)
-        );
-        setFlexRates(rates);
-      }
     }
   }
 
-  async function fetchLockedRates() {
-    try {
-      const sevenDaysAgo = new Date();
-      sevenDaysAgo.setHours(sevenDaysAgo.getHours() - 24 * 7);
-      const rateData = await API.graphql(
-        graphqlOperation(listCoinRates, {
-          filter: {
-            and: {
-              date: { ge: sevenDaysAgo.toISOString() },
-              lockDays: { attributeExists: true },
-            },
-          },
-        })
-      );
-      const rates = extractFormattedCoinRates(
-        rateData.data.listCoinRates.items
-      );
-      setLockedRates(rates);
-    } catch (error) {
-      console.error("error fetching coins", error);
-      if (error.data.listCoinRates.items) {
-        const rates = extractFormattedCoinRates(
-          error.data.listCoinRates.items.filter((i) => i !== null)
-        );
-        setLockedRates(rates);
-      }
-    }
-  }
-
-  const flexRateCard = (coinRate) => {
+  const ratesCard = (coinRate) => {
     return (
-      <Grid item key={`${coinRate.title}-flex`} xs={12} md={3}>
+      <Grid item key={`${coinRate.title}-fixex`} xs={12} md={3}>
         <Card>
           {coinRate.logoUrl && (
             <CardMedia
@@ -132,7 +156,7 @@ function Home() {
               height="200"
               style={{ backgroundColor: "#fff", objectFit: "contain" }}
               image={coinRate.logoUrl}
-              alt={`${coinRate.title}-flex`}
+              alt={`${coinRate.title}-fixed`}
               ba
             />
           )}
@@ -142,7 +166,6 @@ function Home() {
               2
             )}%`}
             titleTypographyProps={{ align: "center", variant: "h4" }}
-            // action={tier.title === 'Pro' ? <StarIcon /> : null}
             subheaderTypographyProps={{
               align: "center",
               variant: "h6",
@@ -177,78 +200,22 @@ function Home() {
     );
   };
 
-  const lockedRateCard = (coinRate) => {
-    return (
-      <Grid item key={`${coinRate.title}-fixex`} xs={12} md={3}>
-        <Card>
-          {coinRate.logoUrl && (
-            <CardMedia
-              component="img"
-              height="200"
-              style={{ backgroundColor: "#fff", objectFit: "contain" }}
-              image={coinRate.logoUrl}
-              alt={`${coinRate.title}-fixed`}
-              ba
-            />
-          )}
-          <CardHeader
-            title={coinRate.title}
-            subheader={`Best rate: ${(coinRate.interestRate * 100).toFixed(
-              2
-            )}%`}
-            titleTypographyProps={{ align: "center", variant: "h4" }}
-            // action={tier.title === 'Pro' ? <StarIcon /> : null}
-            subheaderTypographyProps={{
-              align: "center",
-              variant: "h6",
-            }}
-            sx={{
-              backgroundColor: (theme) =>
-                theme.palette.mode === "light"
-                  ? theme.palette.grey[200]
-                  : theme.palette.grey[700],
-            }}
-          />
-          <CardContent>
-            <ul>
-              {coinRate.exchanges && (
-                <ExchangesTinyList
-                  exchanges={coinRate.exchanges}
-                  fixedStaking={true}
-                />
-              )}
-            </ul>
-          </CardContent>
-          <CardActions>
-            <Button
-              fullWidth
-              variant={coinRate.buttonVariant}
-              onClick={() =>
-                navigate(`/coins/${coinRate.title}`, { replace: true })
-              }
-            >
-              {coinRate.buttonText}
-            </Button>
-          </CardActions>
-        </Card>
-      </Grid>
-    );
+  const handleShowRateType = (event, rateType) => {
+    setRateType(rateType);
   };
-  console.log(flexRates);
-  const btcCoinFlexRate = flexRates.find((c) => c.title === "BTC");
-  const ethCoinFlexRate = flexRates.find((c) => c.title === "ETH");
-  const usdtCoinFlexRate = flexRates.find((c) => c.title === "USDT");
-  const usdcCoinFlexRate = flexRates.find((c) => c.title === "USDC");
-  const filteredFlexRates = flexRates.filter(
-    (c) => !["BTC", "ETH", "USDC", "USDT"].includes(c.title)
-  );
-  const btcCoinLockedRate = lockedRates.find((c) => c.title === "BTC");
-  const ethCoinLockedRate = lockedRates.find((c) => c.title === "ETH");
-  const usdtCoinLockedRate = lockedRates.find((c) => c.title === "USDT");
-  const usdcCoinLockedRate = lockedRates.find((c) => c.title === "USDC");
-  const filteredLockedRates = lockedRates.filter(
-    (c) => !["BTC", "ETH", "USDC", "USDT"].includes(c.title)
-  );
+
+  const handleShowCoinType = (event, coinType) => {
+    setCoinType(coinType);
+  };
+
+  // const btcCoinLockedRate = topCoinsFixedRates.find((c) => c.title === "BTC");
+  // const ethCoinLockedRate = topCoinsFixedRates.find((c) => c.title === "ETH");
+  // const usdtCoinLockedRate = topCoinsFixedRates.find((c) => c.title === "USDT");
+  // const usdcCoinLockedRate = topCoinsFixedRates.find((c) => c.title === "USDC");
+  // const filteredLockedRates = topCoinsFixedRates.filter(
+  //   (c) => !["BTC", "ETH", "USDC", "USDT"].includes(c.title)
+  // );
+
   return (
     <>
       <Container disableGutters maxWidth="xl" component="main" sx={{ p: 2 }}>
@@ -281,27 +248,63 @@ function Home() {
       </Container>
       <Container maxWidth="xl" component="main">
         <Grid container spacing={3} alignItems="flex-end">
-          <Grid item key="flexible-staking-title" xs={12}>
-            <Typography variant="h5">Flexible Staking</Typography>
+          <Grid item xs={12} alignItems="flex-end">
+            <ToggleButtonGroup
+              value={rateType}
+              exclusive
+              color="primary"
+              onChange={handleShowRateType}
+              aria-label="rate type"
+              style={{ paddingRight: 15, paddingBottom: 15 }}
+            >
+              <ToggleButton value="all" aria-label="all rates">
+                All rates
+              </ToggleButton>
+              <ToggleButton value="flexible" aria-label="centered">
+                Flexible rates
+              </ToggleButton>
+              <ToggleButton value="fixed" aria-label="right aligned">
+                Fixed rates
+              </ToggleButton>
+            </ToggleButtonGroup>
+            <ToggleButtonGroup
+              value={coinType}
+              color="secondary"
+              exclusive
+              onChange={handleShowCoinType}
+              aria-label="coin type"
+              style={{ paddingRight: 15, paddingBottom: 15}}
+            >
+              <ToggleButton value="top" aria-label="all rates">
+                Top coins
+              </ToggleButton>
+              <ToggleButton value="other" aria-label="centered">
+                Alternative coin
+              </ToggleButton>
+              <ToggleButton value="all" aria-label="right aligned">
+                All coins
+              </ToggleButton>
+            </ToggleButtonGroup>
           </Grid>
-          {btcCoinFlexRate && flexRateCard(btcCoinFlexRate)}
-          {ethCoinFlexRate && flexRateCard(ethCoinFlexRate)}
-          {usdtCoinFlexRate && flexRateCard(usdtCoinFlexRate)}
-          {usdcCoinFlexRate && flexRateCard(usdcCoinFlexRate)}
-          {filteredFlexRates.map((coinRate) => flexRateCard(coinRate))}
+          {rateType === "all" && coinType === "top" &&
+            topCoinsRates.map((coinRate) => ratesCard(coinRate))}
+          {rateType === "all" && coinType === "other" &&
+            otherCoinsRates.map((coinRate) => ratesCard(coinRate))}
+          {rateType === "all" && coinType === "all" &&
+            [...topCoinsRates, ...otherCoinsRates].map((coinRate) => ratesCard(coinRate))}
+          {rateType === "flexible" && coinType === "top" &&
+            topCoinsFlexRates.map((coinRate) => ratesCard(coinRate))}
+          {rateType === "flexible" && coinType === "other" &&
+            otherCoinsFlexRates.map((coinRate) => ratesCard(coinRate))}
+          {rateType === "flexible" && coinType === "all" &&
+            [...topCoinsFlexRates, ...otherCoinsFlexRates].map((coinRate) => ratesCard(coinRate))}
+          {rateType === "fixed" && coinType === "top" &&
+            topCoinsFixedRates.map((coinRate) => ratesCard(coinRate))}
+          {rateType === "fixed" && coinType === "other" &&
+            otherCoinsFixedRates.map((coinRate) => ratesCard(coinRate))}
+          {rateType === "fixed" && coinType === "all" &&
+            [...topCoinsFixedRates, ...otherCoinsFixedRates].map((coinRate) => ratesCard(coinRate))}
         </Grid>
-        {lockedRates.length > 0 && (
-          <Grid container spacing={3} alignItems="flex-end" mt={10}>
-            <Grid item key="flexible-staking-title" xs={12}>
-              <Typography variant="h5">Fixed Staking</Typography>
-            </Grid>
-            {btcCoinLockedRate && lockedRateCard(btcCoinLockedRate)}
-            {ethCoinLockedRate && lockedRateCard(ethCoinLockedRate)}
-            {usdtCoinLockedRate && lockedRateCard(usdtCoinLockedRate)}
-            {usdcCoinLockedRate && lockedRateCard(usdcCoinLockedRate)}
-            {filteredLockedRates.map((coinRate) => lockedRateCard(coinRate))}
-          </Grid>
-        )}
       </Container>
     </>
   );

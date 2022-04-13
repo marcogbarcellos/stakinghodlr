@@ -156,7 +156,13 @@ function Coin() {
 
   async function fetchCoins() {
     try {
-      const coinData = await API.graphql(graphqlOperation(listCoins));
+      const coinData = await API.graphql(
+        graphqlOperation(listCoins, {
+          filter: {
+            type: { eq: "TOP" },
+          },
+        })
+      );
       const coins = coinData.data.listCoins.items;
       setCoins(coins);
     } catch (error) {

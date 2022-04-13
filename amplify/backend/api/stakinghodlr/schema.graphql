@@ -2,10 +2,17 @@
 # all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
 input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
 
+enum CoinType {
+  TOP
+  TRENDING
+  ALTERNATIVE
+  AUTO_GENERATED
+}
 type Coin @model {
   symbol: String! @primaryKey
   name: String!
   logoUrl: String
+  type: CoinType
   coinRates: [CoinRate] @hasMany(indexName: "byCoinSymbol", fields: ["symbol"])
   historicCoinRates: [HistoryCoinRate] @hasMany(indexName: "byCoinSymbol", fields: ["symbol"])
 }
@@ -20,6 +27,7 @@ type CoinRate @model {
   exchange: Exchange! @belongsTo(fields: ["exchangeName"])
   interestRate: String!
   lockDays: Int
+  origin: String
 }
 
 type HistoryCoinRate @model {
@@ -32,6 +40,7 @@ type HistoryCoinRate @model {
   exchange: Exchange! @belongsTo(fields: ["exchangeName"])
   interestRate: String!
   lockDays: Int
+  origin: String
 }
 
 type Exchange @model {

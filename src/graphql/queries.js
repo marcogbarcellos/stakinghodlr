@@ -7,6 +7,7 @@ export const getCoin = /* GraphQL */ `
       symbol
       name
       logoUrl
+      type
       coinRates {
         items {
           coinNameExchangeName
@@ -15,6 +16,7 @@ export const getCoin = /* GraphQL */ `
           exchangeName
           interestRate
           lockDays
+          origin
           createdAt
           updatedAt
         }
@@ -28,6 +30,7 @@ export const getCoin = /* GraphQL */ `
           exchangeName
           interestRate
           lockDays
+          origin
           createdAt
           updatedAt
         }
@@ -57,6 +60,7 @@ export const listCoins = /* GraphQL */ `
         symbol
         name
         logoUrl
+        type
         coinRates {
           nextToken
         }
@@ -81,6 +85,7 @@ export const getCoinRate = /* GraphQL */ `
         symbol
         name
         logoUrl
+        type
         coinRates {
           nextToken
         }
@@ -105,6 +110,7 @@ export const getCoinRate = /* GraphQL */ `
       }
       interestRate
       lockDays
+      origin
       createdAt
       updatedAt
     }
@@ -134,6 +140,7 @@ export const listCoinRates = /* GraphQL */ `
           symbol
           name
           logoUrl
+          type
           createdAt
           updatedAt
         }
@@ -146,6 +153,7 @@ export const listCoinRates = /* GraphQL */ `
         }
         interestRate
         lockDays
+        origin
         createdAt
         updatedAt
       }
@@ -170,6 +178,7 @@ export const getHistoryCoinRate = /* GraphQL */ `
         symbol
         name
         logoUrl
+        type
         coinRates {
           nextToken
         }
@@ -194,6 +203,7 @@ export const getHistoryCoinRate = /* GraphQL */ `
       }
       interestRate
       lockDays
+      origin
       createdAt
       updatedAt
     }
@@ -225,6 +235,7 @@ export const listHistoryCoinRates = /* GraphQL */ `
           symbol
           name
           logoUrl
+          type
           createdAt
           updatedAt
         }
@@ -237,6 +248,7 @@ export const listHistoryCoinRates = /* GraphQL */ `
         }
         interestRate
         lockDays
+        origin
         createdAt
         updatedAt
       }
@@ -258,6 +270,7 @@ export const getExchange = /* GraphQL */ `
           exchangeName
           interestRate
           lockDays
+          origin
           createdAt
           updatedAt
         }
@@ -271,6 +284,7 @@ export const getExchange = /* GraphQL */ `
           exchangeName
           interestRate
           lockDays
+          origin
           createdAt
           updatedAt
         }

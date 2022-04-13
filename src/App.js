@@ -7,6 +7,7 @@ import Link from "@mui/material/Link";
 import GlobalStyles from "@mui/material/GlobalStyles";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
+import Image from "mui-image";
 import Home from "./pages/Home";
 import Coin from "./pages/Coin";
 import Signin from "./pages/Signin";
@@ -56,15 +57,16 @@ const BasePage = ({ children }) => {
         elevation={0}
         sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}
       >
-        <Toolbar sx={{ flexWrap: "wrap", backgroundColor: "#fff" }}>
-          <Typography variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
-            <Link
+        <Toolbar sx={{ flexWrap: "wrap", backgroundColor: "#2f2f2f" }}>
+          <Link
               color="inherit"
               onClick={() => navigate("/")}
               style={{ cursor: "pointer" }}
             >
-              StakingHodlr
-            </Link>
+            <Image src="https://stakinghodlr.s3.amazonaws.com/app_imgs/stakinghodlr.png" height={70} width={250} />
+          </Link>
+          <Typography variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
+            
           </Typography>
         </Toolbar>
       </AppBar>

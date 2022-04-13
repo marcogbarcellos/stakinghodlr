@@ -8,8 +8,15 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import { Divider } from '@mui/material';
 
-export default function ExchangesTinyList({exchanges, fixedStaking}) {
+export default function ExchangesTinyList({exchanges}) {
+  // finding the 3 top rates, if there is less than 3 rates, add blank ones to get them all to the same size
   const cutExchanges = exchanges.sort((a,b) => b.interestRate - a.interestRate).slice(0,3);
+  if (cutExchanges.length < 3) {
+    const iterations = 3-cutExchanges.length;
+    for (let index = 0; index < iterations; index++) {
+      cutExchanges.push({logoUrl: "", name: "", interestRate: 0, lockDays: ""})
+    }
+  }
   return (
     <List dense sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
       {cutExchanges.map(({logoUrl, name, interestRate, lockDays}, index) => {
@@ -18,24 +25,20 @@ export default function ExchangesTinyList({exchanges, fixedStaking}) {
         <>
           <ListItem
             key={index}
-            // secondaryAction={
-            //   <Checkbox
-            //     edge="end"
-            //     onChange={handleToggle(value)}
-            //     checked={checked.indexOf(value) !== -1}
-            //     inputProps={{ 'aria-labelledby': labelId }}
-            //   />
-            // }
             disablePadding
           >
             <ListItemButton>
-              <ListItemAvatar>
-                <Avatar
-                  alt={`Exchange top${index + 1}`}
-                  src={logoUrl}
-                />
-              </ListItemAvatar>
-              <ListItemText id={`exchange-${labelId}`} primary={`${(interestRate*100).toFixed(2)}% on ${name}${fixedStaking ? ` for ${lockDays} days` : ''}`} />
+              
+                <ListItemAvatar>
+                  <Avatar
+                    alt={`Exchange top${index + 1}`}
+                    src={logoUrl}
+                  >-</Avatar>
+                </ListItemAvatar>
+              
+              {interestRate > 0 &&(
+                <ListItemText id={`exchange-${labelId}`} primary={`${(interestRate*100).toFixed(2)}% on ${name}${lockDays > 0 ? ` for ${lockDays} days` : ', flexible term'}`} />
+              )}
             </ListItemButton>
           </ListItem>
           <Divider style={{color: "#000"}} />
