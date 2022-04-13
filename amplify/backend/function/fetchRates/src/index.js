@@ -7,12 +7,8 @@ const binanceStaking = require("./exchanges/binance");
 const krakenStaking = require("./exchanges/kraken");
 
 const listCoins = gql`
-  query ListCoins(
-    $nextToken: String
-  ) {
-    listCoins(
-      nextToken: $nextToken
-    ) {
+  query ListCoins($nextToken: String) {
+    listCoins(nextToken: $nextToken) {
       items {
         symbol
         name
@@ -68,19 +64,19 @@ const createCoinRate = gql`
   }
 `;
 
-const updateCoinRate = gql`
-  mutation UpdateCoinRate(
-    $input: UpdateCoinRateInput!
-    $condition: ModelCoinRateConditionInput
-  ) {
-    updateCoinRate(input: $input, condition: $condition) {
-      coinNameExchangeName
-      date
-      coinSymbol
-      exchangeName
-    }
-  }
-`;
+// const updateCoinRate = gql`
+//   mutation UpdateCoinRate(
+//     $input: UpdateCoinRateInput!
+//     $condition: ModelCoinRateConditionInput
+//   ) {
+//     updateCoinRate(input: $input, condition: $condition) {
+//       coinNameExchangeName
+//       date
+//       coinSymbol
+//       exchangeName
+//     }
+//   }
+// `;
 
 const createHistoryCoinRate = gql`
   mutation CreateHistoryCoinRate(
@@ -202,47 +198,57 @@ const getAllCoinRates = async () => {
 };
 
 const cleanupDynamicallyInsertedRates = async (allRates) => {
-  const dynamicRates = allRates.filter(r => r.origin === "dynamic_api_insertion");
-  for(const rate of dynamicRates) {
-    const historyRate = {
-      coinNameExchangeName: rate.coinNameExchangeName,
-      date: rate.date,
-      coinSymbol: rate.coinSymbol,
-      exchangeName: rate.exchangeName,
-      interestRate: rate.interestRate,
-      lockDays: rate.lockDays,
-      origin: rate.origin,
-    };
-    await axios({
-      url: process.env.API_STAKINGHODLR_GRAPHQLAPIENDPOINTOUTPUT,
-      method: "post",
-      headers: {
-        "x-api-key": process.env.API_STAKINGHODLR_GRAPHQLAPIKEYOUTPUT,
-      },
-      data: {
-        query: print(createHistoryCoinRate),
-        variables: {
-          input: historyRate,
+  const dynamicRates = allRates.filter(
+    (r) => r.origin === "dynamic_api_insertion"
+  );
+  for (const rate of dynamicRates) {
+    try {
+      const historyRate = {
+        coinNameExchangeName: rate.coinNameExchangeName,
+        date: rate.date,
+        coinSymbol: rate.coinSymbol,
+        exchangeName: rate.exchangeName,
+        interestRate: rate.interestRate,
+        lockDays: rate.lockDays,
+        origin: rate.origin,
+      };
+      await axios({
+        url: process.env.API_STAKINGHODLR_GRAPHQLAPIENDPOINTOUTPUT,
+        method: "post",
+        headers: {
+          "x-api-key": process.env.API_STAKINGHODLR_GRAPHQLAPIKEYOUTPUT,
         },
-      },
-    });
-    await axios({
-      url: process.env.API_STAKINGHODLR_GRAPHQLAPIENDPOINTOUTPUT,
-      method: "post",
-      headers: {
-        "x-api-key": process.env.API_STAKINGHODLR_GRAPHQLAPIKEYOUTPUT,
-      },
-      data: {
-        query: print(deleteCoinRate),
-        variables: {
-          input: {coinNameExchangeName: rate.coinNameExchangeName},
+        data: {
+          query: print(createHistoryCoinRate),
+          variables: {
+            input: historyRate,
+          },
         },
-      },
-    });
+      });
+      await axios({
+        url: process.env.API_STAKINGHODLR_GRAPHQLAPIENDPOINTOUTPUT,
+        method: "post",
+        headers: {
+          "x-api-key": process.env.API_STAKINGHODLR_GRAPHQLAPIKEYOUTPUT,
+        },
+        data: {
+          query: print(deleteCoinRate),
+          variables: {
+            input: { coinNameExchangeName: rate.coinNameExchangeName },
+          },
+        },
+      });
+      console.log(
+        "Successfully cleaned up coinRates from old dynamic rates and inserted into history"
+      );
+    } catch (error) {
+      console.log(
+        "error delete old dynamically inserted coin rates and saving to history",
+        error
+      );
+    }
   }
 };
-
-
 
 const getAllStakings = async () => {
   try {
@@ -289,7 +295,7 @@ const upsertUnexistingCoins = async (coins, stakings) => {
   }, {});
   const insertingCoins = [];
   for (const stake of stakings) {
-    if(!coinMap[stake.coin]) {
+    if (!coinMap[stake.coin]) {
       insertingCoins.push({
         symbol: stake.coin,
         name: stake.coin,
@@ -308,7 +314,7 @@ const upsertUnexistingCoins = async (coins, stakings) => {
           data: {
             query: print(createCoin),
             variables: {
-              input: {...coin, type: "AUTO_GENERATED"},
+              input: { ...coin, type: "AUTO_GENERATED" },
             },
           },
         });
@@ -320,53 +326,37 @@ const upsertUnexistingCoins = async (coins, stakings) => {
   } else {
     console.log("No Coins to insert, all of them were already found");
   }
-}
+};
 
-const insertCoinRates = async (currentCoinRates, stakings) => {
-  const coinRates = stakings.map(stake => ({
-    coinNameExchangeName: `COIN#${stake.coin}#EXCHANGE#${stake.exchange}#LOCK_DAYS#${stake.duration > 0 ? stake.duration : 0}`,
+const insertCoinRates = async (stakings) => {
+  const coinRates = stakings.map((stake) => ({
+    coinNameExchangeName: `COIN#${stake.coin}#EXCHANGE#${
+      stake.exchange
+    }#LOCK_DAYS#${stake.duration > 0 ? stake.duration : 0}`,
     date: new Date().toISOString(),
     coinSymbol: stake.coin,
     exchangeName: stake.exchange,
     interestRate: stake.interestRate,
     lockDays: stake.duration,
-    origin: "dynamic_api_insertion"
+    origin: "dynamic_api_insertion",
   }));
   console.log(`insertingCOinRATES`, JSON.stringify(coinRates, null, 2));
   for (const coinRate of coinRates) {
-    const oldCoinRate = currentCoinRates.find(rate => rate.coinNameExchangeName === coinRate.coinNameExchangeName);
     try {
-      if (oldCoinRate) {
-        await axios({
-          url: process.env.API_STAKINGHODLR_GRAPHQLAPIENDPOINTOUTPUT,
-          method: "post",
-          headers: {
-            "x-api-key": process.env.API_STAKINGHODLR_GRAPHQLAPIKEYOUTPUT,
+      const x = await axios({
+        url: process.env.API_STAKINGHODLR_GRAPHQLAPIENDPOINTOUTPUT,
+        method: "post",
+        headers: {
+          "x-api-key": process.env.API_STAKINGHODLR_GRAPHQLAPIKEYOUTPUT,
+        },
+        data: {
+          query: print(createCoinRate),
+          variables: {
+            input: { ...coinRate, origin: "dynamic_api_insertion" },
           },
-          data: {
-            query: print(updateCoinRate),
-            variables: {
-              input: {...coinRate, origin: "dynamic_api_insertion"},
-            },
-          },
-        });
-        console.log(`update coinRate`);
-      } else {
-        await axios({
-          url: process.env.API_STAKINGHODLR_GRAPHQLAPIENDPOINTOUTPUT,
-          method: "post",
-          headers: {
-            "x-api-key": process.env.API_STAKINGHODLR_GRAPHQLAPIKEYOUTPUT,
-          },
-          data: {
-            query: print(createCoinRate),
-            variables: {
-              input: {...coinRate, origin: "dynamic_api_insertion"},
-            },
-          },
-        });
-        console.log(`created coinRate`);
-      }
+        },
+      });
+      console.log(`created coinRate`, x);
     } catch (error) {
       console.error("Inserting coin rate failed", error);
     }
@@ -389,7 +379,7 @@ exports.handler = async (event) => {
   // remove all current dynamic api insertions (and save history)
   await cleanupDynamicallyInsertedRates(coinRates);
   // Persist new (and valid) coin rates
-  await insertCoinRates(coinRates, allStakings);
+  await insertCoinRates(allStakings);
   return {
     statusCode: 200,
     //  Uncomment below to enable CORS requests
