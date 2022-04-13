@@ -25,7 +25,12 @@
         "fetchRates": {
           "secretsPathAmplifyAppId": "d3fihn4bs5jrqf",
           "deploymentBucketName": "amplify-stakinghodlr-dev-164054-deployment",
-          "s3Key": "amplify-builds/fetchRates-61695452787270546a57-build.zip"
+          "s3Key": "amplify-builds/fetchRates-454f61694e3262367350-build.zip"
+        },
+        "tweetRates": {
+          "secretsPathAmplifyAppId": "d3fihn4bs5jrqf",
+          "deploymentBucketName": "amplify-stakinghodlr-dev-164054-deployment",
+          "s3Key": "amplify-builds/tweetRates-46556c43467046663147-build.zip"
         }
       }
     }
