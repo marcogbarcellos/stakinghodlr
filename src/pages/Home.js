@@ -150,7 +150,7 @@ function Home() {
   const ratesCard = (coinRate) => {
     return (
       <Grid item key={`${coinRate.title}-fixex`} xs={12} md={3}>
-        <Card style={{ width: 360 }}>
+        <Card /* style={{ width: 360 }} */>
           {coinRate.logoUrl && (
             <CardMedia
               component="img"
@@ -262,44 +262,46 @@ function Home() {
       </Container>
       <Container maxWidth="xl" component="main">
         <Grid container spacing={3} alignItems="flex-end">
-          <Grid item xs={12} alignItems="flex-end">
+          <Grid item xs={12} lg={3} alignItems="flex-end">
             <ToggleButtonGroup
               value={rateType}
               exclusive
               color="primary"
               onChange={handleShowRateType}
               aria-label="rate type"
-              style={{ paddingRight: 15, paddingBottom: 15 }}
+              size="small"
+              fullWidth
             >
               <ToggleButton
                 value="all"
                 aria-label="all rates"
-                style={{ width: 120 }}
               >
                 All terms
               </ToggleButton>
               <ToggleButton
                 value="flexible"
                 aria-label="centered"
-                style={{ width: 120 }}
               >
                 Flex terms
               </ToggleButton>
               <ToggleButton
                 value="fixed"
                 aria-label="right aligned"
-                style={{ width: 120 }}
               >
                 Fixed terms
               </ToggleButton>
             </ToggleButtonGroup>
+          </Grid>
+          <Grid item xs={12} lg={3} alignItems="flex-end">
             <ToggleButtonGroup
               value={coinType}
               color="secondary"
               exclusive
               onChange={handleShowCoinType}
               aria-label="coin type"
-              style={{ paddingRight: 15, paddingBottom: 15 }}
+              size="small"
+              fullWidth
+              // style={{ paddingRight: 15, paddingBottom: 15 }}
             >
               <ToggleButton
                 value="top"
@@ -323,6 +325,8 @@ function Home() {
                 All coins
               </ToggleButton>
             </ToggleButtonGroup>
+          </Grid>
+          <Grid item xs={12} lg={6} alignItems="flex-end">
           </Grid>
           {rateType === "all" &&
             coinType === "top" &&

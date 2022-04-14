@@ -409,7 +409,7 @@
       "Type": "AWS::Events::Rule",
       "Properties": {
         "Description": "Schedule rule for Lambda",
-        "ScheduleExpression": "cron(30 18 * * ? *)",
+        "ScheduleExpression": "cron(38 23 * * ? *)",
         "State": "ENABLED",
         "Targets": [
           {
