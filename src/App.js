@@ -1,4 +1,5 @@
 import { Routes, Route, useNavigate } from "react-router-dom";
+import ReactGA from 'react-ga';
 import AppBar from "@mui/material/AppBar";
 import CssBaseline from "@mui/material/CssBaseline";
 import Toolbar from "@mui/material/Toolbar";
@@ -12,6 +13,9 @@ import Home from "./pages/Home";
 import Coin from "./pages/Coin";
 import Signin from "./pages/Signin";
 import TermsOfUse from "./pages/TermsOfUse";
+// import { useEffect } from "react";
+ReactGA.initialize("UA-226006942-2");
+ReactGA.pageview(window.location.pathname + window.location.search);
 
 function Copyright(props) {
   const navigate = useNavigate();
@@ -105,6 +109,11 @@ const BasePage = ({ children }) => {
   );
 };
 const App = () => {
+  
+  // useEffect(() => {
+  //   ReactGA.pageview(window.location.pathname + window.location.search);
+  // }, []);
+
   return (
     <>
       <Routes>

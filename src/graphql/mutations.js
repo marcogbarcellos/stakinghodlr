@@ -158,6 +158,7 @@ export const createCoinRate = /* GraphQL */ `
         name
         logoUrl
         earnUrl
+        twitterAccount
         coinRates {
           nextToken
         }
@@ -203,6 +204,7 @@ export const updateCoinRate = /* GraphQL */ `
         name
         logoUrl
         earnUrl
+        twitterAccount
         coinRates {
           nextToken
         }
@@ -248,6 +250,7 @@ export const deleteCoinRate = /* GraphQL */ `
         name
         logoUrl
         earnUrl
+        twitterAccount
         coinRates {
           nextToken
         }
@@ -293,6 +296,7 @@ export const createHistoryCoinRate = /* GraphQL */ `
         name
         logoUrl
         earnUrl
+        twitterAccount
         coinRates {
           nextToken
         }
@@ -338,6 +342,7 @@ export const updateHistoryCoinRate = /* GraphQL */ `
         name
         logoUrl
         earnUrl
+        twitterAccount
         coinRates {
           nextToken
         }
@@ -383,6 +388,7 @@ export const deleteHistoryCoinRate = /* GraphQL */ `
         name
         logoUrl
         earnUrl
+        twitterAccount
         coinRates {
           nextToken
         }
@@ -409,6 +415,7 @@ export const createExchange = /* GraphQL */ `
       name
       logoUrl
       earnUrl
+      twitterAccount
       coinRates {
         items {
           coinNameExchangeName
@@ -451,6 +458,7 @@ export const updateExchange = /* GraphQL */ `
       name
       logoUrl
       earnUrl
+      twitterAccount
       coinRates {
         items {
           coinNameExchangeName
@@ -493,6 +501,7 @@ export const deleteExchange = /* GraphQL */ `
       name
       logoUrl
       earnUrl
+      twitterAccount
       coinRates {
         items {
           coinNameExchangeName

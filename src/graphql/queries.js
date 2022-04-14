@@ -99,6 +99,7 @@ export const getCoinRate = /* GraphQL */ `
         name
         logoUrl
         earnUrl
+        twitterAccount
         coinRates {
           nextToken
         }
@@ -148,6 +149,7 @@ export const listCoinRates = /* GraphQL */ `
           name
           logoUrl
           earnUrl
+          twitterAccount
           createdAt
           updatedAt
         }
@@ -192,6 +194,7 @@ export const getHistoryCoinRate = /* GraphQL */ `
         name
         logoUrl
         earnUrl
+        twitterAccount
         coinRates {
           nextToken
         }
@@ -243,6 +246,7 @@ export const listHistoryCoinRates = /* GraphQL */ `
           name
           logoUrl
           earnUrl
+          twitterAccount
           createdAt
           updatedAt
         }
@@ -262,6 +266,7 @@ export const getExchange = /* GraphQL */ `
       name
       logoUrl
       earnUrl
+      twitterAccount
       coinRates {
         items {
           coinNameExchangeName
@@ -314,6 +319,7 @@ export const listExchanges = /* GraphQL */ `
         name
         logoUrl
         earnUrl
+        twitterAccount
         coinRates {
           nextToken
         }

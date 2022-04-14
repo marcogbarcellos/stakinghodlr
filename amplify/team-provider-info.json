@@ -30,7 +30,7 @@
         "tweetRates": {
           "secretsPathAmplifyAppId": "d3fihn4bs5jrqf",
           "deploymentBucketName": "amplify-stakinghodlr-dev-164054-deployment",
-          "s3Key": "amplify-builds/tweetRates-46556c43467046663147-build.zip"
+          "s3Key": "amplify-builds/tweetRates-3370374b643256445375-build.zip"
         }
       }
     }

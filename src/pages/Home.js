@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import ReactGA from "react-ga";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -14,8 +15,10 @@ import ExchangesTinyList from "../components/ExchangesTinyList";
 import { listCoinRates } from "../graphql/queries";
 import { API, graphqlOperation } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
+import useAnalyticsEventTracker from "../actions/useAnalyticsEventTracker";
 
 function Home() {
+  const gaEventTracker = useAnalyticsEventTracker('Go to Coin Page');
   const navigate = useNavigate();
   const [rateType, setRateType] = React.useState("all");
   const [coinType, setCoinType] = React.useState("top");
@@ -188,9 +191,14 @@ function Home() {
             <Button
               fullWidth
               variant={coinRate.buttonVariant}
-              onClick={() =>
-                navigate(`/coins/${coinRate.title}`, { replace: true })
-              }
+              onClick={() => {
+                // gaEventTracker('seeAllRates');
+                ReactGA.event({
+                  category: 'Coins',
+                  action: 'See All Rates'
+                });
+                return navigate(`/coins/${coinRate.title}`, { replace: true });
+              }}
             >
               {coinRate.buttonText}
             </Button>
