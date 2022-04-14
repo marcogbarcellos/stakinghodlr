@@ -37,7 +37,7 @@ export default function ExchangesTinyList({exchanges}) {
                 </ListItemAvatar>
               
               {interestRate > 0 &&(
-                <ListItemText id={`exchange-${labelId}`} primary={`${(interestRate*100).toFixed(2)}% on ${name}${lockDays > 0 ? ` for ${lockDays} days` : ', flexible term'}`} />
+                <ListItemText id={`exchange-${labelId}`} primary={`${(interestRate*100).toFixed(2)}% at ${name}${lockDays > 0 ? ` for ${lockDays} days` : ', flexible term'}`} />
               )}
             </ListItemButton>
           </ListItem>

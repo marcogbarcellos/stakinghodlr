@@ -18,7 +18,7 @@ import { useNavigate } from "react-router-dom";
 import useAnalyticsEventTracker from "../actions/useAnalyticsEventTracker";
 
 function Home() {
-  const gaEventTracker = useAnalyticsEventTracker('Go to Coin Page');
+  const gaEventTracker = useAnalyticsEventTracker("Go to Coin Page");
   const navigate = useNavigate();
   const [rateType, setRateType] = React.useState("all");
   const [coinType, setCoinType] = React.useState("top");
@@ -40,6 +40,7 @@ function Home() {
         sortedCoins[rate.coinSymbol] = {};
       }
       sortedCoins[rate.coinSymbol].title = rate.coinSymbol;
+      sortedCoins[rate.coinSymbol].name = rate.coin.name;
       sortedCoins[rate.coinSymbol].type = rate.coin.type;
       sortedCoins[rate.coinSymbol].logoUrl = rate.coin.logoUrl;
       sortedCoins[rate.coinSymbol].buttonText = "See all rates";
@@ -149,27 +150,35 @@ function Home() {
   const ratesCard = (coinRate) => {
     return (
       <Grid item key={`${coinRate.title}-fixex`} xs={12} md={3}>
-        <Card style={{width: 360}}>
+        <Card style={{ width: 360 }}>
           {coinRate.logoUrl && (
             <CardMedia
               component="img"
-              height="200"
+              height="100"
               style={{ backgroundColor: "#fff", objectFit: "contain" }}
               image={coinRate.logoUrl}
               alt={`${coinRate.title}-fixed`}
-              ba
             />
           )}
           <CardHeader
-            title={coinRate.title}
-            subheader={`Best rate: ${(coinRate.interestRate * 100).toFixed(
-              2
-            )}%`}
+            title={
+              <Grid
+                container
+                spacing={1}
+                alignItems="baseline"
+                justifyContent="center"
+              >
+                <Grid item>
+                  <Typography variant="h5">{coinRate.name}</Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant="subtitle1">
+                    (Up to {(coinRate.interestRate * 100).toFixed(2)}%)
+                  </Typography>
+                </Grid>
+              </Grid>
+            }
             titleTypographyProps={{ align: "center", variant: "h4" }}
-            subheaderTypographyProps={{
-              align: "center",
-              variant: "h6",
-            }}
             sx={{
               backgroundColor: (theme) =>
                 theme.palette.mode === "light"
@@ -191,8 +200,8 @@ function Home() {
               onClick={() => {
                 // gaEventTracker('seeAllRates');
                 ReactGA.event({
-                  category: 'Coins',
-                  action: 'See All Rates'
+                  category: "Coins",
+                  action: "See All Rates",
                 });
                 return navigate(`/coins/${coinRate.title}`, { replace: true });
               }}
@@ -262,13 +271,25 @@ function Home() {
               aria-label="rate type"
               style={{ paddingRight: 15, paddingBottom: 15 }}
             >
-              <ToggleButton value="all" aria-label="all rates" style={{width: 120}}>
+              <ToggleButton
+                value="all"
+                aria-label="all rates"
+                style={{ width: 120 }}
+              >
                 All terms
               </ToggleButton>
-              <ToggleButton value="flexible" aria-label="centered" style={{width: 120}}>
+              <ToggleButton
+                value="flexible"
+                aria-label="centered"
+                style={{ width: 120 }}
+              >
                 Flex terms
               </ToggleButton>
-              <ToggleButton value="fixed" aria-label="right aligned" style={{width: 120}}>
+              <ToggleButton
+                value="fixed"
+                aria-label="right aligned"
+                style={{ width: 120 }}
+              >
                 Fixed terms
               </ToggleButton>
             </ToggleButtonGroup>
@@ -278,37 +299,64 @@ function Home() {
               exclusive
               onChange={handleShowCoinType}
               aria-label="coin type"
-              style={{ paddingRight: 15, paddingBottom: 15}}
+              style={{ paddingRight: 15, paddingBottom: 15 }}
             >
-              <ToggleButton value="top" aria-label="top coins" style={{width: 120}}>
+              <ToggleButton
+                value="top"
+                aria-label="top coins"
+                style={{ width: 120 }}
+              >
                 Top coins
               </ToggleButton>
-              <ToggleButton value="other" aria-label="other coins" style={{width: 120}}>
+              <ToggleButton
+                value="other"
+                aria-label="other coins"
+                style={{ width: 120 }}
+              >
                 Other coins
               </ToggleButton>
-              <ToggleButton value="all" aria-label="all coins" style={{width: 120}}>
+              <ToggleButton
+                value="all"
+                aria-label="all coins"
+                style={{ width: 120 }}
+              >
                 All coins
               </ToggleButton>
             </ToggleButtonGroup>
           </Grid>
-          {rateType === "all" && coinType === "top" &&
+          {rateType === "all" &&
+            coinType === "top" &&
             topCoinsRates.map((coinRate) => ratesCard(coinRate))}
-          {rateType === "all" && coinType === "other" &&
+          {rateType === "all" &&
+            coinType === "other" &&
             otherCoinsRates.map((coinRate) => ratesCard(coinRate))}
-          {rateType === "all" && coinType === "all" &&
-            [...topCoinsRates, ...otherCoinsRates].map((coinRate) => ratesCard(coinRate))}
-          {rateType === "flexible" && coinType === "top" &&
+          {rateType === "all" &&
+            coinType === "all" &&
+            [...topCoinsRates, ...otherCoinsRates].map((coinRate) =>
+              ratesCard(coinRate)
+            )}
+          {rateType === "flexible" &&
+            coinType === "top" &&
             topCoinsFlexRates.map((coinRate) => ratesCard(coinRate))}
-          {rateType === "flexible" && coinType === "other" &&
+          {rateType === "flexible" &&
+            coinType === "other" &&
             otherCoinsFlexRates.map((coinRate) => ratesCard(coinRate))}
-          {rateType === "flexible" && coinType === "all" &&
-            [...topCoinsFlexRates, ...otherCoinsFlexRates].map((coinRate) => ratesCard(coinRate))}
-          {rateType === "fixed" && coinType === "top" &&
+          {rateType === "flexible" &&
+            coinType === "all" &&
+            [...topCoinsFlexRates, ...otherCoinsFlexRates].map((coinRate) =>
+              ratesCard(coinRate)
+            )}
+          {rateType === "fixed" &&
+            coinType === "top" &&
             topCoinsFixedRates.map((coinRate) => ratesCard(coinRate))}
-          {rateType === "fixed" && coinType === "other" &&
+          {rateType === "fixed" &&
+            coinType === "other" &&
             otherCoinsFixedRates.map((coinRate) => ratesCard(coinRate))}
-          {rateType === "fixed" && coinType === "all" &&
-            [...topCoinsFixedRates, ...otherCoinsFixedRates].map((coinRate) => ratesCard(coinRate))}
+          {rateType === "fixed" &&
+            coinType === "all" &&
+            [...topCoinsFixedRates, ...otherCoinsFixedRates].map((coinRate) =>
+              ratesCard(coinRate)
+            )}
         </Grid>
       </Container>
     </>
