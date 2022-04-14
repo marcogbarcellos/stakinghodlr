@@ -157,13 +157,11 @@ const getAllCoins = async () => {
         ? [...items, ...graphqlData.data.data.listCoins.items]
         : items;
       nextToken = graphqlData.data.data.listCoins.nextToken;
-      console.log("PARTIAL listCoins ", JSON.stringify(items, null, 2));
-      console.log("nextToken ", nextToken);
     } while (nextToken);
 
     return items;
   } catch (err) {
-    console.log("error posting to appsync: ", err);
+    console.error("error posting to appsync: ", err);
   }
 };
 
@@ -193,7 +191,7 @@ const getAllCoinRates = async () => {
 
     return items;
   } catch (err) {
-    console.log("error posting to appsync: ", err);
+    console.error("error posting to appsync: ", err);
   }
 };
 

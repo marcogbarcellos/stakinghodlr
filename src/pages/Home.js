@@ -135,9 +135,6 @@ function Home() {
         topCoinsFixedRates,
         otherCoinsFixedRates,
       } = extractFormattedCoinRates(items);
-      console.log("items", items);
-      console.log("topCoinsFlexRates", topCoinsFlexRates);
-      console.log("topCoinsFixedRates", topCoinsFixedRates);
       setTopCoinsRates(topCoinsRates);
       setOtherCoinsRates(otherCoinsRates);
       setTopCoinsFlexRates(topCoinsFlexRates);
@@ -152,7 +149,7 @@ function Home() {
   const ratesCard = (coinRate) => {
     return (
       <Grid item key={`${coinRate.title}-fixex`} xs={12} md={3}>
-        <Card>
+        <Card style={{width: 360}}>
           {coinRate.logoUrl && (
             <CardMedia
               component="img"
@@ -265,14 +262,14 @@ function Home() {
               aria-label="rate type"
               style={{ paddingRight: 15, paddingBottom: 15 }}
             >
-              <ToggleButton value="all" aria-label="all rates">
-                All rates
+              <ToggleButton value="all" aria-label="all rates" style={{width: 120}}>
+                All terms
               </ToggleButton>
-              <ToggleButton value="flexible" aria-label="centered">
-                Flexible rates
+              <ToggleButton value="flexible" aria-label="centered" style={{width: 120}}>
+                Flex terms
               </ToggleButton>
-              <ToggleButton value="fixed" aria-label="right aligned">
-                Fixed rates
+              <ToggleButton value="fixed" aria-label="right aligned" style={{width: 120}}>
+                Fixed terms
               </ToggleButton>
             </ToggleButtonGroup>
             <ToggleButtonGroup
@@ -283,13 +280,13 @@ function Home() {
               aria-label="coin type"
               style={{ paddingRight: 15, paddingBottom: 15}}
             >
-              <ToggleButton value="top" aria-label="all rates">
+              <ToggleButton value="top" aria-label="top coins" style={{width: 120}}>
                 Top coins
               </ToggleButton>
-              <ToggleButton value="other" aria-label="centered">
-                Alternative coin
+              <ToggleButton value="other" aria-label="other coins" style={{width: 120}}>
+                Other coins
               </ToggleButton>
-              <ToggleButton value="all" aria-label="right aligned">
+              <ToggleButton value="all" aria-label="all coins" style={{width: 120}}>
                 All coins
               </ToggleButton>
             </ToggleButtonGroup>

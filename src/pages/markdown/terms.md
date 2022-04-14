@@ -14,4 +14,4 @@
 
 ## Ideas and Feedback
 
-You are more than welcome to share any ideas you have with our [twitter account](https://twitter.com/marcogbarcellos). By submitting any Idea, You agree that Your disclosure is unsolicited and without restriction and will not place Stakinghodlr under any fiduciary or other obligation, and that we are free to use the Idea without any additional compensation to You, and/or to disclose the Idea on a non-confidential basis or otherwise to anyone. 
+You are more than welcome to share any ideas you have with our twitter account[@stakinghodlr](https://twitter.com/stakinghodlr). By submitting any Idea, You agree that Your disclosure is unsolicited and without restriction and will not place Stakinghodlr under any fiduciary or other obligation, and that we are free to use the Idea without any additional compensation to You, and/or to disclose the Idea on a non-confidential basis or otherwise to anyone. 

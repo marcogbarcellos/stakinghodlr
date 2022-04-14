@@ -61,7 +61,7 @@ const BasePage = ({ children }) => {
         elevation={0}
         sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}
       >
-        <Toolbar sx={{ flexWrap: "wrap", backgroundColor: "#2f2f2f" }}>
+        <Toolbar sx={{ flexWrap: "wrap", backgroundColor: "#04053e" }}>
           <Link
               color="inherit"
               onClick={() => navigate("/")}

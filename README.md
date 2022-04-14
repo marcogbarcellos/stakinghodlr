@@ -223,6 +223,8 @@ Some API's like, for example, Kucoin and others unfortunately don't provide acce
 - [Ledn](https://ledn.io/en/btc-savings)
 - [Guarda](https://guarda.com/staking/)
 - [Gate.io](https://www.gate.io/hodl)
+- [Okx](https://www.okx.com/earn/home)
+- [Vauld](https://www.vauld.com/rates)
 
 Skippping for now (few coins, bad rates):
 - [Bitfinex](https://staking.bitfinex.com/)

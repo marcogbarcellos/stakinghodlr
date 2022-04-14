@@ -2,10 +2,10 @@
   "AWSTemplateFormatVersion": "2010-09-09",
   "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"7.6.26\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
   "Parameters": {
-    "CloudWatchRule": {
+    "CronjobExpressionAllRates": {
       "Type": "String",
       "Default": "NONE",
-      "Description": " Schedule Expression"
+      "Description": " ALL RATES Schedule Expression"
     },
     "deploymentBucketName": {
       "Type": "String"
@@ -366,12 +366,12 @@
         }
       }
     },
-    "CloudWatchEvent": {
+    "AllRatesTweetEvent": {
       "Type": "AWS::Events::Rule",
       "Properties": {
         "Description": "Schedule rule for Lambda",
         "ScheduleExpression": {
-          "Ref": "CloudWatchRule"
+          "Ref": "CronjobExpressionAllRates"
         },
         "State": "ENABLED",
         "Targets": [
@@ -389,7 +389,7 @@
         ]
       }
     },
-    "PermissionForEventsToInvokeLambda": {
+    "PermAllRatesEventsToInvokeLambda": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "FunctionName": {
@@ -399,7 +399,45 @@
         "Principal": "events.amazonaws.com",
         "SourceArn": {
           "Fn::GetAtt": [
-            "CloudWatchEvent",
+            "AllRatesTweetEvent",
+            "Arn"
+          ]
+        }
+      }
+    },
+    "BtcRatesTweetEvent": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "Description": "Schedule rule for Lambda",
+        "ScheduleExpression": "cron(30 18 * * ? *)",
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::GetAtt": [
+                "LambdaFunction",
+                "Arn"
+              ]
+            },
+            "Id": {
+              "Ref": "LambdaFunction"
+            },
+            "Input": "{\"coinSymbol\": \"BTC\"}"
+          }
+        ]
+      }
+    },
+    "PermBtcRatesEventsToInvokeLambda": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "LambdaFunction"
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "events.amazonaws.com",
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "AllRatesTweetEvent",
             "Arn"
           ]
         }
@@ -487,9 +525,14 @@
         "Ref": "LambdaExecutionRole"
       }
     },
-    "CloudWatchEventRule": {
+    "AllRatesTweetEventRule": {
       "Value": {
-        "Ref": "CloudWatchEvent"
+        "Ref": "AllRatesTweetEvent"
+      }
+    },
+    "BtcRatesTweetEventRule": {
+      "Value": {
+        "Ref": "BtcRatesTweetEvent"
       }
     }
   }

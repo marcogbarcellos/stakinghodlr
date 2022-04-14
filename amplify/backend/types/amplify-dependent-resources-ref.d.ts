@@ -30,7 +30,8 @@ export type AmplifyDependentResourcesAttributes = {
             "Arn": "string",
             "Region": "string",
             "LambdaExecutionRole": "string",
-            "CloudWatchEventRule": "string"
+            "AllRatesTweetEventRule": "string",
+            "BtcRatesTweetEventRule": "string"
         }
     }
 }

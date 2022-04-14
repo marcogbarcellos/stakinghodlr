@@ -51,7 +51,7 @@ const getAllCoinRates = async () => {
 
     return items;
   } catch (err) {
-    console.log("error posting to appsync: ", err);
+    console.error("error posting to appsync: ", err);
   }
 };
 
@@ -94,7 +94,7 @@ const tweetRates = async (tweet) => {
     const tweetResult = await twitterClient.tweets.statusesUpdate({
       status: tweet,
     });
-    console.log("tweetResult v1:", tweetResult);
+    console.log("tweetResult:", tweetResult);
   } catch (error) {
     console.error("tweeting ERROR:", error);
   }
@@ -109,7 +109,7 @@ const getTopCoinRates = (coinRates, returnNumber, coinSymbol) => {
 };
 
 const getTweetPhraseForAllCoinsRates = (coinRates) => {
-  let topRatesPhrase = `Check out the Top ${coinRates.length} staking rates:\n\n`;
+  let topRatesPhrase = `Top ${coinRates.length} staking APYs today:\n\n`;
   for (let index = 0; index < coinRates.length; index++) {
     const coinRate = coinRates[index];
     topRatesPhrase += `#${index+1}: ${coinRate.coinSymbol} with ${(
@@ -117,12 +117,14 @@ const getTweetPhraseForAllCoinsRates = (coinRates) => {
     ).toFixed(2)}% at ${coinRate.exchangeName}\n`;
   }
   topRatesPhrase += `\n\nCheck all rates at https://www.stakinghodlr.com\n\n\n `;
-  topRatesPhrase += `#blockchain #crypto #staking #passiveincome #income ${coinRates.map(c => `#${c.exchangeName} #${c.coinSymbol}`).join(" ")}`;
+  const uniqueCoinsTags = [...new Set(coinRates.map(c => `#${c.coinSymbol}`))].join(" ");
+  const uniqueExchangesTags = [...new Set(coinRates.map(c => `#${c.exchangeName}`))].join(" ");
+  topRatesPhrase += `#blockchain #crypto #staking #passiveincome #income ${uniqueCoinsTags} ${uniqueExchangesTags}`;
   return topRatesPhrase;
 };
 
 const getTweetPhraseForSpecificCoinsRates = (coinRates) => {
-  let topRatesPhrase = `Check out the Top ${coinRates.length} ${coinRates[0].coinSymbol} staking rates:\n\n`;
+  let topRatesPhrase = `Top ${coinRates.length} ${coinRates[0].coinSymbol} staking APYs today:\n\n`;
   for (let index = 0; index < coinRates.length; index++) {
     const coinRate = coinRates[index];
     topRatesPhrase += `#${index+1}: ${(coinRate.interestRate * 100).toFixed(2)}% at ${
@@ -130,7 +132,8 @@ const getTweetPhraseForSpecificCoinsRates = (coinRates) => {
     }\n`;
   }
   topRatesPhrase += `\n\nCheck all rates at https://www.stakinghodlr.com\n\n\n `;
-  topRatesPhrase += `#blockchain #crypto #staking #passiveincome #income #${coinRates[0].coinSymbol} ${coinRates.map(c => `#${c.exchangeName}`).join(" ")}`;
+  const uniqueExchangesTags = [...new Set(coinRates.map(c => `#${c.exchangeName}`))].join(" ");
+  topRatesPhrase += `#blockchain #crypto #staking #passiveincome #income #${coinRates[0].coinSymbol} ${uniqueExchangesTags}`;
   return topRatesPhrase;
 };
 
@@ -139,24 +142,15 @@ const getTweetPhraseForSpecificCoinsRates = (coinRates) => {
  */
 exports.handler = async (event) => {
   console.log(`EVENT: ${JSON.stringify(event)}`);
+  // default number of rates to 3 (remember tweets have limited lengths)
+  const numberOfRates = event.numberOfRates ? parseInt(event.numberOfRates) : 3;
   const coinRates = await getAllCoinRates();
   console.log(`coinRates`, JSON.stringify(coinRates, null, 2));
-  // const topThreeETHRates = getTopCoinRates(coinRates, 3, "ETH");
-  // const topThreeUSDTRates = getTopCoinRates(coinRates, 3, "USDT");
-  // const topThreeUSDCRates = getTopCoinRates(coinRates, 3, "USDC");
-  const topThreeRates = getTopCoinRates(coinRates, 3);
-  let tweet = getTweetPhraseForAllCoinsRates(topThreeRates);
+  const topRates = getTopCoinRates(coinRates, numberOfRates, event.coinSymbol);
+  const tweet = event.coinSymbol
+  ? getTweetPhraseForSpecificCoinsRates(topRates)
+  : getTweetPhraseForAllCoinsRates(topRates);
+  console.log(`Ready to tweet the following:\n ${tweet}`);
   await tweetRates(tweet);
-  const topThreeBTCRates = getTopCoinRates(coinRates, 3, "BTC");
-  tweet = getTweetPhraseForSpecificCoinsRates(topThreeBTCRates);
-  await tweetRates(tweet);
-  return {
-    statusCode: 200,
-    //  Uncomment below to enable CORS requests
-    //  headers: {
-    //      "Access-Control-Allow-Origin": "*",
-    //      "Access-Control-Allow-Headers": "*"
-    //  },
-    body: JSON.stringify("Successfully finished!"),
-  };
+  return event;
 };
