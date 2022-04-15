@@ -499,3 +499,30 @@ export const onDeleteExchange = /* GraphQL */ `
     }
   }
 `;
+export const onCreateMailList = /* GraphQL */ `
+  subscription OnCreateMailList {
+    onCreateMailList {
+      email
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateMailList = /* GraphQL */ `
+  subscription OnUpdateMailList {
+    onUpdateMailList {
+      email
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteMailList = /* GraphQL */ `
+  subscription OnDeleteMailList {
+    onDeleteMailList {
+      email
+      createdAt
+      updatedAt
+    }
+  }
+`;

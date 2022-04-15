@@ -535,3 +535,39 @@ export const deleteExchange = /* GraphQL */ `
     }
   }
 `;
+export const createMailList = /* GraphQL */ `
+  mutation CreateMailList(
+    $input: CreateMailListInput!
+    $condition: ModelMailListConditionInput
+  ) {
+    createMailList(input: $input, condition: $condition) {
+      email
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateMailList = /* GraphQL */ `
+  mutation UpdateMailList(
+    $input: UpdateMailListInput!
+    $condition: ModelMailListConditionInput
+  ) {
+    updateMailList(input: $input, condition: $condition) {
+      email
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteMailList = /* GraphQL */ `
+  mutation DeleteMailList(
+    $input: DeleteMailListInput!
+    $condition: ModelMailListConditionInput
+  ) {
+    deleteMailList(input: $input, condition: $condition) {
+      email
+      createdAt
+      updatedAt
+    }
+  }
+`;

@@ -3,7 +3,7 @@ const KrakenClient = require('kraken-api');
 const getStaking = async (apiKey, apiSecret) => {
   const kraken = new KrakenClient(apiKey, apiSecret);
   const res = await kraken.privateMethod('Staking/Assets');
-  console.log("KRAKEN ALL RESULT STAKINGL:", JSON.stringify(res, null, 2));
+  console.log("KRAKEN ALL RESULT STAKING:", JSON.stringify(res, null, 2));
   const flexibleStaking = res.result.filter(r => !r.lock).map( staking => {
     let interestRate = 0;
     if (staking.rewards.reward && staking.rewards.type === 'percentage') {

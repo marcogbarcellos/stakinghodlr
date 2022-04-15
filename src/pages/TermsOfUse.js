@@ -14,9 +14,9 @@ function TermsOfUse() {
         fetch(res.default)
           .then((res) => res.text())
           .then((res) => setPost(res))
-          .catch((err) => console.log(err));
+          .catch((err) => console.error(err));
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   });
 
   return (

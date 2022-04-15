@@ -333,3 +333,36 @@ export const listExchanges = /* GraphQL */ `
     }
   }
 `;
+export const getMailList = /* GraphQL */ `
+  query GetMailList($email: String!) {
+    getMailList(email: $email) {
+      email
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listMailLists = /* GraphQL */ `
+  query ListMailLists(
+    $email: String
+    $filter: ModelMailListFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listMailLists(
+      email: $email
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        email
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;

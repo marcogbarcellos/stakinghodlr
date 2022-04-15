@@ -8,6 +8,7 @@ enum CoinType {
   ALTERNATIVE
   AUTO_GENERATED
 }
+
 type Coin @model {
   symbol: String! @primaryKey
   name: String!
@@ -50,4 +51,8 @@ type Exchange @model {
   twitterAccount: String
   coinRates: [CoinRate] @hasMany(indexName: "byExchangeName", fields: ["name"])
   historicCoinRates: [HistoryCoinRate] @hasMany(indexName: "byExchangeName", fields: ["name"])
+}
+
+type MailList @model {
+  email: String! @primaryKey
 }

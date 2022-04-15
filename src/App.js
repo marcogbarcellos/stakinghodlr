@@ -52,7 +52,7 @@ const BasePage = ({ children }) => {
   return (
     <>
       <GlobalStyles
-        styles={{ ul: { margin: 0, padding: 0, listStyle: "none" } }}
+        styles={{ ul: { margin: 0, padding: 0, listStyle: "none", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, segoe ui, Roboto, Helvetica, Arial, sans-serif" } }}
       />
       <CssBaseline />
       <AppBar

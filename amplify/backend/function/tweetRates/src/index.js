@@ -68,7 +68,6 @@ const tweetRates = async (tweet) => {
       WithDecryption: true,
     })
     .promise();
-  console.log("Parameters", Parameters);
   const apiKey = Parameters.find((p) =>
     p.Name.includes("TWITTER_API_KEY")
   ).Value;

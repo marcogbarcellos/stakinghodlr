@@ -16,6 +16,7 @@ import { listCoinRates } from "../graphql/queries";
 import { API, graphqlOperation } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
 import useAnalyticsEventTracker from "../actions/useAnalyticsEventTracker";
+import SubscribeEmailForm from "../components/SubscribeEmailForm";
 
 function Home() {
   const gaEventTracker = useAnalyticsEventTracker("Go to Coin Page");
@@ -222,45 +223,33 @@ function Home() {
     setCoinType(coinType);
   };
 
-  // const btcCoinLockedRate = topCoinsFixedRates.find((c) => c.title === "BTC");
-  // const ethCoinLockedRate = topCoinsFixedRates.find((c) => c.title === "ETH");
-  // const usdtCoinLockedRate = topCoinsFixedRates.find((c) => c.title === "USDT");
-  // const usdcCoinLockedRate = topCoinsFixedRates.find((c) => c.title === "USDC");
-  // const filteredLockedRates = topCoinsFixedRates.filter(
-  //   (c) => !["BTC", "ETH", "USDC", "USDT"].includes(c.title)
-  // );
-
   return (
     <>
-      <Container disableGutters maxWidth="xl" component="main" sx={{ p: 2 }}>
-        <Typography
-          component="h2"
-          variant="h3"
-          align="center"
-          color="text.primary"
-          gutterBottom
+      <Container maxWidth="xl" component="main" sx={{ p: 2 }}>
+        <Grid
+          container
+          spacing={2}
         >
-          Top Staking rates
-        </Typography>
-        <Typography
-          variant="subtitle1"
-          align="center"
-          color="text.secondary"
-          component="p"
-        >
-          Browse the best staking APYs available from one single place.
-        </Typography>
-        {/* <Typography
-          variant="body1"
-          align="center"
-          color="text.secondary"
-          component="p"
-        >
-          APYs are updated every day 9am EST time so make sure to follow up on
-          the platforms to see if the rates are still valid.
-        </Typography> */}
+          <Grid item xs={12} lg={9}>
+            <Typography
+              variant="h5"
+              // align="center"
+              style={{
+                fontWeight: 900
+              }}
+              color="text.secondary"
+              component="p"
+            >
+              Browse the best staking rates
+              from one single place.
+            </Typography>
+          </Grid>
+          <Grid item xs={12} lg={3}>
+            <SubscribeEmailForm />
+          </Grid>
+        </Grid>
       </Container>
-      <Container maxWidth="xl" component="main">
+      <Container maxWidth="xl" component="main" >
         <Grid container spacing={3} alignItems="flex-end">
           <Grid item xs={12} lg={3} alignItems="flex-end">
             <ToggleButtonGroup
@@ -272,22 +261,13 @@ function Home() {
               size="small"
               fullWidth
             >
-              <ToggleButton
-                value="all"
-                aria-label="all rates"
-              >
+              <ToggleButton value="all" aria-label="all rates">
                 All terms
               </ToggleButton>
-              <ToggleButton
-                value="flexible"
-                aria-label="centered"
-              >
+              <ToggleButton value="flexible" aria-label="centered">
                 Flex terms
               </ToggleButton>
-              <ToggleButton
-                value="fixed"
-                aria-label="right aligned"
-              >
+              <ToggleButton value="fixed" aria-label="right aligned">
                 Fixed terms
               </ToggleButton>
             </ToggleButtonGroup>
@@ -301,7 +281,6 @@ function Home() {
               aria-label="coin type"
               size="small"
               fullWidth
-              // style={{ paddingRight: 15, paddingBottom: 15 }}
             >
               <ToggleButton
                 value="top"
@@ -326,8 +305,7 @@ function Home() {
               </ToggleButton>
             </ToggleButtonGroup>
           </Grid>
-          <Grid item xs={12} lg={6} alignItems="flex-end">
-          </Grid>
+          <Grid item xs={12} lg={6} alignItems="flex-end"></Grid>
           {rateType === "all" &&
             coinType === "top" &&
             topCoinsRates.map((coinRate) => ratesCard(coinRate))}

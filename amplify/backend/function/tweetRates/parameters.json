@@ -1,10 +1,10 @@
 {
-  "CronjobExpressionAllRates": "cron(02 17 * * ? *)",
-  "CronjobExpressionBtcRates": "cron(15 00 * * ? *)",
-  "CronjobExpressionEthRates": "cron(17 00 * * ? *)",
-  "CronjobExpressionUsdtRates": "cron(20 00 * * ? *)",
-  "CronjobExpressionUsdcRates": "cron(27 00 * * ? *)",
-  "CronjobExpressionAdaRates": "cron(22 00 * * ? *)",
-  "CronjobExpressionBnbRates": "cron(30 00 * * ? *)",
-  "CronjobExpressionLunaRates": "cron(33 00 * * ? *)"
+  "CronjobExpressionAllRates": "cron(30 12 * * ? *)",
+  "CronjobExpressionBtcRates": "cron(30 13 * * ? *)",
+  "CronjobExpressionEthRates": "cron(30 14 * * ? *)",
+  "CronjobExpressionUsdtRates": "cron(30 15 * * ? *)",
+  "CronjobExpressionUsdcRates": "cron(30 16 * * ? *)",
+  "CronjobExpressionAdaRates": "cron(30 17 * * ? *)",
+  "CronjobExpressionBnbRates": "cron(30 18 * * ? *)",
+  "CronjobExpressionLunaRates": "cron(30 19 * * ? *)"
 }
