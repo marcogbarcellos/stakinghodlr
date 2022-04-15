@@ -31,7 +31,7 @@ function Home() {
   const [otherCoinsFixedRates, setOtherCoinsFixedRates] = useState([]);
 
   useEffect(() => {
-    fetchCoinRates();
+    fetchTopCoinRates();
   }, []);
 
   const getFormattedCoinsMap = (rates) => {
@@ -118,31 +118,79 @@ function Home() {
     };
   };
 
-  async function fetchCoinRates() {
+  async function fetchTopCoinRates() {
     try {
       let nextToken;
       let items = [];
       do {
         const rateData = await API.graphql(
-          graphqlOperation(listCoinRates, { nextToken })
+          graphqlOperation(listCoinRates, {
+            nextToken,
+            filter: {
+              or: [
+                {coinSymbol: {eq: "BTC"}},
+                {coinSymbol: {eq: "ETH"}},
+                {coinSymbol: {eq: "USDT"}},
+                {coinSymbol: {eq: "USDC"}},
+                {coinSymbol: {eq: "LUNA"}},
+                {coinSymbol: {eq: "SOL"}},
+                {coinSymbol: {eq: "BNB"}},
+                {coinSymbol: {eq: "ADA"}},
+              ]
+            }
+          })
         );
         items = [...items, ...(rateData.data.listCoinRates.items || [])];
+        const {
+          topCoinsRates:topRates,
+          topCoinsFlexRates: topFlex,
+          topCoinsFixedRates: topFixed,
+        } = extractFormattedCoinRates(items);
+        setTopCoinsRates([...topCoinsRates, ...topRates]);
+        setTopCoinsFlexRates([...topCoinsFlexRates, ...topFlex]);
+        setTopCoinsFixedRates([...topCoinsFixedRates, ...topFixed]);
         nextToken = rateData.data.listCoinRates.nextToken;
       } while (nextToken);
-      const {
-        topCoinsRates,
-        otherCoinsRates,
-        topCoinsFlexRates,
-        otherCoinsFlexRates,
-        topCoinsFixedRates,
-        otherCoinsFixedRates,
-      } = extractFormattedCoinRates(items);
-      setTopCoinsRates(topCoinsRates);
-      setOtherCoinsRates(otherCoinsRates);
-      setTopCoinsFlexRates(topCoinsFlexRates);
-      setTopCoinsFixedRates(topCoinsFixedRates);
-      setOtherCoinsFlexRates(otherCoinsFlexRates);
-      setOtherCoinsFixedRates(otherCoinsFixedRates);
+      
+    } catch (error) {
+      console.error("error fetching coins", error);
+    }
+  }
+
+  async function fetchOtherRates() {
+    try {
+      let nextToken;
+      let items = [];
+      do {
+        const rateData = await API.graphql(
+          graphqlOperation(listCoinRates, {
+            nextToken,
+            filter: {
+              and: [
+                {coinSymbol: {ne: "BTC"}},
+                {coinSymbol: {ne: "ETH"}},
+                {coinSymbol: {ne: "USDT"}},
+                {coinSymbol: {ne: "USDC"}},
+                {coinSymbol: {ne: "LUNA"}},
+                {coinSymbol: {ne: "SOL"}},
+                {coinSymbol: {ne: "BNB"}},
+                {coinSymbol: {ne: "ADA"}},
+              ]
+            }
+          })
+        );
+        items = [...items, ...(rateData.data.listCoinRates.items || [])];
+        const {
+          otherCoinsRates: otherRates,
+          otherCoinsFlexRates: otherFlex,
+          otherCoinsFixedRates: otherFixed,
+        } = extractFormattedCoinRates(items);
+        setOtherCoinsRates([...otherCoinsRates, ...otherRates]);
+        setOtherCoinsFlexRates([...otherCoinsFlexRates, ...otherFlex]);
+        setOtherCoinsFixedRates([...otherCoinsFixedRates, ...otherFixed]);
+        nextToken = rateData.data.listCoinRates.nextToken;
+      } while (nextToken);
+      
     } catch (error) {
       console.error("error fetching coins", error);
     }
@@ -221,6 +269,9 @@ function Home() {
 
   const handleShowCoinType = (event, coinType) => {
     setCoinType(coinType);
+    if (coinType === "other") {
+      fetchOtherRates();
+    }
   };
 
   return (
@@ -241,7 +292,7 @@ function Home() {
               component="p"
             >
               Browse the best staking rates
-              from one single place.
+              from one single place
             </Typography>
           </Grid>
           <Grid item xs={12} lg={3}>
