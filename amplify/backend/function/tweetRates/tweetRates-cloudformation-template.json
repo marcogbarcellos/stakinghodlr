@@ -7,6 +7,41 @@
       "Default": "NONE",
       "Description": " ALL RATES Schedule Expression"
     },
+    "CronjobExpressionBtcRates": {
+      "Type": "String",
+      "Default": "NONE",
+      "Description": " BTC RATES Schedule Expression"
+    },
+    "CronjobExpressionEthRates": {
+      "Type": "String",
+      "Default": "NONE",
+      "Description": " ETH RATES Schedule Expression"
+    },
+    "CronjobExpressionUsdtRates": {
+      "Type": "String",
+      "Default": "NONE",
+      "Description": " USDT RATES Schedule Expression"
+    },
+    "CronjobExpressionUsdcRates": {
+      "Type": "String",
+      "Default": "NONE",
+      "Description": " USDC RATES Schedule Expression"
+    },
+    "CronjobExpressionAdaRates": {
+      "Type": "String",
+      "Default": "NONE",
+      "Description": " ADA RATES Schedule Expression"
+    },
+    "CronjobExpressionBnbRates": {
+      "Type": "String",
+      "Default": "NONE",
+      "Description": " BNB RATES Schedule Expression"
+    },
+    "CronjobExpressionLunaRates": {
+      "Type": "String",
+      "Default": "NONE",
+      "Description": " LUNA RATES Schedule Expression"
+    },
     "deploymentBucketName": {
       "Type": "String"
     },
@@ -409,7 +444,9 @@
       "Type": "AWS::Events::Rule",
       "Properties": {
         "Description": "Schedule rule for Lambda",
-        "ScheduleExpression": "cron(38 23 * * ? *)",
+        "ScheduleExpression": {
+          "Ref": "CronjobExpressionBtcRates"
+        },
         "State": "ENABLED",
         "Targets": [
           {
@@ -437,7 +474,127 @@
         "Principal": "events.amazonaws.com",
         "SourceArn": {
           "Fn::GetAtt": [
-            "AllRatesTweetEvent",
+            "BtcRatesTweetEvent",
+            "Arn"
+          ]
+        }
+      }
+    },
+    "EthRatesTweetEvent": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "Description": "Schedule rule for Lambda",
+        "ScheduleExpression": {
+          "Ref": "CronjobExpressionEthRates"
+        },
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::GetAtt": [
+                "LambdaFunction",
+                "Arn"
+              ]
+            },
+            "Id": {
+              "Ref": "LambdaFunction"
+            },
+            "Input": "{\"coinSymbol\": \"ETH\"}"
+          }
+        ]
+      }
+    },
+    "PermEthRatesEventsToInvokeLambda": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "LambdaFunction"
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "events.amazonaws.com",
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "EthRatesTweetEvent",
+            "Arn"
+          ]
+        }
+      }
+    },
+    "UsdtRatesTweetEvent": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "Description": "Schedule rule for Lambda",
+        "ScheduleExpression": {
+          "Ref": "CronjobExpressionUsdtRates"
+        },
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::GetAtt": [
+                "LambdaFunction",
+                "Arn"
+              ]
+            },
+            "Id": {
+              "Ref": "LambdaFunction"
+            },
+            "Input": "{\"coinSymbol\": \"USDT\"}"
+          }
+        ]
+      }
+    },
+    "PermUsdtRatesEventsToInvokeLambda": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "LambdaFunction"
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "events.amazonaws.com",
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "UsdtRatesTweetEvent",
+            "Arn"
+          ]
+        }
+      }
+    },
+    "AdaRatesTweetEvent": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "Description": "Schedule rule for Lambda",
+        "ScheduleExpression": {
+          "Ref": "CronjobExpressionAdaRates"
+        },
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::GetAtt": [
+                "LambdaFunction",
+                "Arn"
+              ]
+            },
+            "Id": {
+              "Ref": "LambdaFunction"
+            },
+            "Input": "{\"coinSymbol\": \"ADA\"}"
+          }
+        ]
+      }
+    },
+    "PermAdaRatesEventsToInvokeLambda": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "LambdaFunction"
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "events.amazonaws.com",
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "AdaRatesTweetEvent",
             "Arn"
           ]
         }

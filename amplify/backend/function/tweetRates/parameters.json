@@ -1,3 +1,10 @@
 {
-  "CronjobExpressionAllRates": "cron(02 17 * * ? *)"
+  "CronjobExpressionAllRates": "cron(02 17 * * ? *)",
+  "CronjobExpressionBtcRates": "cron(15 00 * * ? *)",
+  "CronjobExpressionEthRates": "cron(17 00 * * ? *)",
+  "CronjobExpressionUsdtRates": "cron(20 00 * * ? *)",
+  "CronjobExpressionUsdcRates": "cron(27 00 * * ? *)",
+  "CronjobExpressionAdaRates": "cron(22 00 * * ? *)",
+  "CronjobExpressionBnbRates": "cron(30 00 * * ? *)",
+  "CronjobExpressionLunaRates": "cron(33 00 * * ? *)"
 }
