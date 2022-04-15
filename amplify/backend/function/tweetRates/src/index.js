@@ -1,3 +1,17 @@
+/*
+Use the following code to retrieve configured secrets from SSM:
+
+const aws = require('aws-sdk');
+
+const { Parameters } = await (new aws.SSM())
+  .getParameters({
+    Names: ["TWITTER_API_KEY","TWITTER_API_SECRET","TWITTER_BEARER_TOKEN","TWITTER_ACCESS_TOKEN","TWITTER_ACCESS_TOKEN_SECRET"].map(secretName => process.env[secretName]),
+    WithDecryption: true,
+  })
+  .promise();
+
+Parameters will be of the form { Name: 'secretName', Value: 'secretValue', ... }[]
+*/
 const AWS = require("aws-sdk");
 const { TwitterClient } = require("twitter-api-client");
 const axios = require("axios");
@@ -13,9 +27,9 @@ const listCoinRates = gql`
         date
         coinSymbol
         exchangeName
-        # exchange {
-        #   twitterAccount
-        # }
+        exchange {
+          twitterAccount
+        }
         interestRate
         lockDays
         origin
@@ -111,13 +125,21 @@ const getTweetPhraseForAllCoinsRates = (coinRates) => {
   let topRatesPhrase = `Top ${coinRates.length} staking APYs today:\n\n`;
   for (let index = 0; index < coinRates.length; index++) {
     const coinRate = coinRates[index];
-    topRatesPhrase += `#${index+1}: ${coinRate.coinSymbol} with ${(
+    topRatesPhrase += `#${index + 1}: ${coinRate.coinSymbol} with ${(
       coinRate.interestRate * 100
-    ).toFixed(2)}% at ${coinRate.exchangeName}\n`;
+    ).toFixed(2)}% ${
+      coinRate.exchange.twitterAccount
+        ? `@${coinRate.exchange.twitterAccount}`
+        : `at ${coinRate.exchangeName}`
+    }\n`;
   }
   topRatesPhrase += `\n\nCheck all rates at https://www.stakinghodlr.com\n\n\n `;
-  const uniqueCoinsTags = [...new Set(coinRates.map(c => `#${c.coinSymbol}`))].join(" ");
-  const uniqueExchangesTags = [...new Set(coinRates.map(c => `#${c.exchangeName}`))].join(" ");
+  const uniqueCoinsTags = [
+    ...new Set(coinRates.map((c) => `#${c.coinSymbol}`)),
+  ].join(" ");
+  const uniqueExchangesTags = [
+    ...new Set(coinRates.map((c) => `#${c.exchangeName}`)),
+  ].join(" ");
   topRatesPhrase += `#blockchain #crypto #staking #passiveincome #income ${uniqueCoinsTags} ${uniqueExchangesTags}`;
   return topRatesPhrase;
 };
@@ -126,12 +148,18 @@ const getTweetPhraseForSpecificCoinsRates = (coinRates) => {
   let topRatesPhrase = `Top ${coinRates.length} ${coinRates[0].coinSymbol} staking APYs today:\n\n`;
   for (let index = 0; index < coinRates.length; index++) {
     const coinRate = coinRates[index];
-    topRatesPhrase += `#${index+1}: ${(coinRate.interestRate * 100).toFixed(2)}% at ${
-      coinRate.exchangeName
+    topRatesPhrase += `#${index + 1}: ${(coinRate.interestRate * 100).toFixed(
+      2
+    )}% ${
+      coinRate.exchange.twitterAccount
+        ? `@${coinRate.exchange.twitterAccount}`
+        : `at ${coinRate.exchangeName}`
     }\n`;
   }
   topRatesPhrase += `\n\nCheck all rates at https://www.stakinghodlr.com\n\n\n `;
-  const uniqueExchangesTags = [...new Set(coinRates.map(c => `#${c.exchangeName}`))].join(" ");
+  const uniqueExchangesTags = [
+    ...new Set(coinRates.map((c) => `#${c.exchangeName}`)),
+  ].join(" ");
   topRatesPhrase += `#blockchain #crypto #staking #passiveincome #income #${coinRates[0].coinSymbol} ${uniqueExchangesTags}`;
   return topRatesPhrase;
 };
@@ -147,8 +175,8 @@ exports.handler = async (event) => {
   console.log(`coinRates`, JSON.stringify(coinRates, null, 2));
   const topRates = getTopCoinRates(coinRates, numberOfRates, event.coinSymbol);
   const tweet = event.coinSymbol
-  ? getTweetPhraseForSpecificCoinsRates(topRates)
-  : getTweetPhraseForAllCoinsRates(topRates);
+    ? getTweetPhraseForSpecificCoinsRates(topRates)
+    : getTweetPhraseForAllCoinsRates(topRates);
   console.log(`Ready to tweet the following:\n ${tweet}`);
   await tweetRates(tweet);
   return event;

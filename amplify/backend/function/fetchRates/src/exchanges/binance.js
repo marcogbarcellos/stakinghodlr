@@ -4,7 +4,7 @@ const getFixedStaking = async (client) => {
   const data = (
     await client.savingsProductList("CUSTOMIZED_FIXED")
   ).data;
-  console.log("BINANCE DATA FIXED STAKING:", JSON.stringify(data, null, 2));
+  // console.log("BINANCE DATA FIXED STAKING:", JSON.stringify(data, null, 2));
   const staking = data.map((f) => ({
     coin: f.asset,
     exchange: "Binance",
@@ -18,7 +18,7 @@ const getFixedStaking = async (client) => {
 
 const getFlexibleStaking = async (client) => {
   const data = (await client.savingsFlexibleProducts()).data;
-  console.log("BINANCE DATA FLEX STAKING:", JSON.stringify(data, null, 2));
+  // console.log("BINANCE DATA FLEX STAKING:", JSON.stringify(data, null, 2));
   const staking = data.map((f) => ({
     coin: f.asset,
     exchange: "Binance",

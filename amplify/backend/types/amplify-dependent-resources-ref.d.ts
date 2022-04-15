@@ -32,6 +32,12 @@ export type AmplifyDependentResourcesAttributes = {
             "LambdaExecutionRole": "string",
             "AllRatesTweetEventRule": "string",
             "BtcRatesTweetEventRule": "string"
+        },
+        "nexoScraper": {
+            "Name": "string",
+            "Arn": "string",
+            "Region": "string",
+            "LambdaExecutionRole": "string"
         }
     }
 }

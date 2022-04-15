@@ -1,3 +1,17 @@
+/*
+Use the following code to retrieve configured secrets from SSM:
+
+const aws = require('aws-sdk');
+
+const { Parameters } = await (new aws.SSM())
+  .getParameters({
+    Names: ["BINANCE_API_KEY","BINANCE_API_SECRET","KRAKEN_API_KEY","KRAKEN_API_SECRET"].map(secretName => process.env[secretName]),
+    WithDecryption: true,
+  })
+  .promise();
+
+Parameters will be of the form { Name: 'secretName', Value: 'secretValue', ... }[]
+*/
 const AWS = require("aws-sdk");
 const axios = require("axios");
 const gql = require("graphql-tag");
@@ -5,6 +19,8 @@ const graphql = require("graphql");
 const { print } = graphql;
 const binanceStaking = require("./exchanges/binance");
 const krakenStaking = require("./exchanges/kraken");
+const youhodlerStaking = require("./exchanges/youhodler");
+const nexoStaking = require("./exchanges/nexo");
 
 const listCoins = gql`
   query ListCoins($nextToken: String) {
@@ -236,9 +252,6 @@ const cleanupDynamicallyInsertedRates = async (allRates) => {
           },
         },
       });
-      console.log(
-        "Successfully cleaned up coinRates from old dynamic rates and inserted into history"
-      );
     } catch (error) {
       console.log(
         "error delete old dynamically inserted coin rates and saving to history",
@@ -246,11 +259,13 @@ const cleanupDynamicallyInsertedRates = async (allRates) => {
       );
     }
   }
+  console.log(
+    "Successfully cleaned up coinRates from old dynamic rates and inserted into history"
+  );
 };
 
 const getAllStakings = async () => {
   try {
-    console.log("getParameters");
     const { Parameters } = await new AWS.SSM()
       .getParameters({
         Names: [
@@ -262,8 +277,6 @@ const getAllStakings = async () => {
         WithDecryption: true,
       })
       .promise();
-    console.log("FINISHED gettting Parameters");
-    console.log(Parameters);
     const binanceApiKey = Parameters.find((p) =>
       p.Name.includes("BINANCE_API_KEY")
     ).Value;
@@ -276,11 +289,18 @@ const getAllStakings = async () => {
     const krakenApiSecret = Parameters.find((p) =>
       p.Name.includes("KRAKEN_API_SECRET")
     ).Value;
-    const binance = await binanceStaking(binanceApiKey, binanceApiSecret);
-    const kraken = await krakenStaking(krakenApiKey, krakenApiSecret);
+    const [binance, kraken, youhodler/* , nexo */] = await Promise.all([
+      binanceStaking(binanceApiKey, binanceApiSecret),
+      krakenStaking(krakenApiKey, krakenApiSecret),
+      youhodlerStaking(),
+      // nexoStaking(),
+    ]);
     console.log("binance response", binance);
     console.log("kraken response", kraken);
-    return [...binance, ...kraken];
+    console.log("youhodler response", youhodler);
+    const nexo = await nexoStaking();
+    console.log("nexo response", nexo);
+    return [...binance, ...kraken, ...youhodler, ...nexo];
   } catch (error) {
     console.error("error", error);
   }
@@ -303,7 +323,7 @@ const upsertUnexistingCoins = async (coins, stakings) => {
   if (insertingCoins.length > 0) {
     for (const coin of insertingCoins) {
       try {
-        const graphqlData = await axios({
+        await axios({
           url: process.env.API_STAKINGHODLR_GRAPHQLAPIENDPOINTOUTPUT,
           method: "post",
           headers: {
@@ -316,11 +336,12 @@ const upsertUnexistingCoins = async (coins, stakings) => {
             },
           },
         });
-        console.log("Inserted coin successfully", graphqlData);
+        
       } catch (error) {
         console.error("Inserting coin failed", error);
       }
     }
+    console.log("Inserted coins successfully");
   } else {
     console.log("No Coins to insert, all of them were already found");
   }
@@ -341,7 +362,7 @@ const insertCoinRates = async (stakings) => {
   console.log(`insertingCOinRATES`, JSON.stringify(coinRates, null, 2));
   for (const coinRate of coinRates) {
     try {
-      const x = await axios({
+      await axios({
         url: process.env.API_STAKINGHODLR_GRAPHQLAPIENDPOINTOUTPUT,
         method: "post",
         headers: {
@@ -354,11 +375,11 @@ const insertCoinRates = async (stakings) => {
           },
         },
       });
-      console.log(`created coinRate`, x);
     } catch (error) {
       console.error("Inserting coin rate failed", error);
     }
   }
+  console.log(`created all coinRates`);
 };
 
 /**
@@ -366,11 +387,16 @@ const insertCoinRates = async (stakings) => {
  */
 exports.handler = async (event) => {
   console.log(`EVENT: ${JSON.stringify(event)}`);
-  const coins = await getAllCoins();
+  const [coins, coinRates, allStakings] = await Promise.all([
+    getAllCoins(),
+    getAllCoinRates(),
+    getAllStakings(),
+  ])
+  // const coins = await getAllCoins();
+  // const coinRates = await getAllCoinRates();
+  // const allStakings = await getAllStakings();
   console.log("coins", JSON.stringify(coins, null, 2));
-  const coinRates = await getAllCoinRates();
   console.log("coinRates", JSON.stringify(coinRates, null, 2));
-  const allStakings = await getAllStakings();
   console.log("allStakings", JSON.stringify(allStakings, null, 2));
   // create coins if they don't exist
   await upsertUnexistingCoins(coins, allStakings);
