@@ -1,38 +1,38 @@
 {
-  "dev": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-stakinghodlr-dev-164054-authRole",
-      "UnauthRoleArn": "arn:aws:iam::169392221016:role/amplify-stakinghodlr-dev-164054-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::169392221016:role/amplify-stakinghodlr-dev-164054-authRole",
-      "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-stakinghodlr-dev-164054-deployment",
-      "UnauthRoleName": "amplify-stakinghodlr-dev-164054-unauthRole",
-      "StackName": "amplify-stakinghodlr-dev-164054",
-      "StackId": "arn:aws:cloudformation:us-east-1:169392221016:stack/amplify-stakinghodlr-dev-164054/5cb72cc0-b9cf-11ec-9c8c-0a786f8c1ff1",
-      "AmplifyAppId": "d3fihn4bs5jrqf"
-    },
-    "categories": {
-      "hosting": {
-        "amplifyhosting": {
-          "appId": "d3fihn4bs5jrqf",
-          "type": "cicd"
-        }
-      },
-      "auth": {
-        "stakinghodlr5e3dfa3e": {}
-      },
-      "function": {
-        "fetchRates": {
-          "secretsPathAmplifyAppId": "d3fihn4bs5jrqf",
-          "deploymentBucketName": "amplify-stakinghodlr-dev-164054-deployment",
-          "s3Key": "amplify-builds/fetchRates-417958705332637a4832-build.zip"
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-stakinghodlr-dev-142916-authRole",
+            "UnauthRoleArn": "arn:aws:iam::169392221016:role/amplify-stakinghodlr-dev-142916-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::169392221016:role/amplify-stakinghodlr-dev-142916-authRole",
+            "Region": "eu-central-1",
+            "DeploymentBucketName": "amplify-stakinghodlr-dev-142916-deployment",
+            "UnauthRoleName": "amplify-stakinghodlr-dev-142916-unauthRole",
+            "StackName": "amplify-stakinghodlr-dev-142916",
+            "StackId": "arn:aws:cloudformation:eu-central-1:169392221016:stack/amplify-stakinghodlr-dev-142916/976b7c30-bce1-11ec-a116-065b663a5ef0",
+            "AmplifyAppId": "dik3yvl4lh7ic"
         },
-        "tweetRates": {
-          "secretsPathAmplifyAppId": "d3fihn4bs5jrqf",
-          "deploymentBucketName": "amplify-stakinghodlr-dev-164054-deployment",
-          "s3Key": "amplify-builds/tweetRates-65674f41762b50795645-build.zip"
+        "categories": {
+            "function": {
+                "fetchRates": {
+                    "secretsPathAmplifyAppId": "dik3yvl4lh7ic",
+                    "deploymentBucketName": "amplify-stakinghodlr-dev-142916-deployment",
+                    "s3Key": "amplify-builds/fetchRates-424b4c5443776a4e5549-build.zip"
+                },
+                "tweetRates": {
+                    "secretsPathAmplifyAppId": "dik3yvl4lh7ic",
+                    "deploymentBucketName": "amplify-stakinghodlr-dev-142916-deployment",
+                    "s3Key": "amplify-builds/tweetRates-3835624a46346a345562-build.zip"
+                }
+            },
+            "auth": {
+                "stakinghodlr5e3dfa3e": {}
+            },
+            "hosting": {
+                "amplifyhosting": {
+                    "appId": "dik3yvl4lh7ic",
+                    "type": "cicd"
+                }
+            }
         }
-      }
     }
-  }
 }
