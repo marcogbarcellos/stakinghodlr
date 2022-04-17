@@ -191,8 +191,20 @@
           ]
         },
         "Runtime": "nodejs14.x",
-        "Layers": [],
-        "Timeout": 900
+        "Layers": [
+          {
+            "Fn::Sub": [
+              "arn:aws:lambda:${region}:764866452798:layer:chrome-aws-lambda:25",
+              {
+                "region": {
+                  "Ref": "AWS::Region"
+                }
+              }
+            ]
+          }
+        ],
+        "Timeout": 900,
+        "MemorySize": 3008
       }
     },
     "LambdaExecutionRole": {

@@ -8,9 +8,11 @@
     "@binance/connector": "^1.8.1",
     "axios": "^0.26.1",
     "cheerio": "^1.0.0-rc.10",
+    "chrome-aws-lambda": "^10.1.0",
     "graphql": "^16.3.0",
     "graphql-tag": "^2.12.6",
-    "kraken-api": "^1.0.1"
+    "kraken-api": "^1.0.1",
+    "puppeteer-core": "^13.5.2"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.92",

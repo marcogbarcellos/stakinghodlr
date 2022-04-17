@@ -11,7 +11,6 @@ function round(num, decimalPlaces = 5) {
 
 const getStaking = async () => {
   try {
-    // console.log("Start Scraping YouHodler");
     // read url data HTML
     const { data } = await axios.get(url);
     const $ = cheerio.load(data);
@@ -22,7 +21,6 @@ const getStaking = async () => {
     listItems.each((idx, el) => {
         const coin = $(el).children(".nav-drop-a-tile-coin-ticker").text();
         const interestRate = round(Number($(el).children(".interest-regular").text().replace("%", ""))/100);
-        // console.log(`#${idx+1} coin: ${coin}, interestRate: ${interestRate}`);
         stakings.push({
             coin,
             exchange: "Youhodler",

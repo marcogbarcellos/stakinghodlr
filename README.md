@@ -210,21 +210,32 @@ Some API's like, for example, Kucoin and others unfortunately don't provide acce
 
 #### Platforms with their Earn links
 
-- [Binance](https://www.binance.com/en/earn) - has API (not need to manually dig in)
-- [Kucoin](https://www.kucoin.com/earn)
-- [Huobi](https://www.huobi.com/en-us/financial/earn)
-- [Crypto.com](https://crypto.com/br/earn)
+Automated through API:
+
+- [Binance](https://www.binance.com/en/earn)
 - [Kraken](https://www.kraken.com/features/staking-coins)
+
+Automated through Web Scraping:
+
+- [Crypto.com](https://crypto.com/br/earn)
 - [Nexo](https://nexo.io/earn-crypto)
 - [Youhodler](https://www.youhodler.com/earn-crypto)
+- [Vauld](https://www.vauld.com/rates)
+
+Missing to automate:
+
+- [Kucoin](https://www.kucoin.com/earn)
+- [Huobi](https://www.huobi.com/en-us/financial/earn)
 - [Celsius](https://celsius.network/earn)
 - [Yield App](https://www.yield.app/yld)
-- [Blockfi](https://blockfi.com/crypto-interest-account)
-- [Ledn](https://ledn.io/en/btc-savings)
 - [Guarda](https://guarda.com/staking/)
-- [Gate.io](https://www.gate.io/hodl)
 - [Okx](https://www.okx.com/earn/home)
-- [Vauld](https://www.vauld.com/rates)
+
+Tried and haven't finished:
+
+- [Blockfi](https://blockfi.com/rates)
+- [Ledn](https://ledn.io/en/btc-savings)
+- [Gate.io](https://www.gate.io/hodl)
 
 Skippping for now (few coins, bad rates):
 - [Bitfinex](https://staking.bitfinex.com/)

@@ -10,6 +10,10 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+// import TextField from "@mui/material/TextField";
+// import Select from "@mui/material/Select";
 import { CardMedia } from "@mui/material";
 import ExchangesTinyList from "../components/ExchangesTinyList";
 import { listCoinRates } from "../graphql/queries";
@@ -21,6 +25,8 @@ import SubscribeEmailForm from "../components/SubscribeEmailForm";
 function Home() {
   const gaEventTracker = useAnalyticsEventTracker("Go to Coin Page");
   const navigate = useNavigate();
+  const [seeAllRatesCoin, setSeeAllRatesCoin] = React.useState("");
+  const [showNumberOfRates, setShowNumberOfRates] = React.useState(3);
   const [rateType, setRateType] = React.useState("all");
   const [coinType, setCoinType] = React.useState("top");
   const [topCoinsRates, setTopCoinsRates] = useState([]);
@@ -128,21 +134,21 @@ function Home() {
             nextToken,
             filter: {
               or: [
-                {coinSymbol: {eq: "BTC"}},
-                {coinSymbol: {eq: "ETH"}},
-                {coinSymbol: {eq: "USDT"}},
-                {coinSymbol: {eq: "USDC"}},
-                {coinSymbol: {eq: "LUNA"}},
-                {coinSymbol: {eq: "SOL"}},
-                {coinSymbol: {eq: "BNB"}},
-                {coinSymbol: {eq: "ADA"}},
-              ]
-            }
+                { coinSymbol: { eq: "BTC" } },
+                { coinSymbol: { eq: "ETH" } },
+                { coinSymbol: { eq: "USDT" } },
+                { coinSymbol: { eq: "USDC" } },
+                { coinSymbol: { eq: "LUNA" } },
+                { coinSymbol: { eq: "SOL" } },
+                { coinSymbol: { eq: "BNB" } },
+                { coinSymbol: { eq: "ADA" } },
+              ],
+            },
           })
         );
         items = [...items, ...(rateData.data.listCoinRates.items || [])];
         const {
-          topCoinsRates:topRates,
+          topCoinsRates: topRates,
           topCoinsFlexRates: topFlex,
           topCoinsFixedRates: topFixed,
         } = extractFormattedCoinRates(items);
@@ -151,7 +157,6 @@ function Home() {
         setTopCoinsFixedRates([...topCoinsFixedRates, ...topFixed]);
         nextToken = rateData.data.listCoinRates.nextToken;
       } while (nextToken);
-      
     } catch (error) {
       console.error("error fetching coins", error);
     }
@@ -167,16 +172,16 @@ function Home() {
             nextToken,
             filter: {
               and: [
-                {coinSymbol: {ne: "BTC"}},
-                {coinSymbol: {ne: "ETH"}},
-                {coinSymbol: {ne: "USDT"}},
-                {coinSymbol: {ne: "USDC"}},
-                {coinSymbol: {ne: "LUNA"}},
-                {coinSymbol: {ne: "SOL"}},
-                {coinSymbol: {ne: "BNB"}},
-                {coinSymbol: {ne: "ADA"}},
-              ]
-            }
+                { coinSymbol: { ne: "BTC" } },
+                { coinSymbol: { ne: "ETH" } },
+                { coinSymbol: { ne: "USDT" } },
+                { coinSymbol: { ne: "USDC" } },
+                { coinSymbol: { ne: "LUNA" } },
+                { coinSymbol: { ne: "SOL" } },
+                { coinSymbol: { ne: "BNB" } },
+                { coinSymbol: { ne: "ADA" } },
+              ],
+            },
           })
         );
         items = [...items, ...(rateData.data.listCoinRates.items || [])];
@@ -185,12 +190,14 @@ function Home() {
           otherCoinsFlexRates: otherFlex,
           otherCoinsFixedRates: otherFixed,
         } = extractFormattedCoinRates(items);
+        otherRates.sort((a, b) => b.exchanges.length - a.exchanges.length);
+        otherFlex.sort((a, b) => b.exchanges.length - a.exchanges.length);
+        otherFixed.sort((a, b) => b.exchanges.length - a.exchanges.length);
         setOtherCoinsRates([...otherCoinsRates, ...otherRates]);
         setOtherCoinsFlexRates([...otherCoinsFlexRates, ...otherFlex]);
         setOtherCoinsFixedRates([...otherCoinsFixedRates, ...otherFixed]);
         nextToken = rateData.data.listCoinRates.nextToken;
       } while (nextToken);
-      
     } catch (error) {
       console.error("error fetching coins", error);
     }
@@ -238,25 +245,54 @@ function Home() {
           <CardContent>
             <ul>
               {coinRate.exchanges && (
-                <ExchangesTinyList exchanges={coinRate.exchanges} />
+                <ExchangesTinyList
+                  exchanges={coinRate.exchanges}
+                  showNumberOfRates={showNumberOfRates}
+                />
               )}
             </ul>
           </CardContent>
           <CardActions>
-            <Button
-              fullWidth
-              variant={coinRate.buttonVariant}
-              onClick={() => {
-                // gaEventTracker('seeAllRates');
-                ReactGA.event({
-                  category: "Coins",
-                  action: "See All Rates",
-                });
-                return navigate(`/coins/${coinRate.title}`, { replace: true });
-              }}
-            >
-              {coinRate.buttonText}
-            </Button>
+            {coinRate.exchanges.length > 3 && coinRate.exchanges.length <= showNumberOfRates && (
+              <Button
+                fullWidth
+                variant={coinRate.buttonVariant}
+                onClick={() => {
+                  // gaEventTracker('seeAllRates');
+                  ReactGA.event({
+                    category: "Coins",
+                    action: "See Only top 3 Rates",
+                  });
+                  console.log(`setShowNumberOfRates(coinRate.exchanges.length) 3`);
+                  setShowNumberOfRates(3);
+                  // return navigate(`/coins/${coinRate.title}`, { replace: true });
+                }}
+              >
+                See only top 3 rates <ArrowDropUpIcon />
+              </Button>
+            )}
+            {coinRate.exchanges.length > 3 && coinRate.exchanges.length > showNumberOfRates && (
+              <Button
+                fullWidth
+                variant={coinRate.buttonVariant}
+                onClick={() => {
+                  // gaEventTracker('seeAllRates');
+                  ReactGA.event({
+                    category: "Coins",
+                    action: "See All Top Rates",
+                  });
+                  console.log(`setShowNumberOfRates(coinRate.exchanges.length) ${coinRate.exchanges.length}`);
+                  if (coinRate.exchanges.length > 3) {
+                    setShowNumberOfRates(coinRate.exchanges.length);
+                  } else {
+                    setShowNumberOfRates(3);
+                  }
+                  // return navigate(`/coins/${coinRate.title}`, { replace: true });
+                }}
+              >
+                {coinRate.buttonText} <ArrowDropDownIcon />
+              </Button>
+            )}
           </CardActions>
         </Card>
       </Grid>
@@ -265,11 +301,13 @@ function Home() {
 
   const handleShowRateType = (event, rateType) => {
     setRateType(rateType);
+    setShowNumberOfRates(3);
   };
 
   const handleShowCoinType = (event, coinType) => {
     setCoinType(coinType);
-    if (coinType === "other") {
+    setShowNumberOfRates(3);
+    if (["other", "all"].includes(coinType)) {
       fetchOtherRates();
     }
   };
@@ -277,22 +315,18 @@ function Home() {
   return (
     <>
       <Container maxWidth="xl" component="main" sx={{ p: 2 }}>
-        <Grid
-          container
-          spacing={2}
-        >
+        <Grid container spacing={2}>
           <Grid item xs={12} lg={9}>
             <Typography
               variant="h5"
               // align="center"
               style={{
-                fontWeight: 900
+                fontWeight: 900,
               }}
               color="text.secondary"
               component="p"
             >
-              Browse the best staking rates
-              from one single place
+              Browse the best staking rates from one single place
             </Typography>
           </Grid>
           <Grid item xs={12} lg={3}>
@@ -300,7 +334,7 @@ function Home() {
           </Grid>
         </Grid>
       </Container>
-      <Container maxWidth="xl" component="main" >
+      <Container maxWidth="xl" component="main">
         <Grid container spacing={3} alignItems="flex-end">
           <Grid item xs={12} lg={3} alignItems="flex-end">
             <ToggleButtonGroup
@@ -353,9 +387,14 @@ function Home() {
                 style={{ width: 120 }}
               >
                 All coins
+                {/* <ArrowDropDownIcon />
+                <Select /> */}
               </ToggleButton>
             </ToggleButtonGroup>
           </Grid>
+          {/* <Grid item xs={12} lg={3} alignItems="flex-end">
+            <TextField id="outlined-basic" size="small" label="Search coin" variant="outlined" style={{width: "100%"}}/>
+          </Grid> */}
           <Grid item xs={12} lg={6} alignItems="flex-end"></Grid>
           {rateType === "all" &&
             coinType === "top" &&

@@ -8,11 +8,10 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import { Divider } from '@mui/material';
 
-export default function ExchangesTinyList({exchanges}) {
-  // finding the 3 top rates, if there is less than 3 rates, add blank ones to get them all to the same size
-  const cutExchanges = exchanges.sort((a,b) => b.interestRate - a.interestRate).slice(0,3);
-  if (cutExchanges.length < 3) {
-    const iterations = 3-cutExchanges.length;
+export default function ExchangesTinyList({exchanges, showNumberOfRates}) {
+  const cutExchanges = exchanges.sort((a,b) => b.interestRate - a.interestRate).slice(0, showNumberOfRates);
+  if (cutExchanges.length < showNumberOfRates) {
+    const iterations = showNumberOfRates - cutExchanges.length;
     for (let index = 0; index < iterations; index++) {
       cutExchanges.push({logoUrl: "", name: "", interestRate: 0, lockDays: ""})
     }

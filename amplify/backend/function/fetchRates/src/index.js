@@ -21,6 +21,8 @@ const binanceStaking = require("./exchanges/binance");
 const krakenStaking = require("./exchanges/kraken");
 const youhodlerStaking = require("./exchanges/youhodler");
 const nexoStaking = require("./exchanges/nexo");
+const cryptocomStaking = require("./exchanges/cryptocom");
+const vauldStaking = require("./exchanges/vauld");
 
 const listCoins = gql`
   query ListCoins($nextToken: String) {
@@ -289,18 +291,35 @@ const getAllStakings = async () => {
     const krakenApiSecret = Parameters.find((p) =>
       p.Name.includes("KRAKEN_API_SECRET")
     ).Value;
-    const [binance, kraken, youhodler/* , nexo */] = await Promise.all([
+    const [
+      binance,
+      kraken,
+      youhodler,
+      nexo,
+      cryptocom,
+      vauld
+    ] = await Promise.all([
       binanceStaking(binanceApiKey, binanceApiSecret),
       krakenStaking(krakenApiKey, krakenApiSecret),
       youhodlerStaking(),
-      // nexoStaking(),
+      nexoStaking(),
+      cryptocomStaking(),
+      vauldStaking(),
     ]);
     console.log("binance response", binance);
     console.log("kraken response", kraken);
     console.log("youhodler response", youhodler);
-    const nexo = await nexoStaking();
     console.log("nexo response", nexo);
-    return [...binance, ...kraken, ...youhodler, ...nexo];
+    console.log("crypto.com response", cryptocom);
+    console.log("vauld response", vauld);
+    return [
+      ...binance,
+      ...kraken,
+      ...youhodler,
+      ...nexo,
+      ...cryptocom,
+      ...vauld
+    ];
   } catch (error) {
     console.error("error", error);
   }

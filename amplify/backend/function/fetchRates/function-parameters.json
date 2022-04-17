@@ -7,7 +7,15 @@
       ]
     }
   },
-  "lambdaLayers": [],
+  "lambdaLayers": [
+    {
+      "type": "ProjectLayer",
+      "resourceName": "stakinghodlrexchangeApis",
+      "env": "dev",
+      "version": "Always choose latest version",
+      "isLatestVersionSelected": true
+    }
+  ],
   "secretNames": [
     "BINANCE_API_KEY",
     "BINANCE_API_SECRET",
