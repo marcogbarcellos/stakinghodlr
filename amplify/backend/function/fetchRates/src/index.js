@@ -1,17 +1,3 @@
-/*
-Use the following code to retrieve configured secrets from SSM:
-
-const aws = require('aws-sdk');
-
-const { Parameters } = await (new aws.SSM())
-  .getParameters({
-    Names: ["BINANCE_API_KEY","BINANCE_API_SECRET","KRAKEN_API_KEY","KRAKEN_API_SECRET"].map(secretName => process.env[secretName]),
-    WithDecryption: true,
-  })
-  .promise();
-
-Parameters will be of the form { Name: 'secretName', Value: 'secretValue', ... }[]
-*/
 const AWS = require("aws-sdk");
 const axios = require("axios");
 const gql = require("graphql-tag");
@@ -23,6 +9,10 @@ const youhodlerStaking = require("./exchanges/youhodler");
 const nexoStaking = require("./exchanges/nexo");
 const cryptocomStaking = require("./exchanges/cryptocom");
 const vauldStaking = require("./exchanges/vauld");
+const geminiStaking = require("./exchanges/gemini");
+const guardaStaking = require("./exchanges/guarda");
+const kucoinStaking = require("./exchanges/kucoin");
+const huobiStaking = require("./exchanges/huobiIncomplete");
 
 const listCoins = gql`
   query ListCoins($nextToken: String) {
@@ -297,7 +287,11 @@ const getAllStakings = async () => {
       youhodler,
       nexo,
       cryptocom,
-      vauld
+      vauld,
+      gemini,
+      guarda,
+      kucoin,
+      huobi,
     ] = await Promise.all([
       binanceStaking(binanceApiKey, binanceApiSecret),
       krakenStaking(krakenApiKey, krakenApiSecret),
@@ -305,6 +299,10 @@ const getAllStakings = async () => {
       nexoStaking(),
       cryptocomStaking(),
       vauldStaking(),
+      geminiStaking(),
+      guardaStaking(),
+      kucoinStaking(),
+      huobiStaking(),
     ]);
     console.log("binance response", binance);
     console.log("kraken response", kraken);
@@ -312,13 +310,21 @@ const getAllStakings = async () => {
     console.log("nexo response", nexo);
     console.log("crypto.com response", cryptocom);
     console.log("vauld response", vauld);
+    console.log("gemini response", gemini);
+    console.log("guarda response", guarda);
+    console.log("kucoin response", kucoin);
+    console.log("huobi response", huobi);
     return [
       ...binance,
       ...kraken,
       ...youhodler,
       ...nexo,
       ...cryptocom,
-      ...vauld
+      ...vauld,
+      ...gemini,
+      ...guarda,
+      ...kucoin,
+      ...huobi,
     ];
   } catch (error) {
     console.error("error", error);
