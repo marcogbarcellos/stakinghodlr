@@ -326,7 +326,7 @@ function Home() {
               color="text.secondary"
               component="p"
             >
-              Browse the best staking rates from one single place
+              Browse the best staking APYs from one single place
             </Typography>
           </Grid>
           <Grid item xs={12} lg={3}>

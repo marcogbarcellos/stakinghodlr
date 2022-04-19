@@ -8,6 +8,8 @@ export const onCreateCoin = /* GraphQL */ `
       name
       logoUrl
       type
+      platform
+      categories
       coinRates {
         items {
           coinNameExchangeName
@@ -48,6 +50,8 @@ export const onUpdateCoin = /* GraphQL */ `
       name
       logoUrl
       type
+      platform
+      categories
       coinRates {
         items {
           coinNameExchangeName
@@ -88,6 +92,8 @@ export const onDeleteCoin = /* GraphQL */ `
       name
       logoUrl
       type
+      platform
+      categories
       coinRates {
         items {
           coinNameExchangeName
@@ -133,6 +139,8 @@ export const onCreateCoinRate = /* GraphQL */ `
         name
         logoUrl
         type
+        platform
+        categories
         coinRates {
           nextToken
         }
@@ -176,6 +184,8 @@ export const onUpdateCoinRate = /* GraphQL */ `
         name
         logoUrl
         type
+        platform
+        categories
         coinRates {
           nextToken
         }
@@ -219,6 +229,8 @@ export const onDeleteCoinRate = /* GraphQL */ `
         name
         logoUrl
         type
+        platform
+        categories
         coinRates {
           nextToken
         }
@@ -262,6 +274,8 @@ export const onCreateHistoryCoinRate = /* GraphQL */ `
         name
         logoUrl
         type
+        platform
+        categories
         coinRates {
           nextToken
         }
@@ -305,6 +319,8 @@ export const onUpdateHistoryCoinRate = /* GraphQL */ `
         name
         logoUrl
         type
+        platform
+        categories
         coinRates {
           nextToken
         }
@@ -348,6 +364,8 @@ export const onDeleteHistoryCoinRate = /* GraphQL */ `
         name
         logoUrl
         type
+        platform
+        categories
         coinRates {
           nextToken
         }

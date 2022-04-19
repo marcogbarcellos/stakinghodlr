@@ -37,24 +37,33 @@ const getStaking = async () => {
     );
     const $ = cheerio.load(data);
     const listItems = $(".listItem___1bPdp");
-
+    console.log("listItems", listItems);
     let stakings = [];
     listItems.each((idx, el) => {
+      console.log("el", el);
       const children = $(el).children();
       if (children.length === 5) {
         const coin = $(children[0]).find(".currency___15qQn").text();
+        console.log("coin", coin);
         const rateElement = $(children[1]).find(".dashedTooltip___3jnqA");
+        console.log("rateElement", rateElement);
         const interestRate = round(
           Number(rateElement.text().replace("%", "")) / 100
-        );
+          );
+        console.log("interestRate", interestRate);
         const tenor = $(children[2]).text().toLowerCase().trim();
+        console.log("tenor", tenor);
         let duration = undefined;
         if (tenor.includes("day")) {
           duration = parseInt(tenor.split("day")[0].trim());
         }
+        console.log("duration", duration);
         const available = $(children[4]).text();
+        console.log("available", available);
         const isAvailable = available.toLowerCase().trim() === "subscribe";
+        console.log("isAvailable", isAvailable);
         if (isAvailable && tenor !== "fixed") {
+          console.log("pushing to stakings");
           stakings.push({
             coin,
             interestRate,

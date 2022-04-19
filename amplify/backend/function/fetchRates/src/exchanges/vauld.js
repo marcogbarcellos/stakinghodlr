@@ -33,7 +33,6 @@ const getStaking = async () => {
       );
       const $ = cheerio.load(data);
       let listItems = $(".coin-int-container");
-      console.log("listItems", listItems);
       // Use .each method to loop through the li we selected
       listItems.each((idx, el) => {
         const coinRates = { exchange: "Vauld", duration: 30 };
@@ -53,7 +52,6 @@ const getStaking = async () => {
           });
         stakings.push(coinRates);
       });
-      console.log("vauld stakings", stakings);
       try {
         await page.click(".right-button");
         await page.waitFor(300);
@@ -62,8 +60,6 @@ const getStaking = async () => {
       } catch (error) {
         console.error("Error on vauld clicking!",error);
       }
-      console.log("firstItemCoinFromLatestArray", firstItemCoinFromLatestArray);
-      console.log("stakings[0].coin", stakings[0].coin);
       if (firstItemCoinFromLatestArray === stakings[0].coin) {
         break;
       } else {
@@ -77,7 +73,6 @@ const getStaking = async () => {
         finalStakings.push(staking);
       }
     }
-    console.log("vauld finalStakings", finalStakings);
     return finalStakings;
   } catch (err) {
     console.error(err);

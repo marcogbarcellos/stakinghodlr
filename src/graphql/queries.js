@@ -8,6 +8,8 @@ export const getCoin = /* GraphQL */ `
       name
       logoUrl
       type
+      platform
+      categories
       coinRates {
         items {
           coinNameExchangeName
@@ -61,6 +63,8 @@ export const listCoins = /* GraphQL */ `
         name
         logoUrl
         type
+        platform
+        categories
         coinRates {
           nextToken
         }
@@ -86,6 +90,8 @@ export const getCoinRate = /* GraphQL */ `
         name
         logoUrl
         type
+        platform
+        categories
         coinRates {
           nextToken
         }
@@ -142,6 +148,8 @@ export const listCoinRates = /* GraphQL */ `
           name
           logoUrl
           type
+          platform
+          categories
           createdAt
           updatedAt
         }
@@ -181,6 +189,8 @@ export const getHistoryCoinRate = /* GraphQL */ `
         name
         logoUrl
         type
+        platform
+        categories
         coinRates {
           nextToken
         }
@@ -239,6 +249,8 @@ export const listHistoryCoinRates = /* GraphQL */ `
           name
           logoUrl
           type
+          platform
+          categories
           createdAt
           updatedAt
         }

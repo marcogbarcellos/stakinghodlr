@@ -2,7 +2,7 @@
   "AWSTemplateFormatVersion": "2010-09-09",
   "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"7.6.26\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
   "Parameters": {
-    "CronjobExpressionAllRates": {
+    "CronjobExpressionTopRates": {
       "Type": "String",
       "Default": "NONE",
       "Description": " ALL RATES Schedule Expression"
@@ -401,12 +401,12 @@
         }
       }
     },
-    "AllRatesTweetEvent": {
+    "TopRatesTweetEvent": {
       "Type": "AWS::Events::Rule",
       "Properties": {
         "Description": "Schedule rule for Lambda",
         "ScheduleExpression": {
-          "Ref": "CronjobExpressionAllRates"
+          "Ref": "CronjobExpressionTopRates"
         },
         "State": "ENABLED",
         "Targets": [
@@ -424,7 +424,7 @@
         ]
       }
     },
-    "PermAllRatesEventsToInvokeLambda": {
+    "PermTopRatesEventsToInvokeLambda": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "FunctionName": {
@@ -434,7 +434,7 @@
         "Principal": "events.amazonaws.com",
         "SourceArn": {
           "Fn::GetAtt": [
-            "AllRatesTweetEvent",
+            "TopRatesTweetEvent",
             "Arn"
           ]
         }
@@ -802,9 +802,9 @@
         "Ref": "LambdaExecutionRole"
       }
     },
-    "AllRatesTweetEventRule": {
+    "TopRatesTweetEventRule": {
       "Value": {
-        "Ref": "AllRatesTweetEvent"
+        "Ref": "TopRatesTweetEvent"
       }
     },
     "BtcRatesTweetEventRule": {

@@ -1,5 +1,5 @@
 import { Routes, Route, useNavigate } from "react-router-dom";
-import ReactGA from 'react-ga';
+import ReactGA from "react-ga";
 import AppBar from "@mui/material/AppBar";
 import CssBaseline from "@mui/material/CssBaseline";
 import Toolbar from "@mui/material/Toolbar";
@@ -7,7 +7,13 @@ import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import GlobalStyles from "@mui/material/GlobalStyles";
 import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
+import IconButton from "@mui/material/IconButton";
+import Avatar from "@mui/material/Avatar";
+import MenuIcon from "@mui/icons-material/Menu";
+import Button from "@mui/material/Button";
+import TwitterIcon from "@mui/icons-material/Twitter";
 import Image from "mui-image";
 import Home from "./pages/Home";
 import Coin from "./pages/Coin";
@@ -43,7 +49,17 @@ function Copyright(props) {
 const footers = [
   {
     title: "Legal",
-    description: [{label: "Terms of use", page: "/terms"}],
+    description: [{ label: "Terms of use", page: "/terms" }],
+  },
+  {
+    title: "Social",
+    description: [
+      {
+        label: "Follow us on twitter",
+        link: "https://twitter.com/stakinghodlr",
+        icon: TwitterIcon,
+      },
+    ],
   },
 ];
 
@@ -52,9 +68,71 @@ const BasePage = ({ children }) => {
   return (
     <>
       <GlobalStyles
-        styles={{ ul: { margin: 0, padding: 0, listStyle: "none", fontFamily: "Inter, -apple-system, BlinkMacSystemFont, segoe ui, Roboto, Helvetica, Arial, sans-serif" } }}
+        styles={{
+          ul: {
+            margin: 0,
+            padding: 0,
+            listStyle: "none",
+            fontFamily:
+              "Inter, -apple-system, BlinkMacSystemFont, segoe ui, Roboto, Helvetica, Arial, sans-serif",
+          },
+        }}
       />
       <CssBaseline />
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="static" sx={{ backgroundColor: "#04053e" }}>
+          <Toolbar
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              width: "100%",
+            }}
+          >
+            {/* <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              sx={{ mr: 2 }}
+            >
+              <MenuIcon /> 
+            </IconButton>*/}
+            <Link
+              color="inherit"
+              onClick={() => navigate("/")}
+              style={{ cursor: "pointer" }}
+            >
+              <Image
+                edge="start"
+                src="https://stakinghodlr.s3.amazonaws.com/app_imgs/stakinghodlr.png"
+                height={70}
+                width={250}
+              />
+            </Link>
+            <Link
+              color="inherit"
+              onClick={() =>
+                window.open("https://twitter.com/stakinghodlr", "_blank") ||
+                window.location.replace("https://twitter.com/stakinghodlr")
+              }
+              style={{ cursor: "pointer" }}
+            >
+              <IconButton
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="twitter"
+                sx={{ mr: 2 }}
+                spacing={3}
+              >
+                <TwitterIcon />
+              </IconButton>
+            </Link>
+            {/* <Button color="inherit">Login</Button> */}
+          </Toolbar>
+        </AppBar>
+      </Box>
+      {/* <Box sx={{ flexGrow: 1 }}>
       <AppBar
         position="static"
         color="default"
@@ -63,17 +141,26 @@ const BasePage = ({ children }) => {
       >
         <Toolbar sx={{ flexWrap: "wrap", backgroundColor: "#04053e" }}>
           <Link
-              color="inherit"
-              onClick={() => navigate("/")}
-              style={{ cursor: "pointer" }}
-            >
-            <Image src="https://stakinghodlr.s3.amazonaws.com/app_imgs/stakinghodlr.png" height={70} width={250} />
+            color="inherit"
+            onClick={() => navigate("/")}
+            style={{ cursor: "pointer" }}
+          >
+            <Image
+              edge="start"
+              src="https://stakinghodlr.s3.amazonaws.com/app_imgs/stakinghodlr.png"
+              height={70}
+              width={250}
+            />
           </Link>
-          <Typography variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
-            
-          </Typography>
+          <Typography
+            variant="h6"
+            color="inherit"
+            noWrap
+            sx={{ flexGrow: 0 }}
+          >asdsa</Typography>
         </Toolbar>
       </AppBar>
+      </Box> */}
       {children}
       <Container
         maxWidth="md"
@@ -93,8 +180,30 @@ const BasePage = ({ children }) => {
               <ul>
                 {footer.description.map((item) => (
                   <li key={item}>
-                    <Link onClick={() => navigate(item.page)} variant="subtitle1" color="text.secondary" style={{ cursor: "pointer" }}>
-                      {item.label}
+                    <Link
+                      onClick={() => {
+                        if (item.page) {
+                          navigate(item.page);
+                        }
+                        if (item.link) {
+                          window.open(item.link, "_blank") ||
+                            window.location.replace(item.link);
+                        }
+                      }}
+                      variant="subtitle1"
+                      color="text.secondary"
+                      style={{ cursor: "pointer" }}
+                    >
+                      <Grid container spacing={1}>
+                        {item.icon && (
+                          <Grid item>
+                            <item.icon />
+                          </Grid>
+                        )}
+                        <Grid item>
+                          <Typography>{item.label}</Typography>
+                        </Grid>
+                      </Grid>
                     </Link>
                   </li>
                 ))}
@@ -109,7 +218,6 @@ const BasePage = ({ children }) => {
   );
 };
 const App = () => {
-  
   // useEffect(() => {
   //   ReactGA.pageview(window.location.pathname + window.location.search);
   // }, []);

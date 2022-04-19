@@ -9,11 +9,22 @@ enum CoinType {
   AUTO_GENERATED
 }
 
+enum Platform {
+  ETHEREUM
+  BSC
+  POLKADOT
+  SOLANA
+  POLYGON
+  AVALANCHE
+}
+
 type Coin @model {
   symbol: String! @primaryKey
   name: String!
   logoUrl: String
   type: CoinType
+  platform: Platform
+  categories: [String]
   coinRates: [CoinRate] @hasMany(indexName: "byCoinSymbol", fields: ["symbol"])
   historicCoinRates: [HistoryCoinRate] @hasMany(indexName: "byCoinSymbol", fields: ["symbol"])
 }

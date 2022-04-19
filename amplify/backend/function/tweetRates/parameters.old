@@ -1,10 +1,8 @@
 {
-  "CronjobExpressionAllRates": "cron(30 12 * * ? *)",
-  "CronjobExpressionBtcRates": "cron(30 13 * * ? *)",
-  "CronjobExpressionEthRates": "cron(30 14 * * ? *)",
-  "CronjobExpressionUsdtRates": "cron(30 15 * * ? *)",
-  "CronjobExpressionUsdcRates": "cron(30 16 * * ? *)",
-  "CronjobExpressionAdaRates": "cron(30 17 * * ? *)",
-  "CronjobExpressionBnbRates": "cron(30 18 * * ? *)",
-  "CronjobExpressionLunaRates": "cron(30 19 * * ? *)"
+  "CronjobExpressionBtcRates": "cron(30 9 * * ? *)",
+  "CronjobExpressionEthRates": "cron(30 11 * * ? *)",
+  "CronjobExpressionTopCoinsFirst": "cron(30 13 * * ? *)",
+  "CronjobExpressionStablecoins": "cron(30 15 * * ? *)",
+  "CronjobExpressionTopCoinsSecond": "cron(30 17 * * ? *)",
+  "CronjobExpressionTopRates": "cron(30 19 * * ? *)"
 }

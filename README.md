@@ -221,15 +221,15 @@ Automated through Web Scraping:
 - [Nexo](https://nexo.io/earn-crypto)
 - [Youhodler](https://www.youhodler.com/earn-crypto)
 - [Vauld](https://www.vauld.com/rates)
+- [Gemini](https://www.gemini.com/earn)
+- [Guarda](https://guarda.com/staking/)
+- [Kucoin](https://www.kucoin.com/earn)
+- [Huobi](https://www.huobi.com/en-us/financial/earn) - PS: Partially automated (missing iterating over all staking duration terms)
 
 Missing to automate:
 
-- [Kucoin](https://www.kucoin.com/earn)
-- [Huobi](https://www.huobi.com/en-us/financial/earn)
 - [Celsius](https://celsius.network/earn)
-- [Yield App](https://www.yield.app/yld)
-- [Guarda](https://guarda.com/staking/)
-- [Okx](https://www.okx.com/earn/home)
+
 
 Tried and haven't finished:
 
@@ -240,5 +240,7 @@ Tried and haven't finished:
 Skippping for now (few coins, bad rates):
 - [Bitfinex](https://staking.bitfinex.com/)
 - [Coinbase](https://www.coinbase.com/earn)
-- [Gemini](https://www.gemini.com/earn)
 - [Bybit](https://www.bybit.com/en-US/earn/home)
+- [Yield App](https://www.yield.app/yld)
+- [Okx](https://www.okx.com/earn/home)
+

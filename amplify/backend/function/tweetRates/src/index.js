@@ -1,17 +1,3 @@
-/*
-Use the following code to retrieve configured secrets from SSM:
-
-const aws = require('aws-sdk');
-
-const { Parameters } = await (new aws.SSM())
-  .getParameters({
-    Names: ["TWITTER_API_KEY","TWITTER_API_SECRET","TWITTER_BEARER_TOKEN","TWITTER_ACCESS_TOKEN","TWITTER_ACCESS_TOKEN_SECRET"].map(secretName => process.env[secretName]),
-    WithDecryption: true,
-  })
-  .promise();
-
-Parameters will be of the form { Name: 'secretName', Value: 'secretValue', ... }[]
-*/
 const AWS = require("aws-sdk");
 const { TwitterClient } = require("twitter-api-client");
 const axios = require("axios");
@@ -30,6 +16,9 @@ const listCoinRates = gql`
         exchange {
           twitterAccount
         }
+        coin {
+          categories
+        }
         interestRate
         lockDays
         origin
@@ -38,6 +27,8 @@ const listCoinRates = gql`
     }
   }
 `;
+
+const numerals = { 1: "1st", 2: "2nd", 3: "3rd", 4: "4th", 5: "5th" };
 
 const getAllCoinRates = async () => {
   try {
@@ -63,7 +54,7 @@ const getAllCoinRates = async () => {
       nextToken = graphqlData.data.data.listCoinRates.nextToken;
     } while (nextToken);
 
-    return items;
+    return items.sort((a, b) => b.interestRate - a.interestRate);
   } catch (err) {
     console.error("error posting to appsync: ", err);
   }
@@ -121,100 +112,137 @@ const getTopCoinRates = (coinRates, returnNumber, coinSymbol) => {
   return coinRates.slice(0, returnNumber);
 };
 
-// const getTweetPhraseForAllCoinsRates = (coinRates) => {
-//   let topRatesPhrase = `Top ${coinRates.length} staking APYs today:\n\n`;
-//   for (let index = 0; index < coinRates.length; index++) {
-//     const coinRate = coinRates[index];
-//     topRatesPhrase += `#${index + 1}: ${coinRate.coinSymbol} with ${(
-//       coinRate.interestRate * 100
-//     ).toFixed(2)}% ${
-//       coinRate.exchange.twitterAccount
-//         ? `@${coinRate.exchange.twitterAccount}`
-//         : `at ${coinRate.exchangeName}`
-//     }\n`;
-//   }
-//   topRatesPhrase += `\n\nCheck all rates at https://www.stakinghodlr.com\n\n\n `;
-//   const uniqueCoinsTags = [
-//     ...new Set(coinRates.map((c) => `#${c.coinSymbol}`)),
-//   ].join(" ");
-//   const uniqueExchangesTags = [
-//     ...new Set(coinRates.map((c) => `#${c.exchangeName}`)),
-//   ].join(" ");
-//   topRatesPhrase += `#blockchain #crypto #staking #passiveincome ${uniqueCoinsTags} ${uniqueExchangesTags}`;
-//   return topRatesPhrase;
-// };
-
-const getTweetPhraseForAllCoinsRatesV2 = (coinRates, coinSymbols) => {
-  let topRatesPhrase = `The best #staking APYs today:\n\n`;
-  const selectedCoinRates = [];
-  const mapCoin = {};
-  for (let index = 0; index < coinRates.length; index++) {
-    coinRate = coinRates[index];
-    if (!coinSymbols.includes(coinRate.coinSymbol) || mapCoin[coinRate.coinSymbol]) {
-      continue;
+const getTweetPhraseForAllCoinsRates = (
+  coinRates,
+  coinSymbols,
+  numberOfRates
+) => {
+  let topRatesPhrase = `Some of the best #staking APYs today:\n\n`;
+  if (coinSymbols && coinSymbols.length > 0) {
+    for (coinSymbol of coinSymbols) {
+      const coinRate = coinRates.find((rate) => rate.coinSymbol === coinSymbol);
+      topRatesPhrase += `#${coinRate.coinSymbol} up to ${(
+        coinRate.interestRate * 100
+      ).toFixed(2)}% at #${coinRate.exchangeName}\n`;
     }
-    mapCoin[coinRate.coinSymbol] = 1;
-    topRatesPhrase +=  `${coinRate.coinSymbol} up to ${(
+  } else {
+    topRatesPhrase = `The best #staking APYs today:\n\n`;
+    for (const coinRate of getTopCoinRates(coinRates, numberOfRates)) {
+      topRatesPhrase += `#${coinRate.coinSymbol} up to ${(
+        coinRate.interestRate * 100
+      ).toFixed(2)}% at #${coinRate.exchangeName}\n`;
+    }
+  }
+  topRatesPhrase += `\nCheck all rates at https://www.stakinghodlr.com\n\n
+    #blockchain #crypto #staking #passiveincome #bitcoin #ethereum #stablecoin`;
+  return topRatesPhrase;
+};
+
+const getTweetPhraseForSpecificCoinRates = (
+  coinRates,
+  coinSymbol,
+  numberOfRates
+) => {
+  const specificCoinRates = coinRates
+    .filter((c) => c.coinSymbol === coinSymbol)
+    .slice(0, numberOfRates);
+  if (!specificCoinRates || specificCoinRates.length <= 0) {
+    console.warn(`Did not find any coinRates with coin symbol ${coinSymbol}`);
+    return "";
+  }
+  let topRatesPhrase = `Top ${specificCoinRates.length} #${specificCoinRates[0].coinSymbol} staking APYs today:\n\n`;
+  for (let index = 0; index < specificCoinRates.length; index++) {
+    const coinRate = specificCoinRates[index];
+    topRatesPhrase += `${numerals[index + 1]}: ${(
       coinRate.interestRate * 100
-    ).toFixed(2)}% ${
-      /* coinRate.exchange.twitterAccount
-        ? `@${coinRate.exchange.twitterAccount}`
-        :  */`at ${coinRate.exchangeName}`
-    }\n`;
+    ).toFixed(2)}% at #${coinRate.exchangeName}\n`;
   }
-  topRatesPhrase += `\n\nCheck all rates at https://www.stakinghodlr.com\n\n\n `;
-  const uniqueCoinsTags = [
-    ...new Set(selectedCoinRates.map((c) => `#${c.coinSymbol}`)),
-  ].join(" ");
-  const uniqueExchangesTags = [
-    ...new Set(selectedCoinRates.map((c) => `#${c.exchangeName}`)),
-  ].join(" ");
-  topRatesPhrase += `#blockchain #crypto #staking #passiveincome ${uniqueCoinsTags} ${uniqueExchangesTags}`;
+  topRatesPhrase += `\n\nCheck all rates at https://www.stakinghodlr.com\n\n\n#blockchain #crypto #staking #passiveincome #bitcoin #ethereum #stablecoin`;
   return topRatesPhrase;
 };
 
-const getTweetPhraseForSpecificCoinsRates = (coinRates) => {
-  let topRatesPhrase = `Top ${coinRates.length} ${coinRates[0].coinSymbol} staking APYs today:\n\n`;
-  for (let index = 0; index < coinRates.length; index++) {
-    const coinRate = coinRates[index];
-    topRatesPhrase += `#${index + 1}: ${(coinRate.interestRate * 100).toFixed(
-      2
-    )}% ${
-      coinRate.exchange.twitterAccount
-        ? `@${coinRate.exchange.twitterAccount}`
-        : `at ${coinRate.exchangeName}`
-    }\n`;
+const getTweetPhraseForStableCoins = (coinRates, numberOfRates) => {
+  const specificCoinRates = coinRates
+    .filter(
+      (c) =>
+        c.coin &&
+        c.coin.categories &&
+        c.coin.categories.includes("Top USD stablecoin")
+    )
+    .slice(0, numberOfRates);
+  let topRatesPhrase = `Top ${specificCoinRates.length} USD Stablecoin staking APYs today:\n\n`;
+  for (let index = 0; index < specificCoinRates.length; index++) {
+    const coinRate = specificCoinRates[index];
+    topRatesPhrase += `${numerals[index + 1]}: ${(
+      coinRate.interestRate * 100
+    ).toFixed(2)}% at #${coinRate.exchangeName}\n`;
   }
-  topRatesPhrase += `\n\nCheck all rates at https://www.stakinghodlr.com\n\n\n `;
-  const uniqueExchangesTags = [
-    ...new Set(coinRates.map((c) => `#${c.exchangeName}`)),
-  ].join(" ");
-  topRatesPhrase += `#blockchain #crypto #staking #passiveincome #${coinRates[0].coinSymbol} ${uniqueExchangesTags}`;
+  topRatesPhrase += `\n\nCheck all rates at https://www.stakinghodlr.com\n\n\n#blockchain #crypto #staking #passiveincome #bitcoin #ethereum #stablecoin`;
   return topRatesPhrase;
 };
 
-// exports.handler = async (event) => {
-//   console.log(`EVENT: ${JSON.stringify(event)}`);
-//   // default number of rates to 3 (remember tweets have limited lengths)
-//   const numberOfRates = event.numberOfRates ? parseInt(event.numberOfRates) : 3;
-//   const coinRates = await getAllCoinRates();
-//   console.log(`coinRates`, JSON.stringify(coinRates, null, 2));
-//   const topRates = getTopCoinRates(coinRates, numberOfRates, event.coinSymbol);
-//   const tweet = event.coinSymbol
-//     ? getTweetPhraseForSpecificCoinsRates(topRates)
-//     : getTweetPhraseForAllCoinsRatesV2(topRates, ["BTC", "ETH", "USDT", "USDC"]);
-//   console.log(`Ready to tweet the following:\n ${tweet}`);
-//   await tweetRates(tweet);
-//   return event;
-// };
+// Lambda Payload
+// 1: Top coins part 1
+// {
+//   "coinSymbols": ["USDT", "BTC", "ETH", "BNB"]
+// }
+// // 2: USD Stablecoins
+// {
+//     "categories": ["Top USD stablecoin"]
+// }
+// // 3: Top coins part 2
+// {
+//   "coinSymbols": ["USDC", "SOL", "LUNA", "ADA"]
+// }
+// // 4: BTC
+// {
+//   "coinSymbol": "BTC"
+// }
+// // 5: ETH
+// {
+//   "coinSymbol": "ETH"
+// }
+
+// // 6: Top rates available
+// {}
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
 exports.handler = async (event) => {
   console.log(`EVENT: ${JSON.stringify(event)}`);
   const coinRates = await getAllCoinRates();
-  const tweet = getTweetPhraseForAllCoinsRatesV2(coinRates, event.coinSymbols || ["BTC", "ETH", "USDT", "USDC"]);
+  console.log("All coinRates", JSON.stringify(coinRates, null, 2));
+  let tweet;
+  const numberOfRates = event.numberOfRates ? parseInt(event.numberOfRates) : 3;
+  if (event.coinSymbol) {
+    tweet = getTweetPhraseForSpecificCoinRates(
+      coinRates,
+      event.coinSymbol,
+      numberOfRates
+    );
+  }
+  if (event.coinSymbols) {
+    tweet = getTweetPhraseForAllCoinsRates(coinRates, event.coinSymbols);
+  }
+  if (
+    event.categories &&
+    event.categories.length > 0 &&
+    event.categories[0] === "Top USD stablecoin"
+  ) {
+    tweet = getTweetPhraseForStableCoins(coinRates, numberOfRates);
+  }
+  if (!tweet) {
+    tweet = getTweetPhraseForAllCoinsRates(coinRates, null, numberOfRates);
+  }
+  if (!tweet || tweet.length <= 0) {
+    console.log(`Empty tweet, not tweeting anything`);
+    return null;
+  }
   console.log(`Ready to tweet the following:\n ${tweet}`);
-  // await tweetRates(tweet);
-  return {tweet};
+  if (event.dontTweet) {
+    console.log("Not actually tweeting this...");
+    return { tweet };
+  }
+  await tweetRates(tweet);
+  return { tweet };
 };
