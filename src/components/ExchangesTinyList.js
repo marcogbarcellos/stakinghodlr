@@ -18,7 +18,7 @@ export default function ExchangesTinyList({exchanges, showNumberOfRates}) {
   }
   return (
     <List dense sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-      {cutExchanges.map(({logoUrl, name, interestRate, lockDays}, index) => {
+      {cutExchanges.map(({logoUrl, earnUrl, name, interestRate, lockDays}, index) => {
         const labelId = `exchange-list-secondary-label-${index}`;
         return (
         <>
@@ -38,7 +38,12 @@ export default function ExchangesTinyList({exchanges, showNumberOfRates}) {
                 </ListItemAvatar>
               
               {interestRate > 0 &&(
-                <ListItemText id={`exchange-${labelId}`} primary={`${(interestRate*100).toFixed(2)}% at ${name}${lockDays > 0 ? ` for ${lockDays} days` : ', flexible term'}`} />
+                <ListItemText onClick={() => {
+                  if (earnUrl) {
+                    window.open(earnUrl, "_blank") ||
+                    window.location.replace(earnUrl)
+                  }
+                }} id={`exchange-${labelId}`} primary={`${(interestRate*100).toFixed(2)}% at ${name}${lockDays > 0 ? ` for ${lockDays} days` : ', flexible term'}`} />
               )}
             </ListItemButton>
           </ListItem>

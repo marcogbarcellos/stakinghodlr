@@ -68,6 +68,7 @@ function Home() {
         {
           name: rate.exchangeName,
           logoUrl: rate.exchange.logoUrl,
+          earnUrl: rate.exchange.earnUrl,
           interestRate: rate.interestRate,
           lockDays: rate.lockDays,
         },
@@ -270,9 +271,6 @@ function Home() {
                       category: "Coins",
                       action: "See Only top 3 Rates",
                     });
-                    console.log(
-                      `setShowNumberOfRates(coinRate.exchanges.length) 3`
-                    );
                     setShowNumberOfRates(3);
                     // return navigate(`/coins/${coinRate.title}`, { replace: true });
                   }}
@@ -291,9 +289,6 @@ function Home() {
                       category: "Coins",
                       action: "See All Top Rates",
                     });
-                    console.log(
-                      `setShowNumberOfRates(coinRate.exchanges.length) ${coinRate.exchanges.length}`
-                    );
                     if (coinRate.exchanges.length > 3) {
                       setShowNumberOfRates(coinRate.exchanges.length);
                     } else {
