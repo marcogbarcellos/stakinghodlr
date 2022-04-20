@@ -8,6 +8,7 @@ import CardHeader from "@mui/material/CardHeader";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import CircularProgress from "@mui/material/CircularProgress";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -209,25 +210,27 @@ function Home() {
       <Grid item key={`${coinRate.title}-fixex`} xs={12} md={3}>
         <Card>
           <CardHeader
-            style={{ borderBottom:"1px solid #eee", background: "#fff" }}
+            style={{ borderBottom: "1px solid #eee", background: "#fff" }}
             title={
               <Grid
                 container
                 // spacing={1}
                 alignItems="center"
                 justifyContent="flex-start"
-                sx={{ml: 1}}
+                sx={{ ml: 1 }}
               >
                 {coinRate.logoUrl && (
-                  <Grid item sx={{mr: 2}}>
+                  <Grid item sx={{ mr: 2 }}>
                     <Avatar
                       alt={`coin-avatar-${coinRate.name}`}
                       src={coinRate.logoUrl}
                       sx={{ width: 50, height: 50 }}
-                    >{coinRate.name}</Avatar>
+                    >
+                      {coinRate.name}
+                    </Avatar>
                   </Grid>
                 )}
-                <Grid item sx={{mr: 2}}>
+                <Grid item sx={{ mr: 2 }}>
                   <Typography variant="h5">{coinRate.name}</Typography>
                 </Grid>
                 <Grid item>
@@ -256,46 +259,52 @@ function Home() {
             </ul>
           </CardContent>
           <CardActions>
-            {coinRate.exchanges.length > 3 && coinRate.exchanges.length <= showNumberOfRates && (
-              <Button
-                fullWidth
-                variant={coinRate.buttonVariant}
-                onClick={() => {
-                  // gaEventTracker('seeAllRates');
-                  ReactGA.event({
-                    category: "Coins",
-                    action: "See Only top 3 Rates",
-                  });
-                  console.log(`setShowNumberOfRates(coinRate.exchanges.length) 3`);
-                  setShowNumberOfRates(3);
-                  // return navigate(`/coins/${coinRate.title}`, { replace: true });
-                }}
-              >
-                See only top 3 rates <ArrowDropUpIcon />
-              </Button>
-            )}
-            {coinRate.exchanges.length > 3 && coinRate.exchanges.length > showNumberOfRates && (
-              <Button
-                fullWidth
-                variant={coinRate.buttonVariant}
-                onClick={() => {
-                  // gaEventTracker('seeAllRates');
-                  ReactGA.event({
-                    category: "Coins",
-                    action: "See All Top Rates",
-                  });
-                  console.log(`setShowNumberOfRates(coinRate.exchanges.length) ${coinRate.exchanges.length}`);
-                  if (coinRate.exchanges.length > 3) {
-                    setShowNumberOfRates(coinRate.exchanges.length);
-                  } else {
+            {coinRate.exchanges.length > 3 &&
+              coinRate.exchanges.length <= showNumberOfRates && (
+                <Button
+                  fullWidth
+                  variant={coinRate.buttonVariant}
+                  onClick={() => {
+                    // gaEventTracker('seeAllRates');
+                    ReactGA.event({
+                      category: "Coins",
+                      action: "See Only top 3 Rates",
+                    });
+                    console.log(
+                      `setShowNumberOfRates(coinRate.exchanges.length) 3`
+                    );
                     setShowNumberOfRates(3);
-                  }
-                  // return navigate(`/coins/${coinRate.title}`, { replace: true });
-                }}
-              >
-                {coinRate.buttonText} <ArrowDropDownIcon />
-              </Button>
-            )}
+                    // return navigate(`/coins/${coinRate.title}`, { replace: true });
+                  }}
+                >
+                  See only top 3 rates <ArrowDropUpIcon />
+                </Button>
+              )}
+            {coinRate.exchanges.length > 3 &&
+              coinRate.exchanges.length > showNumberOfRates && (
+                <Button
+                  fullWidth
+                  variant={coinRate.buttonVariant}
+                  onClick={() => {
+                    // gaEventTracker('seeAllRates');
+                    ReactGA.event({
+                      category: "Coins",
+                      action: "See All Top Rates",
+                    });
+                    console.log(
+                      `setShowNumberOfRates(coinRate.exchanges.length) ${coinRate.exchanges.length}`
+                    );
+                    if (coinRate.exchanges.length > 3) {
+                      setShowNumberOfRates(coinRate.exchanges.length);
+                    } else {
+                      setShowNumberOfRates(3);
+                    }
+                    // return navigate(`/coins/${coinRate.title}`, { replace: true });
+                  }}
+                >
+                  {coinRate.buttonText} <ArrowDropDownIcon />
+                </Button>
+              )}
           </CardActions>
         </Card>
       </Grid>
@@ -314,7 +323,6 @@ function Home() {
       fetchOtherRates();
     }
   };
-
   return (
     <>
       <Container maxWidth="xl" component="main" sx={{ p: 2 }}>
@@ -399,39 +407,47 @@ function Home() {
             <TextField id="outlined-basic" size="small" label="Search coin" variant="outlined" style={{width: "100%"}}/>
           </Grid> */}
           <Grid item xs={12} lg={6} alignItems="flex-end"></Grid>
-          {rateType === "all" &&
-            coinType === "top" &&
-            topCoinsRates.map((coinRate) => ratesCard(coinRate))}
-          {rateType === "all" &&
-            coinType === "other" &&
-            otherCoinsRates.map((coinRate) => ratesCard(coinRate))}
-          {rateType === "all" &&
-            coinType === "all" &&
-            [...topCoinsRates, ...otherCoinsRates].map((coinRate) =>
-              ratesCard(coinRate)
-            )}
-          {rateType === "flexible" &&
-            coinType === "top" &&
-            topCoinsFlexRates.map((coinRate) => ratesCard(coinRate))}
-          {rateType === "flexible" &&
-            coinType === "other" &&
-            otherCoinsFlexRates.map((coinRate) => ratesCard(coinRate))}
-          {rateType === "flexible" &&
-            coinType === "all" &&
-            [...topCoinsFlexRates, ...otherCoinsFlexRates].map((coinRate) =>
-              ratesCard(coinRate)
-            )}
-          {rateType === "fixed" &&
-            coinType === "top" &&
-            topCoinsFixedRates.map((coinRate) => ratesCard(coinRate))}
-          {rateType === "fixed" &&
-            coinType === "other" &&
-            otherCoinsFixedRates.map((coinRate) => ratesCard(coinRate))}
-          {rateType === "fixed" &&
-            coinType === "all" &&
-            [...topCoinsFixedRates, ...otherCoinsFixedRates].map((coinRate) =>
-              ratesCard(coinRate)
-            )}
+          {[...topCoinsRates, ...otherCoinsRates].length <= 0 ? (
+            <Grid item container xs={12} alignItems="center" justifyContent="center">
+              <CircularProgress />
+            </Grid>
+          ) : (
+            <>
+              {rateType === "all" &&
+                coinType === "top" &&
+                topCoinsRates.map((coinRate) => ratesCard(coinRate))}
+              {rateType === "all" &&
+                coinType === "other" &&
+                otherCoinsRates.map((coinRate) => ratesCard(coinRate))}
+              {rateType === "all" &&
+                coinType === "all" &&
+                [...topCoinsRates, ...otherCoinsRates].map((coinRate) =>
+                  ratesCard(coinRate)
+                )}
+              {rateType === "flexible" &&
+                coinType === "top" &&
+                topCoinsFlexRates.map((coinRate) => ratesCard(coinRate))}
+              {rateType === "flexible" &&
+                coinType === "other" &&
+                otherCoinsFlexRates.map((coinRate) => ratesCard(coinRate))}
+              {rateType === "flexible" &&
+                coinType === "all" &&
+                [...topCoinsFlexRates, ...otherCoinsFlexRates].map((coinRate) =>
+                  ratesCard(coinRate)
+                )}
+              {rateType === "fixed" &&
+                coinType === "top" &&
+                topCoinsFixedRates.map((coinRate) => ratesCard(coinRate))}
+              {rateType === "fixed" &&
+                coinType === "other" &&
+                otherCoinsFixedRates.map((coinRate) => ratesCard(coinRate))}
+              {rateType === "fixed" &&
+                coinType === "all" &&
+                [...topCoinsFixedRates, ...otherCoinsFixedRates].map(
+                  (coinRate) => ratesCard(coinRate)
+                )}
+            </>
+          )}
         </Grid>
       </Container>
     </>
