@@ -12,6 +12,7 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import Avatar from "@mui/material/Avatar";
 // import TextField from "@mui/material/TextField";
 // import Select from "@mui/material/Select";
 import { CardMedia } from "@mui/material";
@@ -206,24 +207,25 @@ function Home() {
   const ratesCard = (coinRate) => {
     return (
       <Grid item key={`${coinRate.title}-fixex`} xs={12} md={3}>
-        <Card /* style={{ width: 360 }} */>
-          {coinRate.logoUrl && (
-            <CardMedia
-              component="img"
-              height="100"
-              style={{ backgroundColor: "#fff", objectFit: "contain" }}
-              image={coinRate.logoUrl}
-              alt={`${coinRate.title}-fixed`}
-            />
-          )}
+        <Card>
           <CardHeader
+            style={{ borderBottom:"1px solid #eee", background: "#fff" }}
             title={
               <Grid
                 container
                 spacing={1}
-                alignItems="baseline"
-                justifyContent="center"
+                alignItems="center"
+                justifyContent="flex-start"
+                sx={{ml: 1}}
               >
+                {coinRate.logoUrl && (
+                  <Grid item>
+                    <Avatar
+                      alt={`coin-avatar-${coinRate.name}`}
+                      src={coinRate.logoUrl}
+                    >{coinRate.name}</Avatar>
+                  </Grid>
+                )}
                 <Grid item>
                   <Typography variant="h5">{coinRate.name}</Typography>
                 </Grid>

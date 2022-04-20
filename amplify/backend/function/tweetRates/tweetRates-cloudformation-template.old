@@ -2,45 +2,35 @@
   "AWSTemplateFormatVersion": "2010-09-09",
   "Description": "{\"createdOn\":\"Mac\",\"createdBy\":\"Amplify\",\"createdWith\":\"7.6.26\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
   "Parameters": {
-    "CronjobExpressionTopRates": {
+    "CronjobExpressionTopCoinsFirst": {
       "Type": "String",
       "Default": "NONE",
-      "Description": " ALL RATES Schedule Expression"
+      "Description": "Top coin first part Schedule Expression"
     },
     "CronjobExpressionBtcRates": {
       "Type": "String",
       "Default": "NONE",
-      "Description": " BTC RATES Schedule Expression"
+      "Description": "BTC RATES Schedule Expression"
     },
     "CronjobExpressionEthRates": {
       "Type": "String",
       "Default": "NONE",
-      "Description": " ETH RATES Schedule Expression"
+      "Description": "ETH RATES Schedule Expression"
     },
-    "CronjobExpressionUsdtRates": {
+    "CronjobExpressionTopCoinsSecond": {
       "Type": "String",
       "Default": "NONE",
-      "Description": " USDT RATES Schedule Expression"
+      "Description": "Top coin second part Schedule Expression"
     },
-    "CronjobExpressionUsdcRates": {
+    "CronjobExpressionTopRates": {
       "Type": "String",
       "Default": "NONE",
-      "Description": " USDC RATES Schedule Expression"
+      "Description": " Top Rates Schedule Expression"
     },
-    "CronjobExpressionAdaRates": {
+    "CronjobExpressionStablecoins": {
       "Type": "String",
       "Default": "NONE",
-      "Description": " ADA RATES Schedule Expression"
-    },
-    "CronjobExpressionBnbRates": {
-      "Type": "String",
-      "Default": "NONE",
-      "Description": " BNB RATES Schedule Expression"
-    },
-    "CronjobExpressionLunaRates": {
-      "Type": "String",
-      "Default": "NONE",
-      "Description": " LUNA RATES Schedule Expression"
+      "Description": " Top Rates Schedule Expression"
     },
     "deploymentBucketName": {
       "Type": "String"
@@ -401,12 +391,69 @@
         }
       }
     },
-    "TopRatesTweetEvent": {
+    "AmplifyFunctionSecretsPolicy": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "amplify-function-secrets-policy",
+        "Roles": [
+          {
+            "Ref": "LambdaExecutionRole"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "ssm:GetParameter",
+                "ssm:GetParameters"
+              ],
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:ssm:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":parameter",
+                    {
+                      "Fn::Sub": [
+                        "/amplify/${appId}/${env}/AMPLIFY_${functionName}_",
+                        {
+                          "appId": {
+                            "Ref": "secretsPathAmplifyAppId"
+                          },
+                          "env": {
+                            "Ref": "env"
+                          },
+                          "functionName": "tweetRates"
+                        }
+                      ]
+                    },
+                    "*"
+                  ]
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "DependsOn": [
+        "LambdaExecutionRole"
+      ]
+    },
+    "TopStablecoinsTweetEvent": {
       "Type": "AWS::Events::Rule",
       "Properties": {
         "Description": "Schedule rule for Lambda",
         "ScheduleExpression": {
-          "Ref": "CronjobExpressionTopRates"
+          "Ref": "CronjobExpressionStablecoins"
         },
         "State": "ENABLED",
         "Targets": [
@@ -419,12 +466,13 @@
             },
             "Id": {
               "Ref": "LambdaFunction"
-            }
+            },
+            "Input": "{\"categories\": [\"Top USD stablecoin\"]}"
           }
         ]
       }
     },
-    "PermTopRatesEventsToInvokeLambda": {
+    "PermStablecoinsEventsToInvokeLambda": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "FunctionName": {
@@ -434,7 +482,47 @@
         "Principal": "events.amazonaws.com",
         "SourceArn": {
           "Fn::GetAtt": [
-            "TopRatesTweetEvent",
+            "TopStablecoinsTweetEvent",
+            "Arn"
+          ]
+        }
+      }
+    },
+    "TopCoinsFirstTweetEvent": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "Description": "Schedule rule for Lambda",
+        "ScheduleExpression": {
+          "Ref": "CronjobExpressionTopCoinsFirst"
+        },
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::GetAtt": [
+                "LambdaFunction",
+                "Arn"
+              ]
+            },
+            "Id": {
+              "Ref": "LambdaFunction"
+            },
+            "Input": "{\"coinSymbols\": [\"USDT\",\"BTC\",\"ETH\",\"BNB\"]}"
+          }
+        ]
+      }
+    },
+    "PermTopCoinsFirstEventsToInvokeLambda": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "LambdaFunction"
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "events.amazonaws.com",
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "TopCoinsFirstTweetEvent",
             "Arn"
           ]
         }
@@ -520,12 +608,12 @@
         }
       }
     },
-    "UsdtRatesTweetEvent": {
+    "TopCoinsSecondTweetEvent": {
       "Type": "AWS::Events::Rule",
       "Properties": {
         "Description": "Schedule rule for Lambda",
         "ScheduleExpression": {
-          "Ref": "CronjobExpressionUsdtRates"
+          "Ref": "CronjobExpressionTopCoinsSecond"
         },
         "State": "ENABLED",
         "Targets": [
@@ -539,12 +627,12 @@
             "Id": {
               "Ref": "LambdaFunction"
             },
-            "Input": "{\"coinSymbol\": \"USDT\"}"
+            "Input": "{\"coinSymbols\": [\"USDC\",\"SOL\",\"LUNA\",\"ADA\"]}"
           }
         ]
       }
     },
-    "PermUsdtRatesEventsToInvokeLambda": {
+    "PermTopCoinsSecondEventsToInvokeLambda": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "FunctionName": {
@@ -554,18 +642,18 @@
         "Principal": "events.amazonaws.com",
         "SourceArn": {
           "Fn::GetAtt": [
-            "UsdtRatesTweetEvent",
+            "TopCoinsSecondTweetEvent",
             "Arn"
           ]
         }
       }
     },
-    "AdaRatesTweetEvent": {
+    "TopRatesTweetEvent": {
       "Type": "AWS::Events::Rule",
       "Properties": {
         "Description": "Schedule rule for Lambda",
         "ScheduleExpression": {
-          "Ref": "CronjobExpressionAdaRates"
+          "Ref": "CronjobExpressionTopRates"
         },
         "State": "ENABLED",
         "Targets": [
@@ -578,204 +666,26 @@
             },
             "Id": {
               "Ref": "LambdaFunction"
-            },
-            "Input": "{\"coinSymbol\": \"ADA\"}"
-          }
-        ]
-      }
-    },
-    "PermAdaRatesEventsToInvokeLambda": {
-      "Type": "AWS::Lambda::Permission",
-      "Properties": {
-        "FunctionName": {
-          "Ref": "LambdaFunction"
-        },
-        "Action": "lambda:InvokeFunction",
-        "Principal": "events.amazonaws.com",
-        "SourceArn": {
-          "Fn::GetAtt": [
-            "AdaRatesTweetEvent",
-            "Arn"
-          ]
-        }
-      }
-    },
-    "UsdcRatesTweetEvent": {
-      "Type": "AWS::Events::Rule",
-      "Properties": {
-        "Description": "Schedule rule for Lambda",
-        "ScheduleExpression": {
-          "Ref": "CronjobExpressionUsdcRates"
-        },
-        "State": "ENABLED",
-        "Targets": [
-          {
-            "Arn": {
-              "Fn::GetAtt": [
-                "LambdaFunction",
-                "Arn"
-              ]
-            },
-            "Id": {
-              "Ref": "LambdaFunction"
-            },
-            "Input": "{\"coinSymbol\": \"USDC\"}"
-          }
-        ]
-      }
-    },
-    "PermUsdcRatesEventsToInvokeLambda": {
-      "Type": "AWS::Lambda::Permission",
-      "Properties": {
-        "FunctionName": {
-          "Ref": "LambdaFunction"
-        },
-        "Action": "lambda:InvokeFunction",
-        "Principal": "events.amazonaws.com",
-        "SourceArn": {
-          "Fn::GetAtt": [
-            "UsdcRatesTweetEvent",
-            "Arn"
-          ]
-        }
-      }
-    },
-    "BnbRatesTweetEvent": {
-      "Type": "AWS::Events::Rule",
-      "Properties": {
-        "Description": "Schedule rule for Lambda",
-        "ScheduleExpression": {
-          "Ref": "CronjobExpressionBnbRates"
-        },
-        "State": "ENABLED",
-        "Targets": [
-          {
-            "Arn": {
-              "Fn::GetAtt": [
-                "LambdaFunction",
-                "Arn"
-              ]
-            },
-            "Id": {
-              "Ref": "LambdaFunction"
-            },
-            "Input": "{\"coinSymbol\": \"BNB\"}"
-          }
-        ]
-      }
-    },
-    "PermBnbRatesEventsToInvokeLambda": {
-      "Type": "AWS::Lambda::Permission",
-      "Properties": {
-        "FunctionName": {
-          "Ref": "LambdaFunction"
-        },
-        "Action": "lambda:InvokeFunction",
-        "Principal": "events.amazonaws.com",
-        "SourceArn": {
-          "Fn::GetAtt": [
-            "BnbRatesTweetEvent",
-            "Arn"
-          ]
-        }
-      }
-    },
-    "LunaRatesTweetEvent": {
-      "Type": "AWS::Events::Rule",
-      "Properties": {
-        "Description": "Schedule rule for Lambda",
-        "ScheduleExpression": {
-          "Ref": "CronjobExpressionLunaRates"
-        },
-        "State": "ENABLED",
-        "Targets": [
-          {
-            "Arn": {
-              "Fn::GetAtt": [
-                "LambdaFunction",
-                "Arn"
-              ]
-            },
-            "Id": {
-              "Ref": "LambdaFunction"
-            },
-            "Input": "{\"coinSymbol\": \"LUNA\"}"
-          }
-        ]
-      }
-    },
-    "PermLunaRatesEventsToInvokeLambda": {
-      "Type": "AWS::Lambda::Permission",
-      "Properties": {
-        "FunctionName": {
-          "Ref": "LambdaFunction"
-        },
-        "Action": "lambda:InvokeFunction",
-        "Principal": "events.amazonaws.com",
-        "SourceArn": {
-          "Fn::GetAtt": [
-            "LunaRatesTweetEvent",
-            "Arn"
-          ]
-        }
-      }
-    },
-    "AmplifyFunctionSecretsPolicy": {
-      "Type": "AWS::IAM::Policy",
-      "Properties": {
-        "PolicyName": "amplify-function-secrets-policy",
-        "Roles": [
-          {
-            "Ref": "LambdaExecutionRole"
-          }
-        ],
-        "PolicyDocument": {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Action": [
-                "ssm:GetParameter",
-                "ssm:GetParameters"
-              ],
-              "Resource": {
-                "Fn::Join": [
-                  "",
-                  [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region"
-                    },
-                    ":",
-                    {
-                      "Ref": "AWS::AccountId"
-                    },
-                    ":parameter",
-                    {
-                      "Fn::Sub": [
-                        "/amplify/${appId}/${env}/AMPLIFY_${functionName}_",
-                        {
-                          "appId": {
-                            "Ref": "secretsPathAmplifyAppId"
-                          },
-                          "env": {
-                            "Ref": "env"
-                          },
-                          "functionName": "tweetRates"
-                        }
-                      ]
-                    },
-                    "*"
-                  ]
-                ]
-              }
             }
+          }
+        ]
+      }
+    },
+    "PermTopRatesEventsToInvokeLambda": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "LambdaFunction"
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "events.amazonaws.com",
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "TopRatesTweetEvent",
+            "Arn"
           ]
         }
-      },
-      "DependsOn": [
-        "LambdaExecutionRole"
-      ]
+      }
     }
   },
   "Outputs": {
@@ -800,16 +710,6 @@
     "LambdaExecutionRole": {
       "Value": {
         "Ref": "LambdaExecutionRole"
-      }
-    },
-    "TopRatesTweetEventRule": {
-      "Value": {
-        "Ref": "TopRatesTweetEvent"
-      }
-    },
-    "BtcRatesTweetEventRule": {
-      "Value": {
-        "Ref": "BtcRatesTweetEvent"
       }
     }
   }

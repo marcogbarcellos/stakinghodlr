@@ -173,7 +173,7 @@ const getTweetPhraseForStableCoins = (coinRates, numberOfRates) => {
   let topRatesPhrase = `Top ${specificCoinRates.length} USD Stablecoin staking APYs today:\n\n`;
   for (let index = 0; index < specificCoinRates.length; index++) {
     const coinRate = specificCoinRates[index];
-    topRatesPhrase += `${numerals[index + 1]}: ${(
+    topRatesPhrase += `${numerals[index + 1]}: #${coinRate.coinSymbol} up to ${(
       coinRate.interestRate * 100
     ).toFixed(2)}% at #${coinRate.exchangeName}\n`;
   }
