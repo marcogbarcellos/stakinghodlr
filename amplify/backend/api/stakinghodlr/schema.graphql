@@ -27,6 +27,7 @@ type Coin @model {
   categories: [String]
   coinRates: [CoinRate] @hasMany(indexName: "byCoinSymbol", fields: ["symbol"])
   historicCoinRates: [HistoryCoinRate] @hasMany(indexName: "byCoinSymbol", fields: ["symbol"])
+  sortIndex: Int
 }
 
 type CoinRate @model {

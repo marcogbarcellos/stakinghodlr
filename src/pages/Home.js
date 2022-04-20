@@ -213,25 +213,26 @@ function Home() {
             title={
               <Grid
                 container
-                spacing={1}
+                // spacing={1}
                 alignItems="center"
                 justifyContent="flex-start"
                 sx={{ml: 1}}
               >
                 {coinRate.logoUrl && (
-                  <Grid item>
+                  <Grid item sx={{mr: 2}}>
                     <Avatar
                       alt={`coin-avatar-${coinRate.name}`}
                       src={coinRate.logoUrl}
+                      sx={{ width: 50, height: 50 }}
                     >{coinRate.name}</Avatar>
                   </Grid>
                 )}
-                <Grid item>
+                <Grid item sx={{mr: 2}}>
                   <Typography variant="h5">{coinRate.name}</Typography>
                 </Grid>
                 <Grid item>
                   <Typography variant="subtitle1">
-                    (Up to {(coinRate.interestRate * 100).toFixed(2)}%)
+                    Up to {(coinRate.interestRate * 100).toFixed(2)}%
                   </Typography>
                 </Grid>
               </Grid>

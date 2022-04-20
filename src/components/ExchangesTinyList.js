@@ -32,6 +32,8 @@ export default function ExchangesTinyList({exchanges, showNumberOfRates}) {
                   <Avatar
                     alt={`Exchange top${index + 1}`}
                     src={logoUrl}
+                    sizes=""
+                    sx={{ width: 32, height: 32 }}
                   >-</Avatar>
                 </ListItemAvatar>
               
