@@ -10,6 +10,7 @@ export const createCoin = /* GraphQL */ `
       symbol
       name
       logoUrl
+      largeLogoUrl
       type
       platform
       categories
@@ -41,6 +42,7 @@ export const createCoin = /* GraphQL */ `
         }
         nextToken
       }
+      sortIndex
       createdAt
       updatedAt
     }
@@ -55,6 +57,7 @@ export const updateCoin = /* GraphQL */ `
       symbol
       name
       logoUrl
+      largeLogoUrl
       type
       platform
       categories
@@ -86,6 +89,7 @@ export const updateCoin = /* GraphQL */ `
         }
         nextToken
       }
+      sortIndex
       createdAt
       updatedAt
     }
@@ -100,6 +104,7 @@ export const deleteCoin = /* GraphQL */ `
       symbol
       name
       logoUrl
+      largeLogoUrl
       type
       platform
       categories
@@ -131,6 +136,7 @@ export const deleteCoin = /* GraphQL */ `
         }
         nextToken
       }
+      sortIndex
       createdAt
       updatedAt
     }
@@ -150,6 +156,7 @@ export const createCoinRate = /* GraphQL */ `
         symbol
         name
         logoUrl
+        largeLogoUrl
         type
         platform
         categories
@@ -159,6 +166,7 @@ export const createCoinRate = /* GraphQL */ `
         historicCoinRates {
           nextToken
         }
+        sortIndex
         createdAt
         updatedAt
       }
@@ -166,6 +174,7 @@ export const createCoinRate = /* GraphQL */ `
         name
         logoUrl
         earnUrl
+        referralUrl
         twitterAccount
         coinRates {
           nextToken
@@ -198,6 +207,7 @@ export const updateCoinRate = /* GraphQL */ `
         symbol
         name
         logoUrl
+        largeLogoUrl
         type
         platform
         categories
@@ -207,6 +217,7 @@ export const updateCoinRate = /* GraphQL */ `
         historicCoinRates {
           nextToken
         }
+        sortIndex
         createdAt
         updatedAt
       }
@@ -214,6 +225,7 @@ export const updateCoinRate = /* GraphQL */ `
         name
         logoUrl
         earnUrl
+        referralUrl
         twitterAccount
         coinRates {
           nextToken
@@ -246,6 +258,7 @@ export const deleteCoinRate = /* GraphQL */ `
         symbol
         name
         logoUrl
+        largeLogoUrl
         type
         platform
         categories
@@ -255,6 +268,7 @@ export const deleteCoinRate = /* GraphQL */ `
         historicCoinRates {
           nextToken
         }
+        sortIndex
         createdAt
         updatedAt
       }
@@ -262,6 +276,7 @@ export const deleteCoinRate = /* GraphQL */ `
         name
         logoUrl
         earnUrl
+        referralUrl
         twitterAccount
         coinRates {
           nextToken
@@ -294,6 +309,7 @@ export const createHistoryCoinRate = /* GraphQL */ `
         symbol
         name
         logoUrl
+        largeLogoUrl
         type
         platform
         categories
@@ -303,6 +319,7 @@ export const createHistoryCoinRate = /* GraphQL */ `
         historicCoinRates {
           nextToken
         }
+        sortIndex
         createdAt
         updatedAt
       }
@@ -310,6 +327,7 @@ export const createHistoryCoinRate = /* GraphQL */ `
         name
         logoUrl
         earnUrl
+        referralUrl
         twitterAccount
         coinRates {
           nextToken
@@ -342,6 +360,7 @@ export const updateHistoryCoinRate = /* GraphQL */ `
         symbol
         name
         logoUrl
+        largeLogoUrl
         type
         platform
         categories
@@ -351,6 +370,7 @@ export const updateHistoryCoinRate = /* GraphQL */ `
         historicCoinRates {
           nextToken
         }
+        sortIndex
         createdAt
         updatedAt
       }
@@ -358,6 +378,7 @@ export const updateHistoryCoinRate = /* GraphQL */ `
         name
         logoUrl
         earnUrl
+        referralUrl
         twitterAccount
         coinRates {
           nextToken
@@ -390,6 +411,7 @@ export const deleteHistoryCoinRate = /* GraphQL */ `
         symbol
         name
         logoUrl
+        largeLogoUrl
         type
         platform
         categories
@@ -399,6 +421,7 @@ export const deleteHistoryCoinRate = /* GraphQL */ `
         historicCoinRates {
           nextToken
         }
+        sortIndex
         createdAt
         updatedAt
       }
@@ -406,6 +429,7 @@ export const deleteHistoryCoinRate = /* GraphQL */ `
         name
         logoUrl
         earnUrl
+        referralUrl
         twitterAccount
         coinRates {
           nextToken
@@ -433,6 +457,7 @@ export const createExchange = /* GraphQL */ `
       name
       logoUrl
       earnUrl
+      referralUrl
       twitterAccount
       coinRates {
         items {
@@ -476,6 +501,7 @@ export const updateExchange = /* GraphQL */ `
       name
       logoUrl
       earnUrl
+      referralUrl
       twitterAccount
       coinRates {
         items {
@@ -519,6 +545,7 @@ export const deleteExchange = /* GraphQL */ `
       name
       logoUrl
       earnUrl
+      referralUrl
       twitterAccount
       coinRates {
         items {

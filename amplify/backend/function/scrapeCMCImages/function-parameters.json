@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "api": {
+      "stakinghodlr": [
+        "Query",
+        "Mutation"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

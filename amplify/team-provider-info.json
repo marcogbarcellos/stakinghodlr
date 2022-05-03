@@ -22,6 +22,10 @@
           "secretsPathAmplifyAppId": "dik3yvl4lh7ic",
           "deploymentBucketName": "amplify-stakinghodlr-dev-142916-deployment",
           "s3Key": "amplify-builds/tweetRates-385053364245534b6670-build.zip"
+        },
+        "scrapeCMCImages": {
+          "deploymentBucketName": "amplify-stakinghodlr-dev-142916-deployment",
+          "s3Key": "amplify-builds/scrapeCMCImages-41552f385843546b767a-build.zip"
         }
       },
       "auth": {

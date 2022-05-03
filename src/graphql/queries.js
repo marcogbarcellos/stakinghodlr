@@ -7,6 +7,7 @@ export const getCoin = /* GraphQL */ `
       symbol
       name
       logoUrl
+      largeLogoUrl
       type
       platform
       categories
@@ -38,6 +39,7 @@ export const getCoin = /* GraphQL */ `
         }
         nextToken
       }
+      sortIndex
       createdAt
       updatedAt
     }
@@ -62,6 +64,7 @@ export const listCoins = /* GraphQL */ `
         symbol
         name
         logoUrl
+        largeLogoUrl
         type
         platform
         categories
@@ -71,6 +74,7 @@ export const listCoins = /* GraphQL */ `
         historicCoinRates {
           nextToken
         }
+        sortIndex
         createdAt
         updatedAt
       }
@@ -89,6 +93,7 @@ export const getCoinRate = /* GraphQL */ `
         symbol
         name
         logoUrl
+        largeLogoUrl
         type
         platform
         categories
@@ -98,6 +103,7 @@ export const getCoinRate = /* GraphQL */ `
         historicCoinRates {
           nextToken
         }
+        sortIndex
         createdAt
         updatedAt
       }
@@ -105,6 +111,7 @@ export const getCoinRate = /* GraphQL */ `
         name
         logoUrl
         earnUrl
+        referralUrl
         twitterAccount
         coinRates {
           nextToken
@@ -147,9 +154,11 @@ export const listCoinRates = /* GraphQL */ `
           symbol
           name
           logoUrl
+          largeLogoUrl
           type
           platform
           categories
+          sortIndex
           createdAt
           updatedAt
         }
@@ -157,6 +166,7 @@ export const listCoinRates = /* GraphQL */ `
           name
           logoUrl
           earnUrl
+          referralUrl
           twitterAccount
           createdAt
           updatedAt
@@ -188,6 +198,7 @@ export const getHistoryCoinRate = /* GraphQL */ `
         symbol
         name
         logoUrl
+        largeLogoUrl
         type
         platform
         categories
@@ -197,6 +208,7 @@ export const getHistoryCoinRate = /* GraphQL */ `
         historicCoinRates {
           nextToken
         }
+        sortIndex
         createdAt
         updatedAt
       }
@@ -204,6 +216,7 @@ export const getHistoryCoinRate = /* GraphQL */ `
         name
         logoUrl
         earnUrl
+        referralUrl
         twitterAccount
         coinRates {
           nextToken
@@ -248,9 +261,11 @@ export const listHistoryCoinRates = /* GraphQL */ `
           symbol
           name
           logoUrl
+          largeLogoUrl
           type
           platform
           categories
+          sortIndex
           createdAt
           updatedAt
         }
@@ -258,6 +273,7 @@ export const listHistoryCoinRates = /* GraphQL */ `
           name
           logoUrl
           earnUrl
+          referralUrl
           twitterAccount
           createdAt
           updatedAt
@@ -278,6 +294,7 @@ export const getExchange = /* GraphQL */ `
       name
       logoUrl
       earnUrl
+      referralUrl
       twitterAccount
       coinRates {
         items {
@@ -331,6 +348,7 @@ export const listExchanges = /* GraphQL */ `
         name
         logoUrl
         earnUrl
+        referralUrl
         twitterAccount
         coinRates {
           nextToken
