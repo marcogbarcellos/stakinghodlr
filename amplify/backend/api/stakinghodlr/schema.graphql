@@ -22,7 +22,6 @@ type Coin @model {
   symbol: String! @primaryKey
   name: String!
   logoUrl: String
-  largeLogoUrl: String
   type: CoinType
   platform: Platform
   categories: [String]

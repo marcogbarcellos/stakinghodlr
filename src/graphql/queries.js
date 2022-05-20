@@ -7,7 +7,6 @@ export const getCoin = /* GraphQL */ `
       symbol
       name
       logoUrl
-      largeLogoUrl
       type
       platform
       categories
@@ -64,7 +63,6 @@ export const listCoins = /* GraphQL */ `
         symbol
         name
         logoUrl
-        largeLogoUrl
         type
         platform
         categories
@@ -93,7 +91,6 @@ export const getCoinRate = /* GraphQL */ `
         symbol
         name
         logoUrl
-        largeLogoUrl
         type
         platform
         categories
@@ -154,7 +151,6 @@ export const listCoinRates = /* GraphQL */ `
           symbol
           name
           logoUrl
-          largeLogoUrl
           type
           platform
           categories
@@ -198,7 +194,6 @@ export const getHistoryCoinRate = /* GraphQL */ `
         symbol
         name
         logoUrl
-        largeLogoUrl
         type
         platform
         categories
@@ -261,7 +256,6 @@ export const listHistoryCoinRates = /* GraphQL */ `
           symbol
           name
           logoUrl
-          largeLogoUrl
           type
           platform
           categories

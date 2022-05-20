@@ -7,7 +7,6 @@ export const onCreateCoin = /* GraphQL */ `
       symbol
       name
       logoUrl
-      largeLogoUrl
       type
       platform
       categories
@@ -51,7 +50,6 @@ export const onUpdateCoin = /* GraphQL */ `
       symbol
       name
       logoUrl
-      largeLogoUrl
       type
       platform
       categories
@@ -95,7 +93,6 @@ export const onDeleteCoin = /* GraphQL */ `
       symbol
       name
       logoUrl
-      largeLogoUrl
       type
       platform
       categories
@@ -144,7 +141,6 @@ export const onCreateCoinRate = /* GraphQL */ `
         symbol
         name
         logoUrl
-        largeLogoUrl
         type
         platform
         categories
@@ -192,7 +188,6 @@ export const onUpdateCoinRate = /* GraphQL */ `
         symbol
         name
         logoUrl
-        largeLogoUrl
         type
         platform
         categories
@@ -240,7 +235,6 @@ export const onDeleteCoinRate = /* GraphQL */ `
         symbol
         name
         logoUrl
-        largeLogoUrl
         type
         platform
         categories
@@ -288,7 +282,6 @@ export const onCreateHistoryCoinRate = /* GraphQL */ `
         symbol
         name
         logoUrl
-        largeLogoUrl
         type
         platform
         categories
@@ -336,7 +329,6 @@ export const onUpdateHistoryCoinRate = /* GraphQL */ `
         symbol
         name
         logoUrl
-        largeLogoUrl
         type
         platform
         categories
@@ -384,7 +376,6 @@ export const onDeleteHistoryCoinRate = /* GraphQL */ `
         symbol
         name
         logoUrl
-        largeLogoUrl
         type
         platform
         categories
