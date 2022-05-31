@@ -6,6 +6,7 @@ export const onCreateCoin = /* GraphQL */ `
     onCreateCoin {
       symbol
       name
+      fullName
       logoUrl
       type
       platform
@@ -49,6 +50,7 @@ export const onUpdateCoin = /* GraphQL */ `
     onUpdateCoin {
       symbol
       name
+      fullName
       logoUrl
       type
       platform
@@ -92,6 +94,7 @@ export const onDeleteCoin = /* GraphQL */ `
     onDeleteCoin {
       symbol
       name
+      fullName
       logoUrl
       type
       platform
@@ -140,6 +143,7 @@ export const onCreateCoinRate = /* GraphQL */ `
       coin {
         symbol
         name
+        fullName
         logoUrl
         type
         platform
@@ -187,6 +191,7 @@ export const onUpdateCoinRate = /* GraphQL */ `
       coin {
         symbol
         name
+        fullName
         logoUrl
         type
         platform
@@ -234,6 +239,7 @@ export const onDeleteCoinRate = /* GraphQL */ `
       coin {
         symbol
         name
+        fullName
         logoUrl
         type
         platform
@@ -281,6 +287,7 @@ export const onCreateHistoryCoinRate = /* GraphQL */ `
       coin {
         symbol
         name
+        fullName
         logoUrl
         type
         platform
@@ -328,6 +335,7 @@ export const onUpdateHistoryCoinRate = /* GraphQL */ `
       coin {
         symbol
         name
+        fullName
         logoUrl
         type
         platform
@@ -375,6 +383,7 @@ export const onDeleteHistoryCoinRate = /* GraphQL */ `
       coin {
         symbol
         name
+        fullName
         logoUrl
         type
         platform

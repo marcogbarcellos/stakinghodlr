@@ -9,6 +9,7 @@ export const createCoin = /* GraphQL */ `
     createCoin(input: $input, condition: $condition) {
       symbol
       name
+      fullName
       logoUrl
       type
       platform
@@ -55,6 +56,7 @@ export const updateCoin = /* GraphQL */ `
     updateCoin(input: $input, condition: $condition) {
       symbol
       name
+      fullName
       logoUrl
       type
       platform
@@ -101,6 +103,7 @@ export const deleteCoin = /* GraphQL */ `
     deleteCoin(input: $input, condition: $condition) {
       symbol
       name
+      fullName
       logoUrl
       type
       platform
@@ -152,6 +155,7 @@ export const createCoinRate = /* GraphQL */ `
       coin {
         symbol
         name
+        fullName
         logoUrl
         type
         platform
@@ -202,6 +206,7 @@ export const updateCoinRate = /* GraphQL */ `
       coin {
         symbol
         name
+        fullName
         logoUrl
         type
         platform
@@ -252,6 +257,7 @@ export const deleteCoinRate = /* GraphQL */ `
       coin {
         symbol
         name
+        fullName
         logoUrl
         type
         platform
@@ -302,6 +308,7 @@ export const createHistoryCoinRate = /* GraphQL */ `
       coin {
         symbol
         name
+        fullName
         logoUrl
         type
         platform
@@ -352,6 +359,7 @@ export const updateHistoryCoinRate = /* GraphQL */ `
       coin {
         symbol
         name
+        fullName
         logoUrl
         type
         platform
@@ -402,6 +410,7 @@ export const deleteHistoryCoinRate = /* GraphQL */ `
       coin {
         symbol
         name
+        fullName
         logoUrl
         type
         platform

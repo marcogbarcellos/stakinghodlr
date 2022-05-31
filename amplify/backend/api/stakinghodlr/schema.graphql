@@ -21,6 +21,7 @@ enum Platform {
 type Coin @model {
   symbol: String! @primaryKey
   name: String!
+  fullName: String!
   logoUrl: String
   type: CoinType
   platform: Platform

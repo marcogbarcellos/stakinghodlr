@@ -6,6 +6,7 @@ export const getCoin = /* GraphQL */ `
     getCoin(symbol: $symbol) {
       symbol
       name
+      fullName
       logoUrl
       type
       platform
@@ -62,6 +63,7 @@ export const listCoins = /* GraphQL */ `
       items {
         symbol
         name
+        fullName
         logoUrl
         type
         platform
@@ -90,6 +92,7 @@ export const getCoinRate = /* GraphQL */ `
       coin {
         symbol
         name
+        fullName
         logoUrl
         type
         platform
@@ -150,6 +153,7 @@ export const listCoinRates = /* GraphQL */ `
         coin {
           symbol
           name
+          fullName
           logoUrl
           type
           platform
@@ -193,6 +197,7 @@ export const getHistoryCoinRate = /* GraphQL */ `
       coin {
         symbol
         name
+        fullName
         logoUrl
         type
         platform
@@ -255,6 +260,7 @@ export const listHistoryCoinRates = /* GraphQL */ `
         coin {
           symbol
           name
+          fullName
           logoUrl
           type
           platform
