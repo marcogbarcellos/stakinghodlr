@@ -40,6 +40,7 @@ export const getCoin = /* GraphQL */ `
         nextToken
       }
       sortIndex
+      to_remove
       createdAt
       updatedAt
     }
@@ -75,6 +76,7 @@ export const listCoins = /* GraphQL */ `
           nextToken
         }
         sortIndex
+        to_remove
         createdAt
         updatedAt
       }
@@ -104,6 +106,7 @@ export const getCoinRate = /* GraphQL */ `
           nextToken
         }
         sortIndex
+        to_remove
         createdAt
         updatedAt
       }
@@ -159,6 +162,7 @@ export const listCoinRates = /* GraphQL */ `
           platform
           categories
           sortIndex
+          to_remove
           createdAt
           updatedAt
         }
@@ -209,6 +213,7 @@ export const getHistoryCoinRate = /* GraphQL */ `
           nextToken
         }
         sortIndex
+        to_remove
         createdAt
         updatedAt
       }
@@ -266,6 +271,7 @@ export const listHistoryCoinRates = /* GraphQL */ `
           platform
           categories
           sortIndex
+          to_remove
           createdAt
           updatedAt
         }

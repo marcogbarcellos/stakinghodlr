@@ -29,6 +29,7 @@ type Coin @model {
   coinRates: [CoinRate] @hasMany(indexName: "byCoinSymbol", fields: ["symbol"])
   historicCoinRates: [HistoryCoinRate] @hasMany(indexName: "byCoinSymbol", fields: ["symbol"])
   sortIndex: Int
+  to_remove: String
 }
 
 type CoinRate @model {

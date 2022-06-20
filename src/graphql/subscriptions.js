@@ -40,6 +40,7 @@ export const onCreateCoin = /* GraphQL */ `
         nextToken
       }
       sortIndex
+      to_remove
       createdAt
       updatedAt
     }
@@ -84,6 +85,7 @@ export const onUpdateCoin = /* GraphQL */ `
         nextToken
       }
       sortIndex
+      to_remove
       createdAt
       updatedAt
     }
@@ -128,6 +130,7 @@ export const onDeleteCoin = /* GraphQL */ `
         nextToken
       }
       sortIndex
+      to_remove
       createdAt
       updatedAt
     }
@@ -155,6 +158,7 @@ export const onCreateCoinRate = /* GraphQL */ `
           nextToken
         }
         sortIndex
+        to_remove
         createdAt
         updatedAt
       }
@@ -203,6 +207,7 @@ export const onUpdateCoinRate = /* GraphQL */ `
           nextToken
         }
         sortIndex
+        to_remove
         createdAt
         updatedAt
       }
@@ -251,6 +256,7 @@ export const onDeleteCoinRate = /* GraphQL */ `
           nextToken
         }
         sortIndex
+        to_remove
         createdAt
         updatedAt
       }
@@ -299,6 +305,7 @@ export const onCreateHistoryCoinRate = /* GraphQL */ `
           nextToken
         }
         sortIndex
+        to_remove
         createdAt
         updatedAt
       }
@@ -347,6 +354,7 @@ export const onUpdateHistoryCoinRate = /* GraphQL */ `
           nextToken
         }
         sortIndex
+        to_remove
         createdAt
         updatedAt
       }
@@ -395,6 +403,7 @@ export const onDeleteHistoryCoinRate = /* GraphQL */ `
           nextToken
         }
         sortIndex
+        to_remove
         createdAt
         updatedAt
       }
